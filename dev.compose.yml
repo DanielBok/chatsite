@@ -1,0 +1,10 @@
+services:
+  db:
+    extends:
+      file: db.compose.yml
+      service: db
+    ports:
+      - "5432:5432"
+
+volumes:
+  db-data:

@@ -1,0 +1,8 @@
+services:
+  db:
+    extends:
+      file: db.compose.yml
+      service: db
+
+volumes:
+  db-data:
