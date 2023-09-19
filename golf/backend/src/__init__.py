@@ -1,8 +1,11 @@
+import os
 from importlib import import_module
 from pathlib import Path
 from pkgutil import iter_modules
+
 from fastapi import FastAPI
-import os
+
+from src.database.connector import pool
 
 __all__ = ['create_app']
 
@@ -15,6 +18,7 @@ def create_app():
                   redoc_url="/docs")
 
     _add_routes(app)
+    _init_database(app)
 
     return app
 
@@ -27,3 +31,13 @@ def _add_routes(app: FastAPI):
             module = import_module('.'.join(router_file.relative_to(root_dir).parts).replace('.py', ''))
             if hasattr(module, 'router'):
                 app.include_router(module.router)
+
+
+def _init_database(app: FastAPI):
+    @app.on_event('startup')
+    def open_pool():
+        pool.open()
+
+    @app.on_event('close')
+    def close_pool():
+        pool.close()
