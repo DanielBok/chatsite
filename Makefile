@@ -1,7 +1,7 @@
 .PHONY: start stop
 
 start:
-	docker compose -f dev.compose.yml up -d
+	docker compose -f compose.yml up -d
 
 stop:
-	docker compose -f dev.compose.yml down
+	docker compose -f compose.yml down
