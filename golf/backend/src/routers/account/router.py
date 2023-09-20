@@ -1,8 +1,14 @@
-from fastapi import Depends, HTTPException, APIRouter
-from fastapi.responses import Response
+from fastapi import Depends, APIRouter
 
-# from src.dependencies.authentication import AuthHandler, UserAuthenticator
-# from src.infrastructure.repository.accounts import Account, AccountsRepo
-# from . import models as m
+import src.repository.account.models as m
+import src.routers.account.responses as resp
+from src.services.authentication import auth_svc
 
 router = APIRouter(prefix="/account", tags=["Account Management"])
+
+
+@router.get("/login", response_model=resp.Account)
+def login(acc: m.Account = Depends(auth_svc)):
+    token = auth_svc.construct_token(acc)
+
+    return resp.Account(**acc.model_dump(include={'username', 'first_name', 'last_name'}), token=token)

@@ -15,7 +15,8 @@ def create_app():
                   description="API service to keep track of my golf statistics",
                   version=os.environ.get('APPLICATION_VERSION', 'TEST'),
                   docs_url=None,
-                  redoc_url="/docs")
+                  redoc_url="/docs",
+                  debug=os.getenv('DEBUG', '0') == '1')
 
     _add_routes(app)
     _attach_events(app)
@@ -39,6 +40,6 @@ def _attach_events(app: FastAPI):
     def open_pool():
         pass
 
-    @app.on_event('close')
+    @app.on_event('shutdown')
     def close_pool():
         pool.close()

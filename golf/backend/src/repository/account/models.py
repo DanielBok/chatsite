@@ -1,20 +1,14 @@
 from pydantic import BaseModel, Field
 
 
-class CreateAccount(BaseModel):
-    username: str = Field(min_length=1, max_length=50, description='Unique username')
+class GetAccount(BaseModel):
+    username: str = Field(min_length=1, max_length=50, description="Unique username")
+    password: str = Field(min_length=1, description="Plaintext password")
+
+
+class CreateAccount(GetAccount):
     first_name: str = Field(min_length=1, max_length=50, description='First name')
     last_name: str = Field(min_length=1, max_length=50, description='Last name')
-    password: str = Field(min_length=1, description="Plaintext password")
-
-    @property
-    def name(self):
-        return f"{self.first_name} {self.last_name}"
-
-
-class GetAccount(BaseModel):
-    username: str = Field(min_length=1, max_length=50, description="Username")
-    password: str = Field(min_length=1, description="Plaintext password")
 
 
 class UpdateAccount(CreateAccount):
