@@ -3,10 +3,13 @@ create schema golf;
 create table golf.player
 (
     id         serial primary key,
+    username   varchar(50) not null,
     first_name varchar(50) not null,
-    last_name  varchar(30) not null,
-    constraint uq_golf_player_name unique (first_name, last_name)
+    last_name  varchar(50) not null,
+    password   text        not null
 );
+
+create unique index uq_golf_player_idx on golf.player (lower(username));
 
 create type golf.holes as enum ('Front 9', 'Back 9', '18 Holes');
 create type golf.tee as enum ('Green', 'Red', 'Yellow', 'White', 'Blue', 'Black', 'Silver', 'Golf');
@@ -14,14 +17,14 @@ create type golf.distance_metric as enum ('meter', 'yard');
 
 create table golf.course
 (
-    id       serial primary key,
-    location varchar(300) not null,
-    course   varchar(300) not null,
-    country  varchar(300) not null,
-    lat_lon  point        not null,
-    active   boolean default true,
-    par      smallint[18],
-    index    smallint[18],
+    id             serial primary key,
+    location       varchar(300) not null,
+    course         varchar(300) not null,
+    country        varchar(300) not null,
+    google_map_url text         not null,
+    active         boolean default true,
+    par            smallint[18],
+    index          smallint[18],
     constraint uq_place unique (location, course, country)
 );
 

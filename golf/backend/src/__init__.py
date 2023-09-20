@@ -5,7 +5,7 @@ from pkgutil import iter_modules
 
 from fastapi import FastAPI
 
-from src.database.connector import pool
+from src.database.connector import pool, require_connection_pool
 
 __all__ = ['create_app']
 
@@ -18,7 +18,7 @@ def create_app():
                   redoc_url="/docs")
 
     _add_routes(app)
-    _init_database(app)
+    _attach_events(app)
 
     return app
 
@@ -33,10 +33,11 @@ def _add_routes(app: FastAPI):
                 app.include_router(module.router)
 
 
-def _init_database(app: FastAPI):
+def _attach_events(app: FastAPI):
     @app.on_event('startup')
+    @require_connection_pool
     def open_pool():
-        pool.open()
+        pass
 
     @app.on_event('close')
     def close_pool():
