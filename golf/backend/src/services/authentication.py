@@ -9,7 +9,7 @@ import src.repository.account.models as m
 from src.repository.account.repo import AccountRepository
 
 
-class AuthorizationService:
+class AuthenticationService:
     def __init__(self):
         self._secret = os.getenv('APP_JWT_SECRET', 'development-token')
 
@@ -67,7 +67,7 @@ class AuthorizationService:
         return acc
 
 
-auth_svc = AuthorizationService()
+auth_svc = AuthenticationService()
 
 
 def is_admin(acc: m.Account = Depends(auth_svc)):
