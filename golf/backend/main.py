@@ -1,4 +1,11 @@
+import logging
+
 import uvicorn
+
+logging.basicConfig(
+    datefmt='%Y-%m-%d %H:%M:%S',
+    level=logging.INFO
+)
 
 if __name__ == '__main__':
     from src import create_app
