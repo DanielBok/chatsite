@@ -16,7 +16,8 @@ class UpdateAccount(CreateAccount):
 
 
 class Account(UpdateAccount):
-    is_valid: bool = Field(False, exclude=True)
+    id: int = Field(gt=0, description='Account ID')
+    is_admin: bool = Field(False, exclude=False)
 
     @property
     def salt(self):

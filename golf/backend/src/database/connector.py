@@ -24,6 +24,7 @@ def connection_context(timeout: float = None) -> ContextManager[Connection]:
 
 def require_connection_pool(cls):
     """Decorator to open the ConnectionPool if it is closed"""
+    # noinspection PyProtectedMember
     if pool._closed:
         pool.open()
 

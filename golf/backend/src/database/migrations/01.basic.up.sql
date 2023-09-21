@@ -6,7 +6,8 @@ create table golf.player
     username   varchar(50) not null,
     first_name varchar(50) not null,
     last_name  varchar(50) not null,
-    password   text        not null
+    password   text        not null,
+    is_admin   bool default false
 );
 
 create unique index uq_golf_player_idx on golf.player (lower(username));

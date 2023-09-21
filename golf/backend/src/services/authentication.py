@@ -1,5 +1,4 @@
 import os
-import secrets
 from base64 import b64decode
 from datetime import datetime, timedelta
 
@@ -12,7 +11,7 @@ from src.repository.account.repo import AccountRepository
 
 class AuthorizationService:
     def __init__(self):
-        self._secret = os.getenv('APPLICATION_AUTHORIZATION_SECRET', secrets.token_hex(32))
+        self._secret = os.getenv('APP_JWT_SECRET', 'development-token')
 
     @property
     def _algorithm(self):
@@ -36,7 +35,7 @@ class AuthorizationService:
         try:
             payload = jwt.decode(token, self._secret, algorithms=self._algorithm)
             if payload['nbt'] <= utc_now_ts <= payload['exp']:
-                return repo.get_account(m.GetAccount(username=payload['username'], password=payload['password']))
+                return repo.get_account_by_id(payload['id'])
             else:
                 raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                     detail="JWT has expired, please login again to get a new one.")
@@ -61,7 +60,7 @@ class AuthorizationService:
         else:
             acc = self.fetch_with_basic_auth(authorization, repo)
 
-        if acc is None or not acc.is_valid:
+        if acc is None:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                 detail='Invalid credentials')
 
@@ -69,3 +68,10 @@ class AuthorizationService:
 
 
 auth_svc = AuthorizationService()
+
+
+def is_admin(acc: m.Account = Depends(auth_svc)):
+    if not acc.is_admin:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="Task requires admin privileges")
+    return acc
