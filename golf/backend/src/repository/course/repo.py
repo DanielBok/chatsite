@@ -46,9 +46,9 @@ class CourseRepository:
             return num_courses
 
     @staticmethod
-    def get_courses(country: str | list[str] = None,
-                    course_id: int | list[int] = None,
-                    status: Literal['active', 'inactive'] = None):
+    def fetch_courses(country: str | list[str] = None,
+                      course_id: int | list[int] = None,
+                      status: Literal['active', 'inactive'] = None) -> list[m.Course]:
         """Fetches courses given filters. If no filters specified, retrieves all courses"""
         filters = []
         params = []
@@ -94,8 +94,24 @@ from golf.course C;
 {where_clause}
                 """, params=params).fetchall()
 
+    @classmethod
+    def fetch_course_by_id(cls, course_id: int):
+        """Fetches a single course by its ID. If ID does not exist, returns None"""
+        courses = cls.fetch_courses(course_id=course_id)
+        if len(courses) == 0:
+            return None
+        else:
+            return courses[0]
+
     @staticmethod
-    def set_active_state(course_id: int, active=False):
+    def course_id_exists(course_id: int):
+        """Checks that the given course ID exists"""
+        with connection_context() as conn:
+            count, *_ = conn.execute("select count(*) from golf.course where id = %s", (course_id,)).fetchone()
+            return count == 1
+
+    @staticmethod
+    def update_status(course_id: int, active=False):
         """Sets the active/inactive state for the course. Usually used to set courses to inactive (defunct)"""
         with connection_context() as conn:
             conn.execute("update golf.course set active = %(active)s where id = %(id)s",
