@@ -14,6 +14,7 @@ class CourseRepository:
 
     @staticmethod
     def create_course(course: m.CreateCourse):
+        """Creates a course given the CreateCourse command object"""
         with connection_context() as conn:
             with conn.cursor() as cur, conn.transaction():
                 course_id, *_ = cur.execute("""
@@ -33,11 +34,13 @@ class CourseRepository:
 
     @staticmethod
     def countries() -> list[str]:
+        """Returns the list of countries"""
         with connection_context() as conn:
             return [c for c, *_ in conn.execute("select country from golf.course")]
 
     @staticmethod
     def num_courses() -> int:
+        """Returns the number of courses"""
         with connection_context() as conn:
             num_courses, *_ = conn.execute("select count(*) from golf.course").fetchone()
             return num_courses
@@ -46,6 +49,7 @@ class CourseRepository:
     def get_courses(country: str | list[str] = None,
                     course_id: int | list[int] = None,
                     status: Literal['active', 'inactive'] = None):
+        """Fetches courses given filters. If no filters specified, retrieves all courses"""
         filters = []
         params = []
         for col, element in [('country', country),
@@ -91,6 +95,8 @@ from golf.course C;
                 """, params=params).fetchall()
 
     @staticmethod
-    def set_inactive(course_id: int):
+    def set_active_state(course_id: int, active=False):
+        """Sets the active/inactive state for the course. Usually used to set courses to inactive (defunct)"""
         with connection_context() as conn:
-            conn.execute("update golf.course")
+            conn.execute("update golf.course set active = %(active)s where id = %(id)s",
+                         {'id': course_id, 'active': active})
