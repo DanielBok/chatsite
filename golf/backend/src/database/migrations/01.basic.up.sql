@@ -13,7 +13,7 @@ create table golf.player
 create unique index uq_golf_player_idx on golf.player (lower(username));
 
 create type golf.holes as enum ('Front 9', 'Back 9', '18 Holes');
-create type golf.tee as enum ('Green', 'Red', 'Yellow', 'White', 'Blue', 'Black', 'Silver', 'Golf');
+create type golf.tee as enum ('Green', 'Red', 'Yellow', 'White', 'Blue', 'Black', 'Silver', 'Gold');
 create type golf.distance_metric as enum ('meter', 'yard');
 
 create table golf.course
@@ -42,11 +42,12 @@ create table golf.course_tee_info
 create table golf.score_card
 (
     id        serial primary key,
-    player_id int          not null,
-    course_id int          not null,
-    tee       golf.tee     not null,
-    scores    smallint[18] not null,
-    holes     golf.holes   not null,
+    player_id int                      not null,
+    course_id int                      not null,
+    datetime  timestamp with time zone not null,
+    tee       golf.tee                 not null,
+    scores    smallint[18]             not null,
+    holes     golf.holes               not null,
     constraint fk_player foreign key (player_id) references golf.player (id) on delete cascade,
     constraint fk_course foreign key (course_id) references golf.course (id) on delete cascade
 );

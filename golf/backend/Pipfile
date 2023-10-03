@@ -7,7 +7,7 @@ name = "pypi"
 fastapi = "*"
 uvicorn = "*"
 pyjwt = "*"
-psycopg = {extras = ["pool", "binary"], version = "*"}
+psycopg = {extras = ["pool", "binary"] }
 
 [dev-packages]
 

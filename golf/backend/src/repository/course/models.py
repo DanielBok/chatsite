@@ -12,7 +12,7 @@ class GolfTeeEnum(str, Enum):
     Blue = 'Blue'
     Black = 'Black'
     Silver = 'Silver'
-    Golf = 'Golf'
+    Gold = 'Gold'
 
 
 class GolfDistanceMetric(str, Enum):

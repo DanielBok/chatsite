@@ -63,7 +63,7 @@ class CourseRepository:
             where_clause = 'where ' + '\nand '.join(filters)
         else:
             where_clause = ''
-        params = None
+            params = None
 
         with connection_context() as conn, conn.cursor(row_factory=class_row(m.Course.from_dict)) as cur:
             return cur.execute(f"""
