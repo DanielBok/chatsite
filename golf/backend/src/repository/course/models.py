@@ -66,7 +66,7 @@ class CourseTeeInfo(CreateCourseTeeInfo):
 
 class Course(CreateCourse):
     id: int = Field(gt=0, description='Course ID')
-    tee_info: conlist(CourseTeeInfo) = Field(description="Tee distance information")
+    tee_info: conlist(CourseTeeInfo, min_length=1) = Field(description="Tee distance information")
 
     @classmethod
     def from_dict(cls, *, value: dict):

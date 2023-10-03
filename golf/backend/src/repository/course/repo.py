@@ -1,5 +1,3 @@
-from typing import Literal
-
 from psycopg.rows import class_row
 
 import src.repository.course.models as m
@@ -48,7 +46,7 @@ class CourseRepository:
     @staticmethod
     def fetch_courses(country: str | list[str] = None,
                       course_id: int | list[int] = None,
-                      status: Literal['active', 'inactive'] = None) -> list[m.Course]:
+                      active: bool = None) -> list[m.Course]:
         """Fetches courses given filters. If no filters specified, retrieves all courses"""
         filters = []
         params = []
@@ -58,9 +56,8 @@ class CourseRepository:
                 filters.append(f'C.{col} = any(%s)')
                 params.append([element] if isinstance(element, (int, str)) else list(element))
 
-        if status is not None:
-            assert status in ('active', 'inactive'), "status must be 'active', 'inactive' or None"
-            filters.append("active" if status == 'active' else 'not active')
+        if isinstance(active, bool):
+            filters.append("active" if active else 'not active')
 
         if filters:
             where_clause = 'where ' + '\nand '.join(filters)
@@ -68,9 +65,8 @@ class CourseRepository:
             where_clause = ''
         params = None
 
-        with connection_context() as conn:
-            with conn.cursor(row_factory=class_row(m.Course.from_dict)) as cur:
-                return cur.execute(f"""
+        with connection_context() as conn, conn.cursor(row_factory=class_row(m.Course.from_dict)) as cur:
+            return cur.execute(f"""
 select json_build_object(
                'id', C.id,
                'location', location,
@@ -92,7 +88,7 @@ select json_build_object(
            ) as value
 from golf.course C;
 {where_clause}
-                """, params=params).fetchall()
+            """, params=params).fetchall()
 
     @classmethod
     def fetch_course_by_id(cls, course_id: int):
@@ -103,16 +99,51 @@ from golf.course C;
         else:
             return courses[0]
 
-    @staticmethod
-    def course_id_exists(course_id: int):
-        """Checks that the given course ID exists"""
-        with connection_context() as conn:
-            count, *_ = conn.execute("select count(*) from golf.course where id = %s", (course_id,)).fetchone()
-            return count == 1
+    @classmethod
+    def update_course(cls, course: m.Course):
+        """Updates the course information"""
+
+        with connection_context() as conn, conn.transaction(), conn.cursor() as cur:
+            cur.execute("""
+update golf.course
+set location = %(location)s, 
+    course = %(course)s, 
+    country = %(country)s, 
+    google_map_url = %(google_map_url)s, 
+    active = %(active)s, 
+    par = %(par)s, 
+    index = %(index)s
+where id = %(id)s;
+            """, course.model_dump(include={'location',
+                                            'course',
+                                            'country',
+                                            'google_map_url',
+                                            'active',
+                                            'par',
+                                            'index',
+                                            'id'}))
+
+            cur.executemany("""
+update golf.course_tee_info
+set tee = %(tee)s,
+    distance = %(distance)s,
+    distance_metric = %(distance_metric)s
+where id = %(id)s;
+            """, [x.model_dump(include={'tee', 'distance', 'distance_metric' 'id'}) for x in course.tee_info])
 
     @staticmethod
-    def update_status(course_id: int, active=False):
-        """Sets the active/inactive state for the course. Usually used to set courses to inactive (defunct)"""
+    def add_tee_info(course_id: int, tee_info: m.CreateCourseTeeInfo):
         with connection_context() as conn:
-            conn.execute("update golf.course set active = %(active)s where id = %(id)s",
-                         {'id': course_id, 'active': active})
+            tee_id, *_ = conn.execute("""
+insert into golf.course_tee_info (course_id, tee, distance, distance_metric)
+values (%(course_id)s, %(tee)s, %(distance)s, %(distance_metric)s)
+returning id
+            """, {'course_id': course_id, **tee_info.model_dump()}).fetchone()
+
+            return tee_id
+
+    @staticmethod
+    def delete_tee_info_by_id(course_id: int, tee_id: int):
+        with connection_context() as conn:
+            conn.execute("delete from golf.course_tee_info where course_id = %s and id = %s",
+                         (course_id, tee_id))
