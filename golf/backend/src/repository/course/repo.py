@@ -1,3 +1,5 @@
+from typing import Optional
+
 from psycopg.rows import class_row
 
 import src.repository.course.models as m
@@ -43,10 +45,11 @@ class CourseRepository:
             num_courses, *_ = conn.execute("select count(*) from golf.course").fetchone()
             return num_courses
 
-    @staticmethod
-    def fetch_courses(country: str | list[str] = None,
+    @classmethod
+    def fetch_courses(cls,
+                      country: str | list[str] = None,
                       course_id: int | list[int] = None,
-                      active: bool = None) -> list[m.Course]:
+                      active: bool = None, ) -> list[m.Course]:
         """Fetches courses given filters. If no filters specified, retrieves all courses"""
         filters = []
         params = []
@@ -66,7 +69,11 @@ class CourseRepository:
             params = None
 
         with connection_context() as conn, conn.cursor(row_factory=class_row(m.Course.from_dict)) as cur:
-            return cur.execute(f"""
+            return cur.execute(cls._generate_fetch_clause_sql(where_clause), params=params).fetchall()
+
+    @staticmethod
+    def _generate_fetch_clause_sql(where_clause: str):
+        return f"""
 select json_build_object(
                'id', C.id,
                'location', location,
@@ -86,9 +93,9 @@ select json_build_object(
                             from golf.course_tee_info T
                             where T.course_id = C.id)
            ) as value
-from golf.course C;
-{where_clause}
-            """, params=params).fetchall()
+from golf.course C
+{where_clause};
+        """
 
     @classmethod
     def fetch_course_by_id(cls, course_id: int):
@@ -100,9 +107,16 @@ from golf.course C;
             return courses[0]
 
     @classmethod
+    def fetch_course(cls, identifiers: m.CourseFilter) -> Optional[m.Course]:
+        params = identifiers.model_dump()
+        where_clause = "where " + ' and '.join(f"{k} = %({k})s" for k in params.keys())
+
+        with connection_context() as conn, conn.cursor(row_factory=class_row(m.Course.from_dict)) as cur:
+            return cur.execute(cls._generate_fetch_clause_sql(where_clause), params=params).fetchone()
+
+    @classmethod
     def update_course(cls, course: m.Course):
         """Updates the course information"""
-
         with connection_context() as conn, conn.transaction(), conn.cursor() as cur:
             cur.execute("""
 update golf.course

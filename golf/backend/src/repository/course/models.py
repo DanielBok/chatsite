@@ -72,3 +72,10 @@ class Course(CreateCourse):
     def from_dict(cls, *, value: dict):
         """Used by the class_row to create the Course object. The query must name the json_build_object as 'value'"""
         return cls(**value)
+
+
+class CourseFilter(BaseModel):
+    """Used to uniquely identify a course"""
+    country: str = Field(min_length=1, description="Country which course is in")
+    location: str = Field(min_length=1, description="Name of resort/area. e.g.: Keppel Club, or Marina Bay Golf Course")
+    course: str = Field(min_length=1, description="Course Name")
