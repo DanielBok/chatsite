@@ -1,5 +1,8 @@
 import logging
 import os
+from datetime import datetime
+
+import pytz
 
 from src.database.connector import require_connection_pool
 
@@ -13,6 +16,7 @@ def seed_application():
 
     _seed_player_table()
     _seed_golf_course_table()
+    _seed_golf_scores_table()
 
 
 def _seed_player_table():
@@ -90,3 +94,40 @@ def _seed_golf_course_table():
         ]:
             logging.info(f"\t\tCreating {course}")
             repo.create_course(payload)
+    else:
+        logging.info("\tSkipping course data seeding")
+
+
+def _seed_golf_scores_table():
+    from src.repository.account.repo import AccountRepository
+    from src.repository.course.models import CourseFilter
+    from src.repository.course.repo import CourseRepository
+    from src.repository.score.repo import ScoreRepository
+    import src.repository.score.models as m
+
+    repo = ScoreRepository()
+    if len(repo.fetch_scores()) == 0:
+        logging.info("\tNo scores in database yet, creating default scores")
+
+        # these are actual scores by Daniel
+        account_id = AccountRepository.get_account('dbok').id
+        mandai_id = CourseRepository.fetch_course(CourseFilter(
+            country='Singapore',
+            location='Mandai Executive Public Golf Course',
+            course='Executive Golf Course'
+        )).id
+
+        for date, scores in [
+            (datetime(2023, 9, 14), [4, 6, 5, 5, 7, 4, 4, 3, 4]),
+            (datetime(2023, 9, 19), [5, 6, 3, 4, 6, 3, 4, 5, 3]),
+        ]:
+            repo.add_score(m.CreateScore(
+                player_id=account_id,
+                course_id=mandai_id,
+                tee='Blue',
+                holes='Front 9',
+                scores=scores,
+                datetime=pytz.timezone('Asia/Singapore').localize(date),
+            ))
+    else:
+        logging.info("\tSkipping golf score data seeding")

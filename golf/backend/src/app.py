@@ -8,10 +8,9 @@ from pkgutil import iter_modules
 from fastapi import FastAPI
 
 from src.database.connector import pool
+from src.repository.seed import seed_application
 
 __all__ = ['create_app']
-
-from src.repository.seed import seed_application
 
 VERSION = '1.0'
 
