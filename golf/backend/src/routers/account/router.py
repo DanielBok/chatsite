@@ -22,7 +22,7 @@ def update_account(changes: m.CreateAccount,
         **changes.model_dump()
     ))
 
-    acc = repo.get_account_by_id(acc.id)
+    acc = repo.get_account(acc.id)
     return resp.Account.from_account(acc)
 
 
@@ -30,7 +30,7 @@ def update_account(changes: m.CreateAccount,
 def create_account(new_acc: m.CreateAccount, repo: AccountRepository = Depends()):
     account_id = repo.create_account(new_acc)
 
-    acc = repo.get_account_by_id(account_id)
+    acc = repo.get_account(account_id)
     return resp.Account.from_account(acc)
 
 

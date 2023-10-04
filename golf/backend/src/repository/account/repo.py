@@ -1,5 +1,6 @@
 import hashlib
 import secrets
+from typing import Optional
 
 from psycopg.rows import class_row
 
@@ -17,13 +18,6 @@ class AccountRepository:
     def _hash_password(password: str, salt: str):
         """Given a password and salt, hash the combination to create a hashed password"""
         return hashlib.sha256(f'{password}{salt}'.encode()).hexdigest() + f':{salt}'
-
-    @classmethod
-    def _validate_account(cls, password: str, hashed_password: str, salt: str):
-        """
-        Checks if the plaintext password matches the hashed password
-        """
-        return cls._hash_password(password, salt) == hashed_password
 
     @staticmethod
     def get_accounts():
@@ -65,32 +59,31 @@ class AccountRepository:
             where id=%(id)s
             """, payload)
 
-    def get_account(self, creds: m.GetAccount):
-        """Fetches the account provided by the credentials"""
-        with connection_context() as conn:
-            with conn.cursor(row_factory=class_row(m.Account)) as cur:
-                acc = cur.execute("""
-                select id, first_name, last_name, username, password, is_admin
-                from golf.player
-                where username = %(username)s
-                """, creds.model_dump(include={'username'})).fetchone()
-
-        # return None if the credentials do not match
-        if acc is not None and self._hash_password(creds.password, acc.salt) == acc.password:
-            return None
-
-        return acc
-
     @staticmethod
-    def get_account_by_id(account_id: int) -> m.Account:
+    def get_account(username_or_id: int | str) -> Optional[m.Account]:
         """Fetches an account by ID"""
-        with connection_context() as conn:
-            with conn.cursor(row_factory=class_row(m.Account)) as cur:
-                return cur.execute("""
-                select id, first_name, last_name, username, password, is_admin
-                from golf.player
-                where id = %s
-                """, (account_id,)).fetchone()
+        if isinstance(username_or_id, int):
+            filter_field = 'id'
+        elif isinstance(username_or_id, str):
+            filter_field = 'username'
+        else:
+            raise TypeError('username_or_id must be an instance of <str | int>')
+
+        with connection_context() as conn, conn.cursor(row_factory=class_row(m.Account)) as cur:
+            return cur.execute(f"""
+            select id, first_name, last_name, username, password, is_admin
+            from golf.player
+            where {filter_field} = %s
+            """, (username_or_id,)).fetchone()
+
+    @classmethod
+    def validate_account(cls, acc: m.Account, password: str):
+        """
+        Checks if the plaintext password matches the hashed password.
+        Returns True if account's hashed password matches the provided password after hashing.
+        Otherwise, False.
+        """
+        return cls._hash_password(password, acc.salt) == acc.password
 
     @staticmethod
     def delete_account(account_id: int):

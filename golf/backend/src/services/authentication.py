@@ -1,6 +1,7 @@
 import os
 from base64 import b64decode
 from datetime import datetime, timedelta
+from typing import Optional
 
 import jwt
 from fastapi import Header, Depends, HTTPException, status
@@ -29,13 +30,13 @@ class AuthenticationService:
 
         return jwt.encode(payload, key=self._secret, algorithm=self._algorithm)
 
-    def fetch_with_jwt_token(self, authorization: str, repo: AccountRepository):
+    def fetch_with_jwt_token(self, authorization: str, repo: AccountRepository) -> Optional[m.Account]:
         *_, token = authorization.split(' ')
         utc_now_ts = datetime.utcnow().timestamp()
         try:
             payload = jwt.decode(token, self._secret, algorithms=self._algorithm)
             if payload['nbt'] <= utc_now_ts <= payload['exp']:
-                return repo.get_account_by_id(payload['id'])
+                return repo.get_account(payload['id'])
             else:
                 raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                     detail="JWT has expired, please login again to get a new one.")
@@ -44,9 +45,12 @@ class AuthenticationService:
                                 detail="Invalid JWT credentials")
 
     @staticmethod
-    def fetch_with_basic_auth(authorization: str, repo: AccountRepository) -> m.Account:
+    def fetch_with_basic_auth(authorization: str, repo: AccountRepository) -> Optional[m.Account]:
         uid, pwd = b64decode(authorization.split(' ')[1]).decode('utf-8').split(':')
-        return repo.get_account(m.GetAccount(username=uid, password=pwd))
+        acc = repo.get_account(uid)
+
+        # returns the account if it is not None and has a valid password
+        return acc if acc is not None and repo.validate_account(acc, pwd) else None
 
     def __call__(self,
                  authorization: str | None = Header(None),

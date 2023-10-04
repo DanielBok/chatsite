@@ -1,12 +1,9 @@
 from pydantic import BaseModel, Field
 
 
-class GetAccount(BaseModel):
+class CreateAccount(BaseModel):
     username: str = Field(min_length=1, max_length=50, description="Unique username")
     password: str = Field(min_length=1, description="Plaintext password")
-
-
-class CreateAccount(GetAccount):
     first_name: str = Field(min_length=1, max_length=50, description='First name')
     last_name: str = Field(min_length=1, max_length=50, description='Last name')
 
