@@ -6,7 +6,11 @@ from src.services.authentication import auth_svc
 __all__ = ['Account']
 
 
-class Account(BaseModel):
+class Token(BaseModel):
+    token: str
+
+
+class Account(Token):
     id: int
     username: str
     first_name: str
