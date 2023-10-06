@@ -28,8 +28,8 @@ class AuthenticationService:
             'firstName': acc.first_name,
             'lastName': acc.last_name,
             'isAdmin': acc.is_admin,
-            'nbt': int(nbt.timestamp()) * 1000,  # UTC in milliseconds
-            'exp': int(exp.timestamp()) * 1000,  # UTC in milliseconds
+            'nbt': int(nbt.timestamp()),
+            'exp': int(exp.timestamp()),
         }
 
         return jwt.encode(payload, key=self._secret, algorithm=self._algorithm)
