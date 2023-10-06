@@ -23,9 +23,13 @@ class AuthenticationService:
         exp = nbt + timedelta(days=7)  # expiration time
 
         payload = {
-            **acc.model_dump(include={'id'}),
-            'nbt': int(nbt.timestamp()),
-            'exp': int(exp.timestamp()),
+            'id': acc.id,
+            'username': acc.username,
+            'firstName': acc.first_name,
+            'lastName': acc.last_name,
+            'isAdmin': acc.is_admin,
+            'nbt': int(nbt.timestamp()) * 1000,  # UTC in milliseconds
+            'exp': int(exp.timestamp()) * 1000,  # UTC in milliseconds
         }
 
         return jwt.encode(payload, key=self._secret, algorithm=self._algorithm)

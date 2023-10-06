@@ -8,9 +8,9 @@ from src.services.authentication import auth_svc, is_admin
 router = APIRouter(prefix="/account", tags=["Account Management"])
 
 
-@router.get("/login", response_model=resp.Account)
+@router.get("/login", response_model=resp.Token)
 def login(acc: m.Account = Depends(auth_svc)):
-    return resp.Account.from_account(acc)
+    return {'token': auth_svc.construct_token(acc)}
 
 
 @router.put('/', response_model=resp.Account)
