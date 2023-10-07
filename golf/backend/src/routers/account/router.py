@@ -13,6 +13,12 @@ def login(acc: m.Account = Depends(auth_svc)):
     return {'token': auth_svc.construct_token(acc)}
 
 
+@router.get('/verify')
+def verify(_: m.Account = Depends(auth_svc)):
+    """Verify if the JWT token is valid"""
+    return "Okay"
+
+
 @router.put('/', response_model=resp.Account)
 def update_account(changes: m.CreateAccount,
                    acc: m.Account = Depends(auth_svc),
