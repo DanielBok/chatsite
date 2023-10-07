@@ -14,6 +14,7 @@ from src.repository.seed import seed_application
 __all__ = ['create_app']
 
 VERSION = '1.0'
+TITLE = "Golf for Chats"
 
 
 def create_app():
@@ -21,7 +22,7 @@ def create_app():
 
     _verify_env_vars_defined(is_debug)
 
-    app = FastAPI(title="My Golf Statistics",
+    app = FastAPI(title=TITLE,
                   description="API service to keep track of my golf statistics",
                   version=VERSION,
                   docs_url=None,
