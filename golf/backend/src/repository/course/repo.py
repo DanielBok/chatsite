@@ -18,11 +18,11 @@ class CourseRepository:
         with connection_context() as conn:
             with conn.cursor() as cur, conn.transaction():
                 course_id, *_ = cur.execute("""
-                insert into golf.course (location, course, country, google_map_url, active, par, index)
+                insert into golf.course (location, course, country, google_map_url, website, active, par, index)
                 values (%(location)s, %(course)s, %(country)s, %(google_map_url)s, %(active)s, %(par)s, %(index)s)
                 returning id
                 """, course.model_dump(include={
-                    'location', 'course', 'country', 'google_map_url', 'active', 'par', 'index'
+                    'location', 'course', 'country', 'google_map_url', 'website', 'active', 'par', 'index'
                 })).fetchone()
 
                 cur.executemany("""
@@ -80,6 +80,7 @@ select json_build_object(
                'course', course,
                'country', country,
                'google_map_url', google_map_url,
+               'website', website,
                'active', active,
                'par', par,
                'index', index,
@@ -120,18 +121,20 @@ from golf.course C
         with connection_context() as conn, conn.transaction(), conn.cursor() as cur:
             cur.execute("""
 update golf.course
-set location = %(location)s, 
-    course = %(course)s, 
-    country = %(country)s, 
-    google_map_url = %(google_map_url)s, 
-    active = %(active)s, 
-    par = %(par)s, 
+set location = %(location)s,
+    course = %(course)s,
+    country = %(country)s,
+    google_map_url = %(google_map_url)s,
+    website = %(website)s,
+    active = %(active)s,
+    par = %(par)s,
     index = %(index)s
 where id = %(id)s;
             """, course.model_dump(include={'location',
                                             'course',
                                             'country',
                                             'google_map_url',
+                                            'website',
                                             'active',
                                             'par',
                                             'index',

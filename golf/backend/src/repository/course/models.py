@@ -39,6 +39,7 @@ class CreateCourse(BaseModel):
     location: str = Field(min_length=1, description="Name of resort/area. e.g.: Keppel Club, or Marina Bay Golf Course")
     course: str = Field(min_length=1, description="Course Name")
     google_map_url: str = Field(description="Google map url")
+    website: str = Field(description="Website for the country club/location")
     active: StrictBool = Field(True, description="True means course is still around. Otherwise, course is defunct")
     par: list[int] = Field(list, description="Par score for each hole")
     index: list[int] = Field(list, description="Index score for each hole")
