@@ -7,9 +7,11 @@ from pkgutil import iter_modules
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from constants import APP_NAME, IS_DEBUG
 from src.database.connector import pool
+from src.lib.staticfiles import STATIC_PATH
 from src.repository.seed import seed_application
 
 __all__ = ['create_app']
@@ -27,6 +29,7 @@ def create_app():
 
     _add_middlewares(app)
     _add_routes(app)
+    _mount_static_folder(app)
 
     return app
 
@@ -37,8 +40,10 @@ def _verify_env_vars_defined(is_debug: bool):
         keys = {
             'APP_FIRST_USER_USERNAME',
             'APP_FIRST_USER_PASSWORD',
-            'APP_FIRST_USER_FIRST_NAME',
-            'APP_FIRST_USER_LAST_NAME',
+            'APP_FIRST_USER_NAME',
+            'APP_SECOND_USER_USERNAME',
+            'APP_SECOND_USER_PASSWORD',
+            'APP_SECOND_USER_NAME',
             'APP_JWT_SECRET',
             'DB_USER',
             'DB_PASSWORD',
@@ -83,3 +88,7 @@ def _add_routes(app: FastAPI):
             module = import_module('.'.join(router_file.relative_to(root_dir).parts).replace('.py', ''))
             if hasattr(module, 'router'):
                 app.include_router(module.router)
+
+
+def _mount_static_folder(app: FastAPI):
+    app.mount('/static', StaticFiles(directory=STATIC_PATH), name='static')
