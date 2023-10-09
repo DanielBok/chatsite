@@ -145,7 +145,10 @@ def _seed_golf_scores_table():
         logging.info("\tNo scores in database yet, creating default scores")
 
         # these are actual scores by Daniel
-        account_id = AccountRepository.get_account('dbok').id
+        dbok_id = AccountRepository.get_account('dbok').id
+        pquek_id = AccountRepository.get_account('pquek').id
+
+        # Mandai scores
         mandai_id = CourseRepository.fetch_course(CourseFilter(
             country='Singapore',
             location='Mandai Executive Public Golf Course',
@@ -155,12 +158,32 @@ def _seed_golf_scores_table():
         for date, scores in [
             (datetime(2023, 9, 14), [4, 6, 5, 5, 7, 4, 4, 3, 4]),
             (datetime(2023, 9, 19), [5, 6, 3, 4, 6, 3, 4, 5, 3]),
+            (datetime(2023, 10, 5), [5, 6, 4, 6, 6, 5, 4, 4, 4]),
         ]:
             repo.add_score(m.CreateScore(
-                player_id=account_id,
+                player_id=dbok_id,
                 course_id=mandai_id,
-                tee='Blue',
-                holes='Front 9',
+                tee=m.GolfTeeEnum.Blue,
+                holes=m.GolfHoles.Front,
+                scores=scores,
+                datetime=pytz.timezone('Asia/Singapore').localize(date),
+            ))
+
+        keppel_id = CourseRepository.fetch_course(CourseFilter(
+            country='Singapore',
+            location='Keppel Club',
+            course='Sime'
+        )).id
+
+        for player_id, date, scores in [
+            (dbok_id, datetime(2023, 10, 8), [6, 9, 6, 7, 6, 6, 3, 6, 9, 5, 6, 6, 6, 6, 7, 6, 5, 5]),
+            (pquek_id, datetime(2023, 10, 8), [6, 6, 4, 5, 4, 6, 4, 6, 6, 5, 6, 5, 4, 6, 5, 6, 5, 4]),
+        ]:
+            repo.add_score(m.CreateScore(
+                player_id=player_id,
+                course_id=keppel_id,
+                tee=m.GolfTeeEnum.White,
+                holes=m.GolfHoles.Full,
                 scores=scores,
                 datetime=pytz.timezone('Asia/Singapore').localize(date),
             ))
