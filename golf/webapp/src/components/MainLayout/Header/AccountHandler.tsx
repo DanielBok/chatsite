@@ -12,6 +12,7 @@ type Props = {
 
 function AccountHandler({user}: Props) {
   const {signOut} = useAuth();
+  console.log(user);
 
   const items: MenuProps["items"] = [
     {
@@ -40,7 +41,8 @@ function AccountHandler({user}: Props) {
         "hover:text-gray-300 hover:border-b-gray-300",
       )}>
         {user.imagePath && <Image src={user.imagePath}
-                                  className="mr-2"
+                                  loader={() => user.imagePath}
+                                  className="mr-2 rounded-full"
                                   alt=""
                                   width={32}
                                   height={32}/>}
