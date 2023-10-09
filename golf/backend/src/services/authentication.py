@@ -25,9 +25,9 @@ class AuthenticationService:
         payload = {
             'id': acc.id,
             'username': acc.username,
-            'firstName': acc.first_name,
-            'lastName': acc.last_name,
+            'name': acc.name,
             'isAdmin': acc.is_admin,
+            'imagePath': acc.image_path,
             'nbt': int(nbt.timestamp()),
             'exp': int(exp.timestamp()),
         }

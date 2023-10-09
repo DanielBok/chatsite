@@ -29,9 +29,14 @@ def _seed_player_table():
         repo.create_account(m.CreateAccount(
             username=os.getenv('APP_FIRST_USER_USERNAME', 'dbok'),
             password=os.getenv('APP_FIRST_USER_PASSWORD', 'password'),
-            first_name=os.getenv('APP_FIRST_USER_FIRST_NAME', 'Daniel'),
-            last_name=os.getenv('APP_FIRST_USER_LAST_NAME', 'Bok'),
+            name=os.getenv('APP_FIRST_USER_NAME', 'Monkey Chat'),
         ))
+        repo.create_account(m.CreateAccount(
+            username=os.getenv('APP_SECOND_USER_USERNAME', 'pquek'),
+            password=os.getenv('APP_SECOND_USER_PASSWORD', 'password'),
+            name=os.getenv('APP_SECOND_USER_NAME', 'Beaver Chat'),
+        ))
+
     else:
         logging.info("\tSkipping player data seeding")
 

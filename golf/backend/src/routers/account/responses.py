@@ -13,12 +13,11 @@ class Token(BaseModel):
 class Account(Token):
     id: int
     username: str
-    first_name: str
-    last_name: str
+    name: str
     is_admin: bool
-    token: str
+    image_path: str
 
     @classmethod
     def from_account(cls, acc: m.Account):
         token = auth_svc.construct_token(acc)
-        return cls(**acc.model_dump(include={'username', 'first_name', 'last_name', 'id', 'is_admin'}), token=token)
+        return cls(**acc.model_dump(include={'username', 'name', 'id', 'is_admin', 'image_path'}), token=token)
