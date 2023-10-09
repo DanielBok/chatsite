@@ -1,14 +1,15 @@
-import { getDefaultSession } from "@/app/api/auth/[...nextauth]/route";
+import AccountHandler from "@/components/MainLayout/Header/AccountHandler";
 import CatLogo from "@/components/MainLayout/Header/cat-logo.svg";
 import { APP_NAME } from "@/constants";
+import { useAuth } from "@/context/auth-context";
 import { Col, Row } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const Header = async () => {
-  const session = await getDefaultSession();
-  console.log(session);
+
+const Header = () => {
+  const {loading, user} = useAuth();
 
   return (
     <div className="h-24 sticky z-10 top-0 bg-teal-600 border-b-gray-400 border-b shadow-xl">
@@ -23,16 +24,19 @@ const Header = async () => {
         </Col>
         <Col span={12}>
           <div className="flex justify-end items-center h-full">
-            {session?.user ? (
-              <div>
-                Signed in
-              </div>
-            ) : (
-              <Link href="/auth/signin"
-                    className="text-white hover:text-gray-100 text-lg h-full items-center flex">
-                Log in
-              </Link>
-            )
+            {
+              !loading && <>
+                {
+                  user ? (
+                    <AccountHandler/>
+                  ) : (
+                    <Link href="/account/signin"
+                          className="text-white hover:text-gray-100 text-lg h-full items-center flex">
+                      Log in
+                    </Link>
+                  )
+                }
+              </>
             }
           </div>
         </Col>

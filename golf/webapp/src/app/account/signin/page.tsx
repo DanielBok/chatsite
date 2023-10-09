@@ -1,8 +1,8 @@
 "use client";
 
-import { CredentialName } from "@/app/api/auth/[...nextauth]/route";
-import { Button, Divider, Form, Input, Col, Row } from "antd";
-import { signIn } from "next-auth/react";
+import { useAuth } from "@/context/auth-context";
+import { Button, Col, Divider, Form, Input, Row } from "antd";
+import { redirect } from "next/navigation";
 import React from "react";
 
 type FieldType = {
@@ -11,7 +11,12 @@ type FieldType = {
 }
 
 
-const SignIn = () => {
+export default function SignIn() {
+  const {user, signIn} = useAuth();
+  if (user) {
+    redirect("/");
+  }
+
   return (
     <div className="my-6 flex flex-col">
       <Row>
@@ -23,7 +28,7 @@ const SignIn = () => {
       </Row>
       <Divider/>
       <Form
-        labelCol={{md: 4, lg: 3}}
+        labelCol={{span: 3}}
         wrapperCol={{span: 12}}
         onFinish={login}
       >
@@ -32,7 +37,7 @@ const SignIn = () => {
           name="username"
           rules={[{required: true, message: "Please enter your username"}]}
         >
-          <Input/>
+          <Input autoComplete="username"/>
         </Form.Item>
 
         <Form.Item<FieldType>
@@ -40,13 +45,14 @@ const SignIn = () => {
           name="password"
           rules={[{required: true, message: "Please enter your password"}]}
         >
-          <Input.Password/>
+          <Input.Password autoComplete="current-password"/>
         </Form.Item>
 
-        <Form.Item wrapperCol={{offset: 3, span: 12}}>
+        <Form.Item wrapperCol={{offset: 3}}>
           <Button
             htmlType="submit"
             type="primary"
+            className="bg-teal-600"
           >
             Log in
           </Button>
@@ -56,11 +62,6 @@ const SignIn = () => {
   );
 
   async function login({username, password}: FieldType) {
-    const result = await signIn("credentials",
-      {username, password, redirect: true, callbackUrl: "/"},
-    );
-    console.log(result);
+    await signIn(username, password);
   }
 };
-
-export default SignIn;
