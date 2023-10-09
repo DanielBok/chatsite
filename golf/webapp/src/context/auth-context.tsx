@@ -13,9 +13,9 @@ const COOKIE_JWT = "jwt";
 export type User = {
   id: number
   username: string
-  firstName: string
-  lastName: string
+  name: string
   isAdmin: boolean
+  imagePath: string
 };
 
 export type JWTTokenInfo = User & {
