@@ -36,8 +36,8 @@ class AccountRepository:
             payload['is_admin'] = conn.execute("""select id from golf.player""").rowcount == 0
 
             account_id, *_ = conn.execute("""
-            insert into golf.player (username, first_name, last_name, password, is_admin) 
-            values (%(username)s, %(first_name)s, %(last_name)s, %(password)s, %(is_admin)s)
+            insert into golf.player (username, name, password, is_admin, image_path) 
+            values (%(username)s, %(name)s, %(password)s, %(is_admin)s, %(image_path)s)
             returning id
             """, payload).fetchone()
         return account_id
@@ -53,9 +53,9 @@ class AccountRepository:
             conn.execute("""
             update golf.player
             set username = %(username)s,
-                first_name = %(first_name)s,
-                last_name = %(last_name)s,
-                password = %(password)s
+                name = %(name)s,
+                password = %(password)s,
+                image_path = %(image_path)s
             where id=%(id)s
             """, payload)
 
@@ -71,7 +71,7 @@ class AccountRepository:
 
         with connection_context() as conn, conn.cursor(row_factory=class_row(m.Account)) as cur:
             return cur.execute(f"""
-            select id, first_name, last_name, username, password, is_admin
+            select id, name, username, password, is_admin, image_path
             from golf.player
             where {filter_field} = %s
             """, (username_or_id,)).fetchone()

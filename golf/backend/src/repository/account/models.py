@@ -4,8 +4,8 @@ from pydantic import BaseModel, Field
 class CreateAccount(BaseModel):
     username: str = Field(min_length=1, max_length=50, description="Unique username")
     password: str = Field(min_length=1, description="Plaintext password")
-    first_name: str = Field(min_length=1, max_length=50, description='First name')
-    last_name: str = Field(min_length=1, max_length=50, description='Last name')
+    name: str = Field(min_length=1, max_length=50, description="User's name")
+    image_path: str = Field('', description="Image path URL")
 
 
 class UpdateAccount(CreateAccount):
