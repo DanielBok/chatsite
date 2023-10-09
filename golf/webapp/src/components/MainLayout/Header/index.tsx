@@ -1,5 +1,5 @@
 import AccountHandler from "@/components/MainLayout/Header/AccountHandler";
-import CatLogo from "@/components/MainLayout/Header/cat-logo.svg";
+import CatLogo from "@/components/MainLayout/Header/cat-logo.png";
 import { APP_NAME } from "@/constants";
 import { useAuth } from "@/context/auth-context";
 import { Col, Row } from "antd";
