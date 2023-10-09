@@ -26,17 +26,20 @@ def _seed_player_table():
     repo = AccountRepository()
     if len(repo.get_accounts()) == 0:
         logging.info("\tNo accounts in database yet, creating default admin account")
-        repo.create_account(m.CreateAccount(
-            username=os.getenv('APP_FIRST_USER_USERNAME', 'dbok'),
-            password=os.getenv('APP_FIRST_USER_PASSWORD', 'password'),
-            name=os.getenv('APP_FIRST_USER_NAME', 'Monkey Chat'),
-        ))
-        repo.create_account(m.CreateAccount(
-            username=os.getenv('APP_SECOND_USER_USERNAME', 'pquek'),
-            password=os.getenv('APP_SECOND_USER_PASSWORD', 'password'),
-            name=os.getenv('APP_SECOND_USER_NAME', 'Beaver Chat'),
-        ))
-
+        for username, password, name in [
+            (
+                    os.getenv('APP_FIRST_USER_USERNAME', 'dbok'),
+                    os.getenv('APP_FIRST_USER_PASSWORD', 'password'),
+                    os.getenv('APP_FIRST_USER_NAME', 'Monkey Chat')
+            ),
+            (
+                    os.getenv('APP_SECOND_USER_USERNAME', 'pquek'),
+                    os.getenv('APP_SECOND_USER_PASSWORD', 'password'),
+                    os.getenv('APP_SECOND_USER_NAME', 'Beaver Chat'),
+            )
+        ]:
+            repo.create_account(m.CreateAccount(username=username, password=password, name=name))
+            logging.info(f'\t\tCreated account <{username}>')
     else:
         logging.info("\tSkipping player data seeding")
 
@@ -168,6 +171,7 @@ def _seed_golf_scores_table():
                 scores=scores,
                 datetime=pytz.timezone('Asia/Singapore').localize(date),
             ))
+            logging.info(f"\t\tAdded score for player={dbok_id} at course={mandai_id} on date='{date:%Y-%m-%d}'")
 
         keppel_id = CourseRepository.fetch_course(CourseFilter(
             country='Singapore',
@@ -187,5 +191,6 @@ def _seed_golf_scores_table():
                 scores=scores,
                 datetime=pytz.timezone('Asia/Singapore').localize(date),
             ))
+            logging.info(f"\t\tAdded score for player={player_id} at course={keppel_id} on date='{date:%Y-%m-%d}'")
     else:
         logging.info("\tSkipping golf score data seeding")
