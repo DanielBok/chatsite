@@ -5,7 +5,7 @@ from importlib import import_module
 from pathlib import Path
 from pkgutil import iter_modules
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
@@ -28,8 +28,9 @@ def create_app():
                   lifespan=_lifespan)
 
     _add_middlewares(app)
-    _add_routes(app)
     _mount_static_folder(app)
+    _add_healthcheck(app)
+    _add_routes(app)
 
     return app
 
@@ -92,3 +93,15 @@ def _add_routes(app: FastAPI):
 
 def _mount_static_folder(app: FastAPI):
     app.mount('/static', StaticFiles(directory=STATIC_PATH), name='static')
+
+
+def _add_healthcheck(app: FastAPI):
+    path = '/healthcheck'
+
+    @app.post(path)
+    @app.get(path)
+    @app.put(path)
+    @app.delete(path)
+    @app.options(path)
+    def healthcheck():
+        return Response()
