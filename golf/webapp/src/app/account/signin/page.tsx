@@ -13,7 +13,6 @@ type FieldType = {
 
 export default function SignIn() {
   const {user, signIn} = useAuth();
-  const [form] = Form.useForm();
 
   if (user) {
     redirect("/");
@@ -30,7 +29,6 @@ export default function SignIn() {
           onFinish={login}
           layout="vertical"
           className="w-full"
-          form={form}
         >
           <Form.Item<FieldType>
             label="Username"
@@ -53,7 +51,6 @@ export default function SignIn() {
               htmlType="submit"
               type="primary"
               className="bg-teal-600 w-24"
-              onClick={form.submit}
             >
               Log in
             </Button>

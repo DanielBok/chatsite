@@ -1,19 +1,26 @@
-import { useAuth } from "@/context/auth-context";
-import { DownOutlined, UserOutlined, } from "@ant-design/icons";
+import { useAuth, User, withUserSession } from "@/context/auth-context";
+import { AndroidOutlined, DownOutlined, UserOutlined, } from "@ant-design/icons";
 import { Dropdown, MenuProps } from "antd";
 import classNames from "classnames";
 import Image from "next/image";
-import { redirect } from "next/navigation";
+import Link from "next/link";
 import React from "react";
 
-export default function AccountHandler() {
-  const {user, signOut} = useAuth();
+type Props = {
+  user: User;
+}
 
-  if (!user) {
-    redirect("/account/login");
-  }
+function AccountHandler({user}: Props) {
+  const {signOut} = useAuth();
 
   const items: MenuProps["items"] = [
+    {
+      label: (
+        <Link href="/account/manage">Manage Account</Link>
+      ),
+      icon: <AndroidOutlined/>,
+      key: "manage",
+    },
     {
       type: "divider",
     },
@@ -43,3 +50,5 @@ export default function AccountHandler() {
     </Dropdown>
   );
 }
+
+export default withUserSession()(AccountHandler);
