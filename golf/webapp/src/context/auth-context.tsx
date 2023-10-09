@@ -6,6 +6,7 @@ import axios from "axios";
 import { deleteCookie, getCookie, hasCookie, setCookie } from "cookies-next";
 import dayjs from "dayjs";
 import jwtDecode from "jwt-decode";
+import { redirect, RedirectType } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 const COOKIE_JWT = "jwt";
@@ -135,3 +136,25 @@ export function AuthenticationProvider({children}: React.PropsWithChildren) {
 
 
 export const useAuth = () => useContext(AuthenticationContext);
+
+
+type UserSessionConfig = {
+  redirect?: string  // redirect path, defaults to '/'
+  type?: RedirectType
+}
+
+export function withUserSession(config?: UserSessionConfig) {
+  return function UserSessionComponent<T>(Component: React.FC<T & { user: User }>) {
+    return function Wrapped(props: T) {
+      const {user} = useAuth();
+      config = config || {};
+
+      if (!user) {
+        console.log("No user, redirect");
+        redirect(config.redirect || "/", config.type);
+      }
+
+      return <Component user={user} {...props}/>;
+    };
+  };
+}
