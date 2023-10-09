@@ -44,20 +44,24 @@ class AccountRepository:
 
     def update_account(self, acc: m.UpdateAccount):
         """Updates the account"""
-        payload = {
-            **acc.model_dump(exclude={'password'}),
-            'password': self._hash_password(acc.password, secrets.token_hex(32))
-        }
+        payload = acc.model_dump()
+        if 'password' in payload:
+            payload['password'] = self._hash_password(payload['password'], secrets.token_hex(32))
 
-        with connection_context() as conn:
-            conn.execute("""
-            update golf.player
-            set username = %(username)s,
-                name = %(name)s,
-                password = %(password)s,
-                image_path = %(image_path)s
-            where id=%(id)s
-            """, payload)
+        update_fields = [
+            f'{field} = %({field})s'
+            for field in payload.keys()
+            if field != 'id'
+        ]
+
+        if len(update_fields) > 0:
+            with connection_context() as conn:
+
+                conn.execute(f"""
+                update golf.player
+                set {', '.join(update_fields)}
+                where id=%(id)s
+                """, payload)
 
     @staticmethod
     def get_account(username_or_id: int | str) -> Optional[m.Account]:

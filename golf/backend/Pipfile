@@ -8,6 +8,7 @@ fastapi = "*"
 uvicorn = "*"
 pyjwt = "*"
 psycopg = {extras = ["pool", "binary"] }
+python-multipart = "*"
 
 [dev-packages]
 
