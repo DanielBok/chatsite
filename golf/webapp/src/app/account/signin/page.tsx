@@ -1,63 +1,65 @@
 "use client";
 
 import { useAuth } from "@/context/auth-context";
-import { Button, Col, Divider, Form, Input, Row } from "antd";
+import { Button, Divider, Form, Input } from "antd";
 import { redirect } from "next/navigation";
 import React from "react";
 
 type FieldType = {
   username: string;
-  password: string
+  password: string;
 }
 
 
 export default function SignIn() {
   const {user, signIn} = useAuth();
+  const [form] = Form.useForm();
+
   if (user) {
     redirect("/");
   }
 
   return (
-    <div className="my-6 flex flex-col">
-      <Row>
-        <Col offset={3}>
-          <div className="text-xl font-bold">
-            Sign in
-          </div>
-        </Col>
-      </Row>
-      <Divider/>
-      <Form
-        labelCol={{span: 3}}
-        wrapperCol={{span: 12}}
-        onFinish={login}
-      >
-        <Form.Item<FieldType>
-          label="Username"
-          name="username"
-          rules={[{required: true, message: "Please enter your username"}]}
+    <div className="flex justify-center">
+      <div className="my-6 flex flex-col pl-4 min-w-[50%] w-[50vw] items-center">
+        <div className="text-xl font-bold">
+          Sign in
+        </div>
+        <Divider/>
+        <Form
+          onFinish={login}
+          layout="vertical"
+          className="w-full"
+          form={form}
         >
-          <Input autoComplete="username"/>
-        </Form.Item>
-
-        <Form.Item<FieldType>
-          label="Password"
-          name="password"
-          rules={[{required: true, message: "Please enter your password"}]}
-        >
-          <Input.Password autoComplete="current-password"/>
-        </Form.Item>
-
-        <Form.Item wrapperCol={{offset: 3}}>
-          <Button
-            htmlType="submit"
-            type="primary"
-            className="bg-teal-600"
+          <Form.Item<FieldType>
+            label="Username"
+            name="username"
+            rules={[{required: true, message: "Please enter your username"}]}
           >
-            Log in
-          </Button>
-        </Form.Item>
-      </Form>
+            <Input autoComplete="username"/>
+          </Form.Item>
+
+          <Form.Item<FieldType>
+            label="Password"
+            name="password"
+            rules={[{required: true, message: "Please enter your password"}]}
+          >
+            <Input.Password autoComplete="current-password"/>
+          </Form.Item>
+
+          <Form.Item>
+            <Button
+              htmlType="submit"
+              type="primary"
+              className="bg-teal-600 w-24"
+              onClick={form.submit}
+            >
+              Log in
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
     </div>
   );
 
