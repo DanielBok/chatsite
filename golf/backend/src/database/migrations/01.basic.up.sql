@@ -23,6 +23,7 @@ create table golf.course
     course         varchar(300) not null,
     country        varchar(300) not null,
     google_map_url text         not null,
+    website        text         not null,
     active         boolean default true,
     par            smallint[18],
     index          smallint[18],
