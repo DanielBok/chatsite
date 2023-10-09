@@ -11,6 +11,10 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 const COOKIE_JWT = "jwt";
 
+export type TokenResponse = {
+  token: string;
+}
+
 export type User = {
   id: number
   username: string
@@ -30,6 +34,7 @@ export type AuthenticationType = {
   error: string | null;
   signIn: (username: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  updateAccount: (data: FormData) => Promise<void>;
 }
 
 const AuthenticationContext = createContext<AuthenticationType>({
@@ -40,6 +45,8 @@ const AuthenticationContext = createContext<AuthenticationType>({
   },
   signOut: async () => {
   },
+  updateAccount: async () => {
+  }
 });
 
 export function AuthenticationProvider({children}: React.PropsWithChildren) {
@@ -51,10 +58,7 @@ export function AuthenticationProvider({children}: React.PropsWithChildren) {
 
   useEffect(() => {
     if (hasCookie(COOKIE_JWT)) {
-      const token = getCookie(COOKIE_JWT) as string;
-      const [user] = decodeToken(token);
-      setAuthState({user, error: null, loading: false});
-
+      tokenSignIn(getCookie(COOKIE_JWT) as string);
     } else {
       setAuthState(v => ({...v, loading: false}));
     }
@@ -64,6 +68,7 @@ export function AuthenticationProvider({children}: React.PropsWithChildren) {
     ...authState,
     signIn,
     signOut,
+    updateAccount,
   };
 
   return <AuthenticationContext.Provider value={value}>
@@ -74,25 +79,12 @@ export function AuthenticationProvider({children}: React.PropsWithChildren) {
     setAuthState(v => ({...v, loading: true}));
 
     try {
-      const {data: {token}} = await axios.get<{ token: string }>(makeUrl("/account/login"), {auth: {username, password}});
-      const [user, maxAge] = decodeToken(token);
+      const {data: {token}} = await axios.get<TokenResponse>(makeUrl("account/login"), {auth: {username, password}});
 
-      if (!user) {
-        setAuthState({
-          user: null,
-          error: "JWT token has expired, please get a new valid one",
-          loading: false,
-        });
-      } else {
-        // token only lasts 5 days
+      // maxAge > 0 only when tokenSignIn is successful
+      const maxAge = tokenSignIn(token);
+      if (maxAge > 0) {
         setCookie(COOKIE_JWT, token, {maxAge, sameSite: true});
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-        setAuthState({
-          user,
-          error: null,
-          loading: false,
-        });
       }
     } catch (e) {
       setAuthState({
@@ -101,6 +93,30 @@ export function AuthenticationProvider({children}: React.PropsWithChildren) {
         loading: false,
       });
     }
+  }
+
+  function tokenSignIn(token: string) {
+    const [user, maxAge] = decodeToken(token);
+
+    if (!user) {
+      setAuthState({
+        user: null,
+        error: "JWT token has expired, please get a new valid one",
+        loading: false,
+      });
+
+      return 0;
+
+    } else {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      setAuthState({
+        user,
+        error: null,
+        loading: false,
+      });
+    }
+
+    return maxAge;
   }
 
   async function signOut() {
@@ -112,6 +128,15 @@ export function AuthenticationProvider({children}: React.PropsWithChildren) {
       error: null,
       loading: false,
     });
+  }
+
+  async function updateAccount(formData: FormData) {
+    if (!axios.defaults.headers.common["Authorization"]) {
+      throw new Error("Must be logged in to update account");
+    }
+
+    const {data: {token}} = await axios.putForm<TokenResponse>(makeUrl("account"), formData);
+    tokenSignIn(token);
   }
 
   /**
