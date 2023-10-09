@@ -19,7 +19,7 @@ class CourseRepository:
             with conn.cursor() as cur, conn.transaction():
                 course_id, *_ = cur.execute("""
                 insert into golf.course (location, course, country, google_map_url, website, active, par, index)
-                values (%(location)s, %(course)s, %(country)s, %(google_map_url)s, %(active)s, %(par)s, %(index)s)
+                values (%(location)s, %(course)s, %(country)s, %(google_map_url)s, %(website)s, %(active)s, %(par)s, %(index)s)
                 returning id
                 """, course.model_dump(include={
                     'location', 'course', 'country', 'google_map_url', 'website', 'active', 'par', 'index'
