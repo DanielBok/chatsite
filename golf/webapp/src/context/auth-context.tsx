@@ -56,6 +56,7 @@ export function AuthenticationProvider({children}: React.PropsWithChildren) {
     error: null,
   });
 
+  // this effect only takes care of signing in
   useEffect(() => {
     if (hasCookie(COOKIE_JWT)) {
       tokenSignIn(getCookie(COOKIE_JWT) as string);
@@ -114,9 +115,9 @@ export function AuthenticationProvider({children}: React.PropsWithChildren) {
         error: null,
         loading: false,
       });
-    }
 
-    return maxAge;
+      return maxAge;
+    }
   }
 
   async function signOut() {
@@ -168,15 +169,18 @@ type UserSessionConfig = {
   type?: RedirectType
 }
 
-export function withUserSession(config?: UserSessionConfig) {
+const defaultUserSessionConfig: UserSessionConfig = {
+  redirect: "/account/signin",
+  type: RedirectType.replace,
+};
+
+export function withUserSession(config: UserSessionConfig = defaultUserSessionConfig) {
   return function UserSessionComponent<T>(Component: React.FC<T & { user: User }>) {
-    return function Wrapped(props: T) {
+    return function WrappedUserSessionComponent(props: T) {
       const {user} = useAuth();
-      config = config || {};
 
       if (!user) {
-        console.log("No user, redirect");
-        redirect(config.redirect || "/", config.type);
+        redirect(config.redirect || defaultUserSessionConfig.redirect!, config.type);
       }
 
       return <Component user={user} {...props}/>;
