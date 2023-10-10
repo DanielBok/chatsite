@@ -55,6 +55,7 @@ export default function InfoFields({user: {username, name}}: Props) {
           name="image"
           label="User Avatar"
           className="flex flex-col"
+          valuePropName="filelist"
         >
           <Upload
             listType="picture"
@@ -100,7 +101,6 @@ export default function InfoFields({user: {username, name}}: Props) {
     }
 
     if (image?.fileList.length === 1) {
-      console.log(image);
       formData.set("image", image.file.originFileObj as any);
     }
 
