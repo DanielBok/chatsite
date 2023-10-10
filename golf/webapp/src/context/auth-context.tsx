@@ -165,22 +165,32 @@ export const useAuth = () => useContext(AuthenticationContext);
 
 
 type UserSessionConfig = {
-  redirect?: string  // redirect path, defaults to '/'
-  type?: RedirectType
+  redirect?: string | null // redirect path, defaults to '/'
+  type?: RedirectType,
+  notLoggedInComponent?: React.ReactNode;  // if this is defined, redirect will be null
 }
 
-const defaultUserSessionConfig: UserSessionConfig = {
-  redirect: "/account/signin",
-  type: RedirectType.replace,
-};
 
-export function withUserSession(config: UserSessionConfig = defaultUserSessionConfig) {
+export function withUserSession(config?: UserSessionConfig) {
+  const conf: Required<UserSessionConfig> = {
+    redirect: "/account/signin",
+    type: RedirectType.replace,
+    notLoggedInComponent: null,
+    ...(config || {})
+  };
+
   return function UserSessionComponent<T>(Component: React.FC<T & { user: User }>) {
     return function WrappedUserSessionComponent(props: T) {
       const {user} = useAuth();
 
       if (!user) {
-        redirect(config.redirect || defaultUserSessionConfig.redirect!, config.type);
+        if (conf.notLoggedInComponent) {
+          return conf.notLoggedInComponent;
+        } else if (conf.redirect) {
+          redirect(conf.redirect!, conf.type);
+        } else {
+          return null;
+        }
       }
 
       return <Component user={user} {...props}/>;
