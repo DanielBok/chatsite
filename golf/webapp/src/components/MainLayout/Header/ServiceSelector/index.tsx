@@ -14,20 +14,47 @@ type Props = {
 
 function ServiceSelector({user}: Props) {
   const [menuKey, setMenuKey] = useState("home");
-  const items: {key: string, icon: React.FC, children: React.ReactNode}[] = [
-    {key: "home", icon: HomeOutlined, children: "Home"},
-    {key: "performance", icon: AuditOutlined, children: "Performance"},
-
+  const items: {
+    key: string,
+    icon: React.ReactNode,
+    children: React.ReactNode
+    path: string
+  }[] = [
+    {
+      key: "home",
+      icon: <HomeOutlined/>,
+      children: "Home",
+      path: "/"
+    },
+    {
+      key: "performance",
+      icon: <AuditOutlined/>,
+      children: "Performance",
+      path: "/performance"
+    },
   ];
+
   if (user.isAdmin) {
-    items.push({key: "course", icon: IoGolfOutline, children: <span className="ml-2">Course</span>},);
+    items.push({
+      key: "course",
+      icon: <IoGolfOutline/>,
+      children: <span className="ml-2">Course</span>,
+      path: "/course"
+    });
   }
 
-  const menuItems: MenuProps["items"] = items.map(({key, icon, children}) => ({
+  const menuItems: MenuProps["items"] = items.map(({key, icon, children, path}) => ({
     key,
-    label: <MenuLabel Icon={icon} selected={menuKey === key}>{children}</MenuLabel>
+    label: (
+      <MenuLabel
+        icon={icon}
+        selected={menuKey === key}
+        linkTo={path}
+      >
+        {children}
+      </MenuLabel>
+    ),
   }));
-
 
   return (
     <Menu
