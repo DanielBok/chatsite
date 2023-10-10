@@ -10,7 +10,7 @@ type Props = {
   user: User;
 }
 
-function AccountHandler({user}: Props) {
+function AccountServiceSelector({user}: Props) {
   const {signOut} = useAuth();
 
   const items: MenuProps["items"] = [
@@ -52,4 +52,4 @@ function AccountHandler({user}: Props) {
   );
 }
 
-export default withUserSession()(AccountHandler);
+export default withUserSession({redirect: null})(AccountServiceSelector);
