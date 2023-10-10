@@ -1,9 +1,8 @@
 "use client";
 
-import { useAuth, User, withUserSession } from "@/context/auth-context";
+import { User, withUserSession } from "@/context/auth-context";
 import type { CollapseProps } from "antd";
 import { Collapse, Divider } from "antd";
-import { redirect } from "next/navigation";
 import React from "react";
 import InfoFields from "./InfoFields";
 import SecurityFields from "./SecurityFields";
@@ -13,10 +12,6 @@ type Props = {
 }
 
 function ManageAccount({user}: Props) {
-  if (!user) {
-    redirect("/account/signin");
-  }
-
   const items: CollapseProps["items"] = [
     {
       key: "username",

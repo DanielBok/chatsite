@@ -12,7 +12,6 @@ type Props = {
 
 function AccountHandler({user}: Props) {
   const {signOut} = useAuth();
-  console.log(user);
 
   const items: MenuProps["items"] = [
     {
