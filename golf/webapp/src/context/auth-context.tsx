@@ -90,7 +90,9 @@ export function AuthenticationProvider({children}: React.PropsWithChildren) {
     } catch (e) {
       setAuthState({
         user: null,
-        error: (e as AxiosError<{ detail: string }>).response!.data.detail,
+        error: (e as AxiosError<{
+          detail: string
+        }>).response!.data.detail,
         loading: false,
       });
     }
@@ -170,16 +172,46 @@ type UserSessionConfig = {
   notLoggedInComponent?: React.ReactNode;  // if this is defined, redirect will be null
 }
 
+const defaultSessionConfig: Required<UserSessionConfig> = {
+  redirect: "/account/signin",
+  type: RedirectType.replace,
+  notLoggedInComponent: null,
+};
+
 
 export function withUserSession(config?: UserSessionConfig) {
   const conf: Required<UserSessionConfig> = {
-    redirect: "/account/signin",
-    type: RedirectType.replace,
-    notLoggedInComponent: null,
+    ...defaultSessionConfig,
     ...(config || {})
   };
 
   return function UserSessionComponent<T>(Component: React.FC<T & { user: User }>) {
+    return function WrappedUserSessionComponent(props: T) {
+      const {user} = useAuth();
+
+      if (!user) {
+        if (conf.notLoggedInComponent) {
+          return conf.notLoggedInComponent;
+        } else if (conf.redirect) {
+          redirect(conf.redirect!, conf.type);
+        } else {
+          return null;
+        }
+      }
+
+      return <Component user={user} {...props}/>;
+    };
+  };
+}
+
+
+export function withProtectedRoute(config?: UserSessionConfig) {
+  const conf: Required<UserSessionConfig> = {
+    ...defaultSessionConfig,
+    ...(config || {})
+  };
+
+  return function UserSessionComponent<T>(Component: React.FC<T>) {
     return function WrappedUserSessionComponent(props: T) {
       const {user} = useAuth();
 
