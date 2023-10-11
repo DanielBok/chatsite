@@ -63,6 +63,7 @@ export function AuthenticationProvider({children}: React.PropsWithChildren) {
     } else {
       setAuthState(v => ({...v, loading: false}));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const value: AuthenticationType = {
