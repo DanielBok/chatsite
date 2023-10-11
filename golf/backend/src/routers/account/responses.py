@@ -3,7 +3,7 @@ from pydantic import BaseModel
 import src.repository.account.models as m
 from src.services.authentication import auth_svc
 
-__all__ = ['Account']
+__all__ = ['Account', 'Token']
 
 
 class Token(BaseModel):
