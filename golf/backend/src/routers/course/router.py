@@ -2,10 +2,16 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 import src.repository.course.models as m
 import src.routers.course.requests as req
+import src.routers.course.responses as resp
 from src.repository.course.repo import CourseRepository
 from src.services.authentication import is_admin
 
 router = APIRouter(prefix="/course", tags=["Course Management"])
+
+
+@router.get('/filters', response_model=resp.CourseFilterOptions)
+def get_course_filter_options(repo: CourseRepository = Depends()):
+    return repo.fetch_filter_options()
 
 
 @router.post('/', response_model=list[m.Course])
