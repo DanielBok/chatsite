@@ -164,3 +164,10 @@ returning id
         with connection_context() as conn:
             conn.execute("delete from golf.course_tee_info where course_id = %s and id = %s",
                          (course_id, tee_id))
+
+    @staticmethod
+    def fetch_filter_options():
+        with connection_context() as conn:
+            countries = [c for c, *_ in conn.execute("select distinct country from golf.course order by country")]
+
+        return {'countries': countries}
