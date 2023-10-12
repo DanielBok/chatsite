@@ -35,12 +35,22 @@ function ServiceSelector({user: {isAdmin}}: Props) {
       label: (
         <MenuLabel
           icon={<AuditOutlined/>}
-          selected={menuKey === "performance"}
-          linkTo="/performance"
+          selected={menuKey.startsWith("performance")}
+          linkTo="/performance/course"
         >
           Performance
         </MenuLabel>
-      )
+      ),
+      children: [
+        {
+          label: <Link href="/performance/course">Course</Link>,
+          key: "performance-course"
+        },
+        {
+          label: <Link href="/performance/range">Range</Link>,
+          key: "performance-range"
+        },
+      ]
     },
     {
       key: "course",
