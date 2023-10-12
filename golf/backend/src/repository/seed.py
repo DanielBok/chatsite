@@ -168,7 +168,7 @@ def _seed_golf_scores_table():
                 player_id=dbok_id,
                 course_id=mandai_id,
                 tee=m.GolfTeeEnum.Blue,
-                holes=m.GolfHoles.Front,
+                game=m.GameEnum.Front,
                 scores=scores,
                 datetime=pytz.timezone('Asia/Singapore').localize(date),
             ))
@@ -188,7 +188,7 @@ def _seed_golf_scores_table():
                 player_id=player_id,
                 course_id=keppel_id,
                 tee=m.GolfTeeEnum.White,
-                holes=m.GolfHoles.Full,
+                game=m.GameEnum.Full,
                 scores=scores,
                 datetime=pytz.timezone('Asia/Singapore').localize(date),
             ))
