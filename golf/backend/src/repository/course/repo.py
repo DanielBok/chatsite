@@ -49,7 +49,7 @@ class CourseRepository:
     def fetch_courses(cls,
                       country: str | list[str] = None,
                       course_id: int | list[int] = None,
-                      active: bool = None, ) -> list[m.Course]:
+                      active: bool = None) -> list[m.Course]:
         """Fetches courses given filters. If no filters specified, retrieves all courses"""
         filters = []
         params = []

@@ -12,8 +12,8 @@ class ScoreRepository:
     def add_score(cls, score: m.CreateScore):
         with connection_context() as conn:
             score_id, *_ = conn.execute("""
-insert into golf.score_card (player_id, course_id, tee, scores, holes, datetime)
-values (%(player_id)s, %(course_id)s, %(tee)s, %(scores)s, %(holes)s, %(datetime)s)
+insert into golf.score_card (player_id, course_id, tee, scores, game, datetime)
+values (%(player_id)s, %(course_id)s, %(tee)s, %(scores)s, %(game)s, %(datetime)s)
 returning id;""", score.model_dump()).fetchone()
 
         return cls.fetch_score_by_id(score_id)
@@ -22,7 +22,7 @@ returning id;""", score.model_dump()).fetchone()
     def fetch_score_by_id(score_id: int):
         with connection_context() as conn, conn.cursor(row_factory=class_row(m.Score)) as cur:
             return cur.execute("""
-select id, player_id, course_id, tee, scores, holes, datetime
+select id, player_id, course_id, tee, scores, game, datetime
 from golf.score_card
 where id = %s;""", (score_id,)).fetchone()
 
@@ -45,6 +45,6 @@ where id = %s;""", (score_id,)).fetchone()
 
         with connection_context() as conn, conn.cursor(row_factory=class_row(m.Score)) as cur:
             return cur.execute(f"""
-select id, player_id, course_id, tee, scores, holes, datetime
+select id, player_id, course_id, tee, scores, game, datetime
 from golf.score_card
 {where_clause};""", params=params).fetchall()

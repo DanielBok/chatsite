@@ -6,7 +6,7 @@ import pytz
 from src.repository.course.models import GolfTeeEnum
 
 
-class GolfHoles(str, Enum):
+class GameEnum(str, Enum):
     Front = 'Front 9'
     Back = 'Back 9'
     Full = '18 Holes'
@@ -16,7 +16,7 @@ class CreateScore(BaseModel):
     player_id: int = Field(gt=0)
     course_id: int = Field(gt=0)
     tee: GolfTeeEnum = Field(description="Tee color for the distance")
-    holes: GolfHoles = Field(description="Number of holes played. If 9, specify whether it's Front 9 or Back 9")
+    game: GameEnum = Field(description="Number of holes played. If 9, specify whether it's Front 9 or Back 9")
     scores: list[int] = Field(list, description="Scores for each hole")
     datetime: AwareDatetime = Field(description="Date golf was played (Timezone needed!)")
 
@@ -36,4 +36,3 @@ class CreateScore(BaseModel):
 
 class Score(CreateScore):
     id: int = Field(gt=0)
-
