@@ -13,7 +13,7 @@ const MainLayout: React.FC<React.PropsWithChildren> = ({children}) => {
       <ThemeProvider>
         <div className="bg-gray-200 min-h-screen flex flex-col">
           <Header/>
-          <div className="container mx-auto p-2 bg-white flex-1">
+          <div className="lg:container mx-auto p-2 bg-white flex-1">
             {children}
           </div>
           <Footer/>
