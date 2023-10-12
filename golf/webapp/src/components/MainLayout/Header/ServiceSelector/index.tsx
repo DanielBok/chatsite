@@ -3,6 +3,7 @@ import { AuditOutlined, HomeOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
 import classNames from "classnames";
+import Link from "next/link";
 import React, { useState } from "react";
 import { IoGolfOutline } from "react-icons/io5";
 import MenuLabel from "./MenuLabel";
@@ -12,49 +13,56 @@ type Props = {
   user: User;
 }
 
-function ServiceSelector({user}: Props) {
+function ServiceSelector({user: {isAdmin}}: Props) {
   const [menuKey, setMenuKey] = useState("home");
-  const items: {
-    key: string,
-    icon: React.ReactNode,
-    children: React.ReactNode
-    path: string
-  }[] = [
+  const adminOnlyItems = new Set(["course"]);
+
+  const menuItems: MenuProps["items"] = [
     {
       key: "home",
-      icon: <HomeOutlined/>,
-      children: "Home",
-      path: "/"
+      label: (
+        <MenuLabel
+          icon={<HomeOutlined/>}
+          selected={menuKey === "home"}
+          linkTo="/"
+        >
+          Home
+        </MenuLabel>
+      )
     },
     {
       key: "performance",
-      icon: <AuditOutlined/>,
-      children: "Performance",
-      path: "/performance"
+      label: (
+        <MenuLabel
+          icon={<AuditOutlined/>}
+          selected={menuKey === "performance"}
+          linkTo="/performance"
+        >
+          Performance
+        </MenuLabel>
+      )
     },
-  ];
-
-  if (user.isAdmin) {
-    items.push({
+    {
       key: "course",
-      icon: <IoGolfOutline/>,
-      children: <span className="ml-2">Course</span>,
-      path: "/course"
-    });
-  }
+      label: (
+        <MenuLabel
+          icon={<IoGolfOutline/>}
+          selected={menuKey.startsWith("course")}
+          linkTo="/course"
+        >
+          <span className="ml-2">Course</span>
+        </MenuLabel>
+      ),
+      children: [
+        {
+          label: <Link href="/course/add">Add Course</Link>,
+          key: "course-add"
+        },
+      ]
+    },
+    // filter allows admin to see everything. Otherwise, remove admin only items
+  ].filter(({key}) => isAdmin || !adminOnlyItems.has(key));
 
-  const menuItems: MenuProps["items"] = items.map(({key, icon, children, path}) => ({
-    key,
-    label: (
-      <MenuLabel
-        icon={icon}
-        selected={menuKey === key}
-        linkTo={path}
-      >
-        {children}
-      </MenuLabel>
-    ),
-  }));
 
   return (
     <Menu
