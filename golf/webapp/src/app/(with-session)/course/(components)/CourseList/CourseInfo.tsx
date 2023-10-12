@@ -1,12 +1,13 @@
 "use client";
 
+import { useCourseOptions } from "@/app/(with-session)/course/context";
 import { Course } from "@/app/(with-session)/course/types";
 import { useAuth } from "@/context/auth-context";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Card } from "antd";
 import Link from "next/link";
-import React, { useCallback, useState } from "react";
-import InfoModal from "./InfoModal";
+import React from "react";
+import InfoModal from "../InfoModal";
 
 type Props = {
   course: Course;
@@ -15,11 +16,12 @@ type Props = {
 
 export default function CourseInfo({course}: Props) {
   const user = useAuth().user!;
-  const [isOpen, setIsOpen] = useState(false);
-  const closeModal = useCallback(() => setIsOpen(false), []);
+  const {setModal, setCourse} = useCourseOptions();
 
   const actions = user.isAdmin ? [
-    <EditOutlined key="edit"/>,
+    <div key="edit" className="w-full">
+      <EditOutlined key="edit"/>,
+    </div>,
     <DeleteOutlined key="delete"/>,
   ] : undefined;
 
@@ -29,7 +31,7 @@ export default function CourseInfo({course}: Props) {
         title={`${course.location}: ${course.course}`}
         actions={actions}
         hoverable={true}
-        onClick={() => setIsOpen(true)}
+        onClick={onCardClick}
       >
         <div className="flex flex-col">
           {[
@@ -41,9 +43,14 @@ export default function CourseInfo({course}: Props) {
           )}
         </div>
       </Card>
-      <InfoModal course={course} isOpen={isOpen} closeModal={closeModal}/>
+      <InfoModal/>
     </>
   );
+
+  function onCardClick() {
+    setCourse(course);
+    setModal("info");
+  }
 
   function Info({field, value, isLink = false}: {
     field: React.ReactNode,

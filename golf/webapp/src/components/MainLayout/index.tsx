@@ -11,7 +11,7 @@ const MainLayout: React.FC<React.PropsWithChildren> = ({children}) => {
   return (
     <AuthenticationProvider>
       <ThemeProvider>
-        <div className="bg-gray-200 h-screen flex flex-col">
+        <div className="bg-gray-200 min-h-screen flex flex-col">
           <Header/>
           <div className="container mx-auto p-2 bg-white flex-1">
             {children}

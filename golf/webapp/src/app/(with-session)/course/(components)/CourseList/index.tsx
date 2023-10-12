@@ -1,16 +1,16 @@
 "use client";
 
-import CourseInfo from "@/app/(with-session)/course/CourseViewer/CourseList/CourseInfo";
+import CourseInfo from "@/app/(with-session)/course/(components)/CourseList/CourseInfo";
 import { Course } from "@/app/(with-session)/course/types";
 import { makeUrl } from "@/lib/api";
 import { List } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useCourseFilter } from "../context";
+import { useCourseOptions } from "../../context";
 
 
 export default function CourseList() {
-  const {filters: {status, country}} = useCourseFilter();
+  const {filters: {status, country}} = useCourseOptions();
   const [courses, setCourses] = useState<Course[]>([]);
 
   useEffect(() => {

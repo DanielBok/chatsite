@@ -1,6 +1,6 @@
 "use client";
 
-import { CourseFilters, useCourseFilter } from "@/app/(with-session)/course/CourseViewer/context";
+import { CourseFilters, useCourseOptions } from "@/app/(with-session)/course/context";
 import { makeUrl } from "@/lib/api";
 import { Checkbox, Form, Select } from "antd";
 import axios from "axios";
@@ -14,7 +14,7 @@ type CourseFilterOptions = {
 
 export default function CourseFilters() {
   const [countries, setCountries] = useState<string[]>([]);
-  const {filters, setFilters} = useCourseFilter();
+  const {filters, setFilters} = useCourseOptions();
   const [form] = Form.useForm<CourseFilters>();
 
   useEffect(() => {
