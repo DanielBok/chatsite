@@ -1,37 +1,37 @@
 "use client";
 
+import { useCourseOptions } from "@/app/(with-session)/course/context";
 import { Course, DistanceMetric, Tee } from "@/app/(with-session)/course/types";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { Descriptions, Modal, Radio, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import React, { useState } from "react";
 
-type Props = {
-  course: Course;
-  isOpen: boolean;
-  closeModal: () => void
 
-}
+export default function InfoModal() {
+  const {modal, setModal, course, setCourse} = useCourseOptions();
 
-export default function InfoModal({
-                                    course: {
-                                      tee_info,
-                                      location,
-                                      country,
-                                      course,
-                                      par,
-                                      index,
-                                      google_map_url,
-                                      active,
-                                      website
-                                    },
-                                    isOpen,
-                                    closeModal,
-                                  }: Props) {
+  if (modal !== "info" || !course) {
+    return null;
+  }
+
+  const {
+    tee_info,
+    location,
+    country,
+    course: courseName,
+    par,
+    index,
+    google_map_url,
+    active,
+    website
+  } = course;
+
+
   const title = (
     <>
       <InfoCircleOutlined/>
-      <span className="ml-2">{course} Information</span>
+      <span className="ml-2">{courseName} Information</span>
     </>
   );
 
@@ -40,15 +40,16 @@ export default function InfoModal({
   return (
     <Modal
       title={title}
-      open={isOpen}
+      open={modal === "info"}
       maskClosable={true}
-      onCancel={closeModal}
+      onCancel={onCancel}
       className="min-w-[800px]"
+      footer={null}
     >
       <Descriptions bordered={true}>
         <Descriptions.Item label="Country">{country}</Descriptions.Item>
         <Descriptions.Item label="Location">{location}</Descriptions.Item>
-        <Descriptions.Item label="Course">{course}</Descriptions.Item>
+        <Descriptions.Item label="Course">{courseName}</Descriptions.Item>
         <Descriptions.Item label="Website" span={2}><a href={website}>{website}</a></Descriptions.Item>
         <Descriptions.Item label="Is Active">
           {
@@ -72,6 +73,11 @@ export default function InfoModal({
       </Descriptions>
     </Modal>
   );
+
+  function onCancel() {
+    setModal(null);
+    setCourse(null);
+  }
 }
 
 function formTableInfo({tee_info, par, index}: Pick<Course, "tee_info" | "par" | "index">) {
