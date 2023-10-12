@@ -162,6 +162,7 @@ def _seed_golf_scores_table():
             (datetime(2023, 9, 14), [4, 6, 5, 5, 7, 4, 4, 3, 4]),
             (datetime(2023, 9, 19), [5, 6, 3, 4, 6, 3, 4, 5, 3]),
             (datetime(2023, 10, 5), [5, 6, 4, 6, 6, 5, 4, 4, 4]),
+            (datetime(2023, 10, 10), [4, 6, 4, 4, 5, 5, 4, 4, 3]),
         ]:
             repo.add_score(m.CreateScore(
                 player_id=dbok_id,

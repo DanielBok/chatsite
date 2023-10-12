@@ -22,29 +22,29 @@ def get_courses(payload: req.GetCourse, repo: CourseRepository = Depends()):
                               active=payload.active)
 
 
-@router.post('/', response_model=m.Course, dependencies=[Depends(is_admin)])
+@router.post('/manage', response_model=m.Course, dependencies=[Depends(is_admin)])
 def create_course(payload: m.CreateCourse, repo: CourseRepository = Depends()):
     """Registers a course"""
     course_id = repo.create_course(payload)
     return repo.fetch_course_by_id(course_id=course_id)
 
 
-@router.put('/', response_model=m.Course, dependencies=[Depends(is_admin)])
+@router.put('/manage', response_model=m.Course, dependencies=[Depends(is_admin)])
 def update_course_status(payload: m.Course, repo: CourseRepository = Depends()):
-    if repo.fetch_course_by_id(course_id=payload.course_id) is None:
+    if repo.fetch_course_by_id(course_id=payload.id) is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Course ID <{payload.course_id}> does not exist")
+                            detail=f"Course ID <{payload.id}> does not exist")
 
-    repo.update_course(payload.course_id)
-    return repo.fetch_course_by_id(payload.course_id)
+    repo.update_course(payload)
+    return repo.fetch_course_by_id(payload.id)
 
 
-@router.post('/{course_id}/tee-info', dependencies=[Depends(is_admin)], response_model=m.CourseTeeInfo)
+@router.post('/manage/{course_id}/tee-info', dependencies=[Depends(is_admin)], response_model=m.CourseTeeInfo)
 def add_course_tee_info(course_id: int, tee_info: m.CreateCourseTeeInfo, repo: CourseRepository = Depends()):
     tee_id = repo.add_tee_info(course_id, tee_info)
     return m.CourseTeeInfo(**tee_info.model_dump(), id=tee_id)
 
 
-@router.delete('/{course_id}/tee-info/{tee_id}', dependencies=[Depends(is_admin)])
+@router.delete('/manage/{course_id}/tee-info/{tee_id}', dependencies=[Depends(is_admin)])
 def delete_course_tee_info(course_id: int, tee_id: int, repo: CourseRepository = Depends()):
     repo.delete_tee_info_by_id(course_id, tee_id)
