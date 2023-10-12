@@ -22,7 +22,7 @@ export default function Header() {
         <div className="flex-1 ml-8 mr-4 flex items-center">
           <ServiceSelector/>
         </div>
-        <div className="flex justify-end items-center h-full">
+        <div className="flex justify-end items-center h-auto">
           <AccountHandler/>
         </div>
       </div>
