@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 import src.repository.score.models as m
-from src.repository.course.models import Course
+from src.repository.course.models import Course, GolfDistanceMetric
 
 __all__ = ['Score']
 
@@ -14,12 +14,12 @@ class ScoreDetail(BaseModel):
     score: int
 
 
-class Score(m.Score):
+class Score(BaseModel):
     id: int
     tee: m.GolfTeeEnum
     game: m.GameEnum
     datetime: m.AwareDatetime
-    metric: str
+    metric: GolfDistanceMetric
     scores: list[ScoreDetail]
 
     @classmethod
