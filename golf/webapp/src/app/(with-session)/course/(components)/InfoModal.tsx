@@ -2,6 +2,7 @@
 
 import { useCourseOptions } from "@/app/(with-session)/course/context";
 import { Course, DistanceMetric, Tee } from "@/app/(with-session)/course/types";
+import { getConversionMap, TEE_COLOR_CLASS } from "@/constants";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { Descriptions, Modal, Radio, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
@@ -98,23 +99,8 @@ type CourseHoleDataTableProps = {
 }
 
 function CourseHoleDataTable({data, metric}: CourseHoleDataTableProps) {
+  const conversionMap = getConversionMap(metric);
   const [currMetric, setMetric] = useState(metric);
-
-  const conversionMap = metric === "meter"
-    ? {meter: 1, yard: 1.0936132983}
-    : {meter: 0.91440276, yard: 1};
-
-
-  const teeColorClass: Record<Tee, string> = {
-    Gold: "!bg-amber-400 !text-white",
-    Silver: "!bg-gray-400 !text-black",
-    Black: "!bg-black !text-white",
-    Blue: "!bg-blue-700 !text-white",
-    White: "!bg-white !text-black",
-    Yellow: "!bg-yellow-300 !text-white",
-    Red: "!bg-red-600 !text-white",
-    Green: "!bg-green-600 !text-white",
-  };
 
   const columns: ColumnsType<ReturnType<typeof formTableInfo>[number]> = [
     {
@@ -139,7 +125,7 @@ function CourseHoleDataTable({data, metric}: CourseHoleDataTableProps) {
     {
       title: `Distance (${currMetric})`,
       key: "Distance",
-      children: Object.entries(teeColorClass)
+      children: Object.entries(TEE_COLOR_CLASS)
         .filter(([tee,]) => data[0].hasOwnProperty(tee))
         .map(([tee, className]) => ({
           title: tee,
@@ -169,7 +155,7 @@ function CourseHoleDataTable({data, metric}: CourseHoleDataTableProps) {
         pagination={false}
         rowKey="Hole"
         summary={(data) => {
-          const totalDistances = Object.keys(teeColorClass)
+          const totalDistances = Object.keys(TEE_COLOR_CLASS)
             .filter((tee) => data[0].hasOwnProperty(tee))
             .map(tee => [
               tee,
