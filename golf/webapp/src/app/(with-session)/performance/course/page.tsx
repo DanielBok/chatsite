@@ -1,6 +1,6 @@
 "use client";
 
-import { DistanceMetric } from "@/app/(with-session)/course/types";
+import SummaryScoreTable from "@/app/(with-session)/performance/course/(component)/SummaryScoreTable";
 import { Score } from "@/app/(with-session)/performance/types";
 import { makeUrl } from "@/lib/api";
 import axios from "axios";
@@ -8,11 +8,8 @@ import dayjs from "dayjs";
 import { sort } from "radash";
 import React, { useEffect, useState } from "react";
 
-type Props = {
-  metric: DistanceMetric;
-}
 
-export default function CoursePerformance({metric}: Props) {
+export default function CoursePerformance() {
   const [scores, setScores] = useState<Score[]>([]);
 
   useEffect(() => {
@@ -26,8 +23,6 @@ export default function CoursePerformance({metric}: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(scores);
-
   if (scores.length === 0) {
     return (
       <div>
@@ -38,7 +33,7 @@ export default function CoursePerformance({metric}: Props) {
 
   return (
     <div>
-      Course Performance
+      <SummaryScoreTable scores={scores}/>
     </div>
   );
 }
