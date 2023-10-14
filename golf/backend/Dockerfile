@@ -8,4 +8,4 @@ RUN pip install pipenv && pipenv install --system --deploy --ignore-pipfile
 
 COPY . .
 
-ENTRYPOINT ["uvicorn", "api_server:app", "--host", "0.0.0.0", "--port", "8080"]
+ENTRYPOINT ["uvicorn", "api_server:app", "--host", "0.0.0.0", "--port", "80"]
