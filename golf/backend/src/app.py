@@ -16,7 +16,8 @@ from src.repository.seed import seed_application
 
 __all__ = ['create_app']
 
-VERSION = '1.0'
+with open(Path(__file__).parents[1] / '.version') as f:
+    VERSION = f.read().strip()
 
 
 def create_app():
