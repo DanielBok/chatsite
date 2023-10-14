@@ -1,59 +1,58 @@
-import logging
 import os
 from contextlib import contextmanager
-from dataclasses import dataclass
-from pathlib import Path
 from typing import Optional, ContextManager
 
+from mypy_boto3_s3.client import S3Client
 from starlette.datastructures import UploadFile
-from starlette.requests import Request
-
-# In the docker image (python:alpine), Path.home() is /root. We will bind mount this with
-# Path with the underlying server's /<home>/staticfiles folder
-# So /root/static <-> /<home>/chatsite/golf-for-chats/
-# The folder in the host server `/<home>/chatsite/golf-for-chats/` will need to be created
-# once manually
-STATIC_PATH = Path.home() / 'static'
 
 
-@dataclass
-class FileInfo:
-    path: str = None
-    filepath: Path = None
-    content: bytes = None
+def _get_endpoint(bucket: str = None, path: str = None):
+    if bucket is None:
+        return "https://sgp1.digitaloceanspaces.com"
+    else:
+        url = f"https://{bucket}.sgp1.digitaloceanspaces.com"
+        return f"{url}/{path}" if isinstance(path, str) else url
 
 
 @contextmanager
-def save_file(file: Optional[UploadFile | bytes], name: str) -> ContextManager[FileInfo]:
+def _s3_client() -> ContextManager[S3Client]:
+    from boto3.session import Session
+    from botocore.config import Config
+
+    session = Session()
+    client = session.client('s3',
+                            endpoint_url=_get_endpoint(),
+                            config=Config(s3={'addressing_style': 'virtual'}),
+                            region_name='sgp1',
+                            aws_access_key_id=os.environ['DO_SPACES_ACCESS_ID'],
+                            aws_secret_access_key=os.environ['DO_SPACES_SECRET_KEY'])
+
+    yield client
+
+    client.close()
+
+
+@contextmanager
+def save_file(file: Optional[UploadFile | bytes], name: str) -> ContextManager[Optional[str]]:
     """Saves provided file and returns the full filepath"""
 
     name = name.lstrip('/').lower().replace(' ', '-')
-    filepath = STATIC_PATH / name
-    filepath.parent.mkdir(mode=0o777, parents=True, exist_ok=True)
-
     if isinstance(file, UploadFile):
         content = file.file.read()
     else:
         content = file
 
-    try:
-        if content is not None:
-            with open(filepath, 'wb') as f:
-                f.write(content)
-            yield FileInfo(name, filepath, content)
+    if content is not None:
+        with _s3_client() as client:
+            res = client.put_object(
+                Bucket="chatsite",
+                Key=name,
+                Body=content,
+                ACL="public-read")
+
+        if res['ResponseMetadata']['HTTPStatusCode'] == 200:
+            yield _get_endpoint('chatsite', name)
         else:
-            yield FileInfo()
-
-    except Exception as e:
-        logging.error(f"Error encountered when running operation with file saving, removing file\n{e}")
-        os.remove(filepath)
-        raise e
-
-
-def get_static_file_url(request: Request, file_info: str | FileInfo):
-    if isinstance(file_info, FileInfo):
-        path = file_info.path
+            raise RuntimeError("An error occurred while attempting to upload a file to the 'chatsite' bucket")
     else:
-        path = file_info
-
-    return str(request.base_url).rstrip('/') + '/static/' + path.lstrip('/')
+        yield None

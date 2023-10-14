@@ -7,11 +7,9 @@ from pkgutil import iter_modules
 
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 
 from constants import APP_NAME, IS_DEBUG
 from src.database.connector import pool
-from src.lib.staticfiles import STATIC_PATH
 from src.repository.seed import seed_application
 
 __all__ = ['create_app']
@@ -29,7 +27,6 @@ def create_app():
                   lifespan=_lifespan)
 
     _add_middlewares(app)
-    _mount_static_folder(app)
     _add_healthcheck(app)
     _add_routes(app)
 
@@ -90,10 +87,6 @@ def _add_routes(app: FastAPI):
             module = import_module('.'.join(router_file.relative_to(root_dir).parts).replace('.py', ''))
             if hasattr(module, 'router'):
                 app.include_router(module.router)
-
-
-def _mount_static_folder(app: FastAPI):
-    app.mount('/static', StaticFiles(directory=STATIC_PATH), name='static')
 
 
 def _add_healthcheck(app: FastAPI):

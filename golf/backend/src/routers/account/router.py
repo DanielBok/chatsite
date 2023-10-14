@@ -1,10 +1,10 @@
 from typing import Annotated
 
-from fastapi import Depends, APIRouter, HTTPException, status, Form, UploadFile, File, Request
+from fastapi import Depends, APIRouter, HTTPException, status, Form, UploadFile, File
 
 import src.repository.account.models as m
 import src.routers.account.responses as resp
-from src.lib.staticfiles import save_file, get_static_file_url
+from src.lib.staticfiles import save_file
 from src.repository.account.repo import AccountRepository
 from src.services.authentication import auth_svc, is_admin
 
@@ -23,21 +23,21 @@ def verify(_: m.Account = Depends(auth_svc)):
 
 
 @router.put('/', response_model=resp.Account)
-def update_account(request: Request,
-                   username: str = Form(None),
+def update_account(username: str = Form(None),
                    password: str = Form(None),
                    name: str = Form(None),
                    image: UploadFile = File(None),
                    acc: m.Account = Depends(auth_svc),
                    repo: AccountRepository = Depends()):
-    filename = f"{name or acc.name}.{image.filename}" if image is not None else ''
-    with save_file(image, f'account/image/{filename}') as file_info:
+    # set filename to be '<name>.<file extension>'
+    filename = f"{name or acc.name}.{image.filename.split('.')[-1]}" if image is not None else ''
+    with save_file(image, f'golf/avatar/{filename}') as file_url:
         payload = m.UpdateAccount(
             id=acc.id,
             username=username,
             password=password,
             name=name,
-            image_path=get_static_file_url(request, file_info) if file_info.path is not None else None,
+            image_path=file_url if file_url is not None else None,
         ).remove_unnecessary_updates(acc)
 
         repo.update_account(payload)
@@ -47,18 +47,17 @@ def update_account(request: Request,
 
 
 @router.post('/', response_model=resp.Account, dependencies=[Depends(is_admin)])
-def create_account(request: Request,
-                   username: Annotated[str, Form()],
+def create_account(username: Annotated[str, Form()],
                    password: Annotated[str, Form()],
                    name: Annotated[str, Form()],
                    image: UploadFile,
                    repo: AccountRepository = Depends()):
-    with save_file(image, f'account/image/{name}.{image.filename}') as file_info:
+    with save_file(image, f"account/image/{name}.{image.filename.split('.')[-1]}") as url:
         account_id = repo.create_account(m.CreateAccount(
             username=username,
             password=password,
             name=name,
-            image_path=get_static_file_url(request, file_info)
+            image_path=url
         ))
 
     acc = repo.get_account(account_id)
