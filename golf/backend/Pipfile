@@ -11,6 +11,7 @@ psycopg = {extras = ["pool", "binary"] }
 python-multipart = "*"
 boto3 = "*"
 boto3-stubs = {extras = ["essential"], version = "*"}
+pytz = "*"
 
 [dev-packages]
 
