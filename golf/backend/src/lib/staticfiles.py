@@ -5,6 +5,8 @@ from typing import Optional, ContextManager
 from mypy_boto3_s3.client import S3Client
 from starlette.datastructures import UploadFile
 
+DEFAULT_BUCKET = 'chatsite'
+
 
 def _get_endpoint(bucket: str = None, path: str = None):
     if bucket is None:
@@ -37,22 +39,36 @@ def save_file(file: Optional[UploadFile | bytes], name: str) -> ContextManager[O
     """Saves provided file and returns the full filepath"""
 
     name = name.lstrip('/').lower().replace(' ', '-')
+    kwargs = {}
     if isinstance(file, UploadFile):
         content = file.file.read()
+        kwargs['ContentType'] = file.content_type
     else:
         content = file
 
     if content is not None:
         with _s3_client() as client:
             res = client.put_object(
-                Bucket="chatsite",
+                Bucket=DEFAULT_BUCKET,
                 Key=name,
                 Body=content,
-                ACL="public-read")
+                ACL="public-read",
+                **kwargs,
+            )
 
         if res['ResponseMetadata']['HTTPStatusCode'] == 200:
-            yield _get_endpoint('chatsite', name)
+            yield _get_endpoint(DEFAULT_BUCKET, name)
         else:
-            raise RuntimeError("An error occurred while attempting to upload a file to the 'chatsite' bucket")
+            raise RuntimeError(f"An error occurred while attempting to upload a file to the '{DEFAULT_BUCKET}' bucket")
     else:
         yield None
+
+
+def delete_file(path: str):
+    with _s3_client() as client:
+        res = client.delete_object(
+            Bucket=DEFAULT_BUCKET,
+            Key=path,
+        )
+
+    return 200 <= res['ResponseMetadata']['HTTPStatusCode'] < 300

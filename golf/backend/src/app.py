@@ -48,6 +48,8 @@ def _verify_env_vars_defined(is_debug: bool):
             'DB_PASSWORD',
             'DB_HOST',
             'DB_PORT',
+            'DO_SPACES_ACCESS_ID',
+            'DO_SPACES_SECRET_KEY',
         }
 
         if len(missing := sorted(keys - set(os.environ))):
