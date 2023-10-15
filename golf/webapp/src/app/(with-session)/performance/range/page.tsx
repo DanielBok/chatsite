@@ -1,13 +1,9 @@
 "use client";
 
-import { DistanceMetric } from "@/app/(with-session)/course/types";
 import React from "react";
 
-type Props = {
-  metric: DistanceMetric
-}
 
-export default function RangePerformance({metric}: Props) {
+export default function RangePerformance() {
   return (
     <div>
       Range Performance [WIP]
