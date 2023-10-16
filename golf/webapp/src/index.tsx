@@ -1,3 +1,6 @@
+import { BACKEND_BASE_URL } from "@/constants";
+import router from "@/router";
+import store from "@/store";
 import axios from "axios";
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -5,13 +8,9 @@ import { Provider } from "react-redux";
 import { RouterProvider, } from "react-router-dom";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import store from "@/store/store";
-import router from "@/router";
 
 
-axios.defaults.baseURL = process.env.BACKEND_BASE_URL;
-console.log('BASEURL', axios.defaults.baseURL);
-
+axios.defaults.baseURL = BACKEND_BASE_URL;
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
