@@ -1,4 +1,4 @@
-import { Tee } from "@/app/(with-session)/course/types";
+
 
 export const APP_NAME = "Golf for Chats";
 
@@ -10,7 +10,7 @@ export function getConversionMap(metric: "meter" | "yard") {
 }
 
 
-export const TEE_COLOR_CLASS: Record<Tee, string> = {
+export const TEE_COLOR_CLASS: Record<string, string> = {
   Gold: "!bg-amber-400 !text-white",
   Silver: "!bg-gray-400 !text-black",
   Black: "!bg-black !text-white",
