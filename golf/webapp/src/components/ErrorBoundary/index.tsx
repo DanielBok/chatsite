@@ -20,7 +20,6 @@ type RouteError = {
 
 export default function ErrorBoundary() {
   const error = useRouteError() as RouteError;
-  console.log(error);
 
   return (
     <MainLayout>
