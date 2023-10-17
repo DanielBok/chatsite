@@ -19,7 +19,6 @@ export default function Protected(
   const user = useUser();
   const {pathname} = useLocation();
 
-  console.log(user, pathname, adminOnly, children);
   if (!user) {
     children = <Navigate to="/account/signin" replace/>;
     setRedirectBackPath(pathname);

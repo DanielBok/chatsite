@@ -1,5 +1,8 @@
+import { JWT_COOKIE } from "@/store/account/thunks";
 import { User } from "@/store/account/types";
+import axios from "axios";
 import dayjs from "dayjs";
+import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
 
 export function decodeToken(token: string): [User | null, number] {
@@ -11,4 +14,14 @@ export function decodeToken(token: string): [User | null, number] {
   } else {
     return [null, 0];
   }
+}
+
+export function decodeTokenAndSetCookies(token: string) {
+  const [user, maxAge] = decodeToken(token);
+  if (!user || maxAge <= 0) return;
+
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  Cookies.set(JWT_COOKIE, token, {expires: maxAge, sameSite: "strict"});
+
+  return user;
 }

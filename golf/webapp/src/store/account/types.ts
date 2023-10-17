@@ -1,6 +1,7 @@
 export type AccountReducer = {
   user?: User
   loading: boolean
+  updating: boolean
 }
 
 export type User = {

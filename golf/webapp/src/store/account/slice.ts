@@ -7,6 +7,7 @@ import { JWT_COOKIE } from "./thunks";
 
 const initialState: AccountReducer = {
   loading: false,
+  updating: false,
 };
 
 export const accountSlice = createSlice({
@@ -21,30 +22,30 @@ export const accountSlice = createSlice({
   },
   extraReducers: builder => {
     // login
-    builder
-      .addCase(A.userLogIn.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(A.userLogIn.rejected, (state) => {
-        state.loading = false;
-        delete state.user;
-      })
-      .addCase(A.userLogIn.fulfilled, (state, {payload}) => {
-        state.loading = false;
-        state.user = payload;
-      });
+    [A.userLogIn, A.verifyToken].forEach(action => {
+      builder
+        .addCase(action.pending, (state) => {
+          state.loading = true;
+        })
+        .addCase(action.rejected, (state) => {
+          state.loading = false;
+          delete state.user;
+        })
+        .addCase(action.fulfilled, (state, {payload}) => {
+          state.loading = false;
+          state.user = payload;
+        });
+    });
 
-    // verify token
     builder
-      .addCase(A.verifyToken.pending, (state) => {
-        state.loading = true;
+      .addCase(A.updateAccount.pending, (state) => {
+        state.updating = true;
       })
-      .addCase(A.verifyToken.rejected, (state) => {
-        state.loading = false;
-        delete state.user;
+      .addCase(A.updateAccount.rejected, (state) => {
+        state.updating = false;
       })
-      .addCase(A.verifyToken.fulfilled, (state, {payload}) => {
-        state.loading = false;
+      .addCase(A.updateAccount.fulfilled, (state, {payload}) => {
+        state.updating = false;
         state.user = payload;
       });
   }
