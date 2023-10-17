@@ -1,4 +1,6 @@
+import { useAppDispatch } from "@/store";
 import { useUser } from "@/store/account/hooks";
+import { signOut } from "@/store/account/slice";
 import { AndroidOutlined, DownOutlined, UserOutlined, } from "@ant-design/icons";
 import { Dropdown, Image, MenuProps } from "antd";
 import classNames from "classnames";
@@ -8,6 +10,8 @@ import { Link } from "react-router-dom";
 
 function AccountServiceSelector() {
   const user = useUser()!;
+  const dispatch = useAppDispatch();
+
   const items: MenuProps["items"] = [
     {
       label: (
@@ -21,7 +25,7 @@ function AccountServiceSelector() {
     },
     {
       label: (
-        <div onClick={signOut}>Sign out</div>
+        <div onClick={onSignOutButtonClick}>Sign out</div>
       ),
       icon: <UserOutlined/>,
       key: "sign-out",
@@ -32,7 +36,7 @@ function AccountServiceSelector() {
     <>
       {user.imagePath && <Image src={user.imagePath}
                                 preview={{
-                                  maskClassName: 'rounded-full',
+                                  maskClassName: "rounded-full",
                                 }}
                                 className="rounded-full cursor-pointer"
                                 alt=""
@@ -50,8 +54,8 @@ function AccountServiceSelector() {
     </>
   );
 
-  function signOut() {
-
+  function onSignOutButtonClick() {
+    dispatch(signOut());
   }
 }
 
