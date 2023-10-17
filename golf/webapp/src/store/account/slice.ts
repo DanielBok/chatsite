@@ -1,10 +1,9 @@
 import { AccountReducer } from "@/store/account/types";
-import { decodeToken } from "@/store/account/utils";
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { JWT_COOKIE } from "./thunks";
 import * as A from "./thunks";
+import { JWT_COOKIE } from "./thunks";
 
 const initialState: AccountReducer = {
   loading: false,

@@ -11,7 +11,7 @@ type TokenResponse = {
 
 export const userLogIn = createAsyncThunk(
   "account/user-log-in",
-  async (auth: { username: string, password: string }, password) => {
+  async (auth: { username: string, password: string }) => {
     const {data: {token}} = await axios.get<TokenResponse>("account/login", {auth});
     const [user, maxAge] = decodeToken(token);
 
