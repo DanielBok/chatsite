@@ -1,7 +1,7 @@
 import { accountSlice } from "@/store/account/slice";
 import { configureStore } from "@reduxjs/toolkit";
 import { isEqual } from "radash";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const store = configureStore({
   reducer: {
@@ -12,7 +12,8 @@ const store = configureStore({
 });
 
 export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+
+export const useAppDispatch = () => useDispatch<typeof store.dispatch>();
 
 export function useRootSelector<Selected>(selector: ((state: RootState) => Selected)) {
   return useSelector(selector, isEqual);

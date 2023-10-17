@@ -1,5 +1,3 @@
-"use client";
-
 import { ConfigProvider } from "antd";
 import React from "react";
 import { Outlet } from "react-router-dom";
@@ -7,7 +5,7 @@ import Footer from "./Footer";
 import Header from "./Header";
 
 
-const MainLayout: React.FC<React.PropsWithChildren> = () => {
+const MainLayout: React.FC<React.PropsWithChildren> = ({children}) => {
   return (
     <ConfigProvider theme={{
       token: {
@@ -18,7 +16,7 @@ const MainLayout: React.FC<React.PropsWithChildren> = () => {
       <div className="bg-gray-200 min-h-screen flex flex-col">
         <Header/>
         <div className="lg:container mx-auto p-2 bg-white flex-1">
-          <Outlet/>
+          {children || <Outlet/>}
         </div>
         <Footer/>
       </div>

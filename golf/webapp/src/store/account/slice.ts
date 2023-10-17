@@ -1,5 +1,9 @@
 import { AccountReducer } from "@/store/account/types";
+import { decodeToken } from "@/store/account/utils";
 import { createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { JWT_COOKIE } from "./thunks";
 import * as A from "./thunks";
 
 const initialState: AccountReducer = {
@@ -11,8 +15,10 @@ export const accountSlice = createSlice({
   initialState,
   reducers: {
     signOut: state => {
+      Cookies.remove(JWT_COOKIE);
+      delete axios.defaults.headers.common["Authorization"];
       delete state.user;
-    }
+    },
   },
   extraReducers: builder => {
     // login
@@ -25,6 +31,20 @@ export const accountSlice = createSlice({
         delete state.user;
       })
       .addCase(A.userLogIn.fulfilled, (state, {payload}) => {
+        state.loading = false;
+        state.user = payload;
+      });
+
+    // verify token
+    builder
+      .addCase(A.verifyToken.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(A.verifyToken.rejected, (state) => {
+        state.loading = false;
+        delete state.user;
+      })
+      .addCase(A.verifyToken.fulfilled, (state, {payload}) => {
         state.loading = false;
         state.user = payload;
       });

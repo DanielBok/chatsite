@@ -1,13 +1,11 @@
-import { useUser } from "@/store/account/hooks";
-import { useRootSelector } from "@/store/store";
+import { useAccount } from "@/store/account/hooks";
 import React from "react";
 import { Link } from "react-router-dom";
 import AccountServiceSelector from "./AccountServiceSelector";
 import "./AccountServiceSelector";
 
 export default function AccountHandler() {
-  const user = useUser();
-  const loading = useRootSelector(s => s.account.loading);
+  const {user, loading} = useAccount();
 
   if (loading) return null;
 

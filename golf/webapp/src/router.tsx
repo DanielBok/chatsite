@@ -1,4 +1,5 @@
 import Home from "@/app";
+import SignIn from "@/app/account/signin";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import MainLayout from "@/components/MainLayout";
 import React from "react";
@@ -11,7 +12,8 @@ const routes: RouteObject[] = [
     element: <MainLayout/>,
     errorElement: <ErrorBoundary/>,
     children: [
-      {path: "", element: <Home/>}
+      {path: "", element: <Home/>},
+      {path: "account/signin", element: <SignIn/>}
     ]
   }
 ];

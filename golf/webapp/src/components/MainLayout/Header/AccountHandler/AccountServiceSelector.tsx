@@ -29,20 +29,25 @@ function AccountServiceSelector() {
   ];
 
   return (
-    <Dropdown menu={{items}}>
-      <div className={classNames(
-        "text-bold text-lg cursor-pointer border-b-white border-b p-1 items-center flex",
-        "hover:text-gray-300 hover:border-b-gray-300",
-      )}>
-        {user.imagePath && <Image src={user.imagePath}
-                                  className="mr-2 rounded-full"
-                                  alt=""
-                                  width={32}
-                                  height={32}/>}
-        <div>{user.name}</div>
-        <DownOutlined className="ml-1 text-sm"/>
-      </div>
-    </Dropdown>
+    <>
+      {user.imagePath && <Image src={user.imagePath}
+                                preview={{
+                                  maskClassName: 'rounded-full',
+                                }}
+                                className="rounded-full cursor-pointer"
+                                alt=""
+                                width={32}
+                                height={32}/>}
+      <Dropdown menu={{items}}>
+        <div className={classNames(
+          "ml-2 text-bold text-lg cursor-pointer border-b-white border-b p-1 items-center flex",
+          "hover:text-gray-300 hover:border-b-gray-300",
+        )}>
+          <div>{user.name}</div>
+          <DownOutlined className="ml-1 text-sm"/>
+        </div>
+      </Dropdown>
+    </>
   );
 
   function signOut() {

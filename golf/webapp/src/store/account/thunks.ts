@@ -1,11 +1,9 @@
-import { User } from "@/store/account/types";
+import { decodeToken } from "@/store/account/utils";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import dayjs from "dayjs";
-import jwtDecode from "jwt-decode";
 import Cookies from "js-cookie";
 
-const JWT_COOKIE = "jwt";
+export const JWT_COOKIE = "jwt";
 
 type TokenResponse = {
   token: string
@@ -18,22 +16,27 @@ export const userLogIn = createAsyncThunk(
     const [user, maxAge] = decodeToken(token);
 
     if (maxAge > 0) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       Cookies.set(JWT_COOKIE, token, {expires: maxAge, sameSite: "strict"});
     } else {
       return;
     }
 
     return user!;
+  }
+);
 
-    function decodeToken(token: string): [User | null, number] {
-      const {nbt, exp, ...user} = jwtDecode<User & { nbt: number, exp: number }>(token);
-      const now = dayjs().unix();
+export const verifyToken = createAsyncThunk(
+  "account/verify-token",
+  async (token: string) => {
 
-      if (nbt < now && now < exp) {
-        return [user, exp - now - 3600];  // expires 1 hour before
-      } else {
-        return [null, 0];
+    const {status} = await axios.get("/account/verify", {headers: {Authorization: `Bearer ${token}`}});
+    if (status >= 200 && status < 300) {
+      const [user] = decodeToken(token);
+      if (user) {
+        return user;
       }
     }
+    return;
   }
 );

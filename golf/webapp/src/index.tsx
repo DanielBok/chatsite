@@ -1,3 +1,4 @@
+import Startup from "@/components/Startup";
 import { BACKEND_BASE_URL } from "@/constants";
 import router from "@/router";
 import store from "@/store";
@@ -18,7 +19,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router}/>
+      <Startup>
+        <RouterProvider router={router}/>
+      </Startup>
     </Provider>
   </React.StrictMode>
 );
