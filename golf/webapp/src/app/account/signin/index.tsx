@@ -1,8 +1,9 @@
+import { getRedirectBackPath, removeRedirectBackPath } from "@/components/MainLayout/Protected/lib";
 import { useAppDispatch } from "@/store";
 import { useAccount } from "@/store/account/hooks";
 import { userLogIn } from "@/store/account/thunks";
 import { Button, Divider, Form, Input } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 
 type FieldType = {
@@ -14,13 +15,20 @@ type FieldType = {
 export default function SignIn() {
   const dispatch = useAppDispatch();
   const {user, loading} = useAccount();
+  const [redirectTo] = useState(getRedirectBackPath());
+
+  useEffect(() => {
+    return () => {
+      removeRedirectBackPath();
+    };
+  }, []);
 
   if (loading) {
     return null;
   }
 
   if (user) {
-    return <Navigate to="/" replace/>;
+    return <Navigate to={redirectTo} replace/>;
   }
 
   return (
