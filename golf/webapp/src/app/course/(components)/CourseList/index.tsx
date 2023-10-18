@@ -15,20 +15,15 @@ export default function CourseList() {
       return;
     }
 
-    const controller = new AbortController();
-
     axios.post<Course[]>(
         "course",
         {
           active: status.length === 2 ? undefined : status[0] === "Active",
           country
-        },
-        {signal: controller.signal})
+        })
       .then(({data}) => {
         setCourses(data);
       });
-
-    return () => controller.abort();
 
   }, [country, status]);
 

@@ -5,13 +5,15 @@ import { Menu } from "antd";
 import classNames from "classnames";
 import React, { useState } from "react";
 import { IoGolfOutline } from "react-icons/io5";
+import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import MenuLabel from "./MenuLabel";
 
 
 function ServiceSelector() {
   const user = useUser();
-  const [menuKey, setMenuKey] = useState("home");
+  const {pathname} = useLocation();
+  const [menuKey, setMenuKey] = useState(pathname.split("/").find(x => x.length > 0) || "home");
 
   if (!user) {
     return null;
@@ -36,7 +38,6 @@ function ServiceSelector() {
         <MenuLabel
           icon={<AuditOutlined/>}
           selected={menuKey.startsWith("performance")}
-          linkTo="/performance/course"
         >
           Performance
         </MenuLabel>
@@ -52,26 +53,39 @@ function ServiceSelector() {
         },
       ]
     },
-    {
-      key: "course",
-      label: (
-        <MenuLabel
-          icon={<IoGolfOutline/>}
-          selected={menuKey.startsWith("course")}
-          linkTo="/course"
-        >
-          <span className="ml-2">Course</span>
-        </MenuLabel>
-      ),
-      children: [
-        ...(user.isAdmin ? [
+    user.isAdmin ? {
+        key: "course",
+        label: (
+          <MenuLabel
+            icon={<IoGolfOutline/>}
+            selected={menuKey === "course"}
+          >
+            <span className="ml-2">Course</span>
+          </MenuLabel>
+        ),
+        children: [
+          {
+            label: <Link to="/course">List courses</Link>,
+            key: "course-list"
+          },
           {
             label: <Link to="/course/add">Add Course</Link>,
             key: "course-add"
           }
-        ] : []),
-      ]
-    },
+        ]
+      }
+      : {
+        key: "course",
+        label: (
+          <MenuLabel
+            icon={<IoGolfOutline/>}
+            selected={menuKey.startsWith("course")}
+            linkTo="/course"
+          >
+            <span className="ml-2">Course</span>
+          </MenuLabel>
+        )
+      },
   ];
 
 
@@ -84,8 +98,8 @@ function ServiceSelector() {
         classNames("bg-teal-600 text-white border-b-0 text-lg",
           "hover:text-white")
       }
-      onSelect={({key}) => {
-        setMenuKey(key);
+      onSelect={({keyPath}) => {
+        setMenuKey(keyPath[keyPath.length - 1]);
       }}
     />
   );

@@ -2,6 +2,7 @@ import Home from "@/app";
 import ManageAccount from "@/app/account/manage";
 import SignIn from "@/app/account/signin";
 import Course from "@/app/course";
+import AddCourse from "@/app/course/add";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import MainLayout from "@/components/MainLayout";
 import Protected from "@/components/MainLayout/Protected";
@@ -28,7 +29,8 @@ const routes: RouteObject[] = [
         path: "/course",
         element: <Protected/>,
         children: [
-          {path: "", element: <Course/>}
+          {path: "", element: <Course/>},
+          {path: "add", element: <AddCourse/>},
         ]
       }
     ]
