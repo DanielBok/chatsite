@@ -1,5 +1,3 @@
-"use client";
-
 import { useCourseOptions } from "@/app/course/context";
 import { Course } from "@/app/course/types";
 import { useUser } from "@/store/account/hooks";
