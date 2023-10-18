@@ -64,7 +64,7 @@ export default function InfoFields() {
           </Upload>
         </Form.Item>
 
-        <Form.Item>
+        <Form.Item name="submit-user-details-change">
           <div>
             <Button
               htmlType="submit"

@@ -59,7 +59,7 @@ export default function SignIn() {
             <Input.Password autoComplete="current-password"/>
           </Form.Item>
 
-          <Form.Item>
+          <Form.Item name="submit-login-details">
             <Button
               htmlType="submit"
               type="primary"

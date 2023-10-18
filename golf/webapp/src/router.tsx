@@ -1,6 +1,7 @@
 import Home from "@/app";
 import ManageAccount from "@/app/account/manage";
 import SignIn from "@/app/account/signin";
+import Course from "@/app/course";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import MainLayout from "@/components/MainLayout";
 import Protected from "@/components/MainLayout/Protected";
@@ -18,10 +19,16 @@ const routes: RouteObject[] = [
       {path: "account/signin", element: <SignIn/>},
       {
         path: "/account",
-        // eslint-disable-next-line react/jsx-no-undef
         element: <Protected/>,
         children: [
           {path: "manage", element: <ManageAccount/>}
+        ]
+      },
+      {
+        path: "/course",
+        element: <Protected/>,
+        children: [
+          {path: "", element: <Course/>}
         ]
       }
     ]

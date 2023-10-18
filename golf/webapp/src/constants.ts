@@ -1,18 +1,24 @@
+import { DistanceMetric, Tee } from "@/app/course/types";
 
 
 export const APP_NAME = "Golf for Chats";
 
-export const BACKEND_BASE_URL = process.env.REACT_APP_BACKEND_BASE_URL
+export const BACKEND_BASE_URL = process.env.REACT_APP_BACKEND_BASE_URL;
 
 
-export function getConversionMap(metric: "meter" | "yard") {
+export function getConversionMap(metric: DistanceMetric) {
   return metric === "meter"
     ? {meter: 1, yard: 1.0936132983}
     : {meter: 0.91440276, yard: 1};
 }
 
+export function getConversion(from: DistanceMetric, to: DistanceMetric) {
+  if (from === to) return 1;
+  return getConversionMap(from)[to];
+}
 
-export const TEE_COLOR_CLASS: Record<string, string> = {
+
+export const TEE_COLOR_CLASS: Record<Tee, string> = {
   Gold: "!bg-amber-400 !text-white",
   Silver: "!bg-gray-400 !text-black",
   Black: "!bg-black !text-white",

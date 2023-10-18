@@ -47,7 +47,7 @@ export default function SecurityFields() {
           <Input.Password/>
         </Form.Item>
 
-        <Form.Item>
+        <Form.Item name="submit-password-change">
           <div>
             <Button
               htmlType="submit"
