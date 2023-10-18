@@ -52,9 +52,9 @@ export default function ErrorBoundary() {
                 key: "stack",
                 label: <b>Error Stack</b>,
                 children: (
-                  <Details>{error.error.stack.split('\n').map(e => (
-                    <div>{e}</div>
-                  ))}</Details>
+                  <Details>
+                    {error.error.stack.split("\n").map(e => <div>{e}</div>)}
+                  </Details>
                 )
               }
             ]}
