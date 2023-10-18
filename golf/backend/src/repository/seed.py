@@ -28,12 +28,12 @@ def _seed_player_table():
         logging.info("\tNo accounts in database yet, creating default admin account")
         for username, password, name in [
             (
-                    os.getenv('APP_FIRST_USER_USERNAME', 'dbok'),
+                    'dbok',
                     os.getenv('APP_FIRST_USER_PASSWORD', 'password'),
                     os.getenv('APP_FIRST_USER_NAME', 'Monkey Chat')
             ),
             (
-                    os.getenv('APP_SECOND_USER_USERNAME', 'pquek'),
+                    'pquek',
                     os.getenv('APP_SECOND_USER_PASSWORD', 'password'),
                     os.getenv('APP_SECOND_USER_NAME', 'Beaver Chat'),
             )

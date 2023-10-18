@@ -37,10 +37,8 @@ def _verify_env_vars_defined(is_debug: bool):
     if not is_debug:
         # only check when in production mode
         keys = {
-            'APP_FIRST_USER_USERNAME',
             'APP_FIRST_USER_PASSWORD',
             'APP_FIRST_USER_NAME',
-            'APP_SECOND_USER_USERNAME',
             'APP_SECOND_USER_PASSWORD',
             'APP_SECOND_USER_NAME',
             'APP_JWT_SECRET',
