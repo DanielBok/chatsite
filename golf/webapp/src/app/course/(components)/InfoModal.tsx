@@ -62,6 +62,7 @@ export default function InfoModal() {
         </Descriptions.Item>
         <Descriptions.Item label="Map" span={3}>
           <iframe
+            title="Course Location"
             src={google_map_url}
             width={600}
             height={450}
