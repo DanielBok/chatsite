@@ -20,12 +20,10 @@ export default function CourseFilters() {
   useEffect(() => {
     dispatch(fetchCourseFilterOptions())
       .unwrap()
-      .then(({countries, status}) => {
+      .then(({countries}) => {
         const country = countries[Math.max(countries.indexOf("Singapore"), 0)];
-
-        const newFilters: Filters = {country, status};
-        setFilters(newFilters);
-        form.setFieldsValue(newFilters);
+        setFilters(f => ({...f, country}));
+        form.setFieldsValue({country});
       });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,12 +1,15 @@
+import { useAppDispatch } from "@/store";
+import { deleteCourse } from "@/store/course/thunks";
 import { DeleteOutlined } from "@ant-design/icons";
-import React, { useState } from "react";
 import { Modal } from "antd";
+import React, { useState } from "react";
 
 type Props = {
   courseId: number;
 }
 
 export default function DeleteCourse({courseId}: Props) {
+  const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
 
   return (
@@ -20,18 +23,15 @@ export default function DeleteCourse({courseId}: Props) {
         width={400}
         onCancel={() => setOpen(false)}
         title={<div className="text-rose-800 font-bold">Are you sure?</div>}
-        onOk={removeCourse}
+        onOk={() => dispatch(deleteCourse(courseId))}
         okButtonProps={{
           className: "bg-rose-600 text-white hover:bg-rose-800"
         }}
         okText="Yes"
       >
-        Once you remove the course, it's lost forever!
+        <p>Once you remove the course, it's lost forever!</p>
+        <p>Do you actually want to switch this course to <b>Inactive</b>?</p>
       </Modal>
     </>
   );
-
-  function removeCourse() {
-    console.log(courseId);
-  }
 }

@@ -25,6 +25,14 @@ export const fetchCourseFilterOptions = createAsyncThunk(
   "course/fetch-filter-options",
   async () => {
     const {data} = await axios.get<CourseFilterOptions>("course/filters");
+    data["status"] = ["Active", "Inactive"];
     return data;
   }
 );
+
+export const deleteCourse = createAsyncThunk(
+  "course/delete",
+  async (courseId: number) => {
+    await axios.delete(`course/manage/${courseId}`);
+    return courseId;
+  });
