@@ -1,4 +1,4 @@
-import { Tee } from "@/app/course/types";
+import { Tee } from "@/store/course/types";
 import { usePerfOptions } from "@/app/performance/context";
 import { Score } from "@/app/performance/types";
 import { getConversion, TEE_COLOR_CLASS } from "@/constants";

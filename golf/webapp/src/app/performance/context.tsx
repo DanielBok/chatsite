@@ -1,4 +1,4 @@
-import { DistanceMetric } from "@/app/course/types";
+import { DistanceMetric } from "@/store/course/types";
 import React, { createContext, useContext, useState } from "react";
 
 

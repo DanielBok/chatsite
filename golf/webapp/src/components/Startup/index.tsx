@@ -1,6 +1,6 @@
 import { useAppDispatch } from "@/store";
-import { JWT_COOKIE, verifyToken } from "@/store/account/thunks";
-import Cookies from "js-cookie";
+import { verifyToken } from "@/store/account/thunks";
+import { getJWTFromCookies } from "@/store/account/utils";
 import React, { useEffect } from "react";
 
 
@@ -9,7 +9,7 @@ import React, { useEffect } from "react";
  */
 export default function Startup({children}: React.PropsWithChildren) {
   const dispatch = useAppDispatch();
-  const jwtToken = Cookies.get(JWT_COOKIE);
+  const jwtToken = getJWTFromCookies();
 
   useEffect(() => {
     if (jwtToken) {

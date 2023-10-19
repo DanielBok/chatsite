@@ -1,9 +1,11 @@
-import { JWT_COOKIE } from "@/store/account/thunks";
 import { User } from "@/store/account/types";
 import axios from "axios";
 import dayjs from "dayjs";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
+
+const JWT_COOKIE = "jwt";
+
 
 export function decodeToken(token: string): [User | null, number] {
   const {nbt, exp, ...user} = jwtDecode<User & { nbt: number, exp: number }>(token);
@@ -24,4 +26,15 @@ export function decodeTokenAndSetCookies(token: string) {
   Cookies.set(JWT_COOKIE, token, {expires: maxAge, sameSite: "strict"});
 
   return user;
+}
+
+
+export function removeJWTCookie() {
+  Cookies.remove(JWT_COOKIE);
+}
+
+
+export function getJWTFromCookies() {
+  return Cookies.get(JWT_COOKIE);
+
 }

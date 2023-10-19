@@ -1,4 +1,4 @@
-import { DistanceMetric, Tee } from "@/app/course/types";
+import { DistanceMetric, Tee } from "@/store/course/types";
 
 
 export const APP_NAME = "Golf for Chats";

@@ -1,31 +1,11 @@
-import { useCourseOptions } from "@/app/course/context";
-import { Course } from "@/app/course/types";
+import { useCourses } from "@/store/course/hooks";
 import { List } from "antd";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import CourseInfo from "./CourseInfo";
 
 
 export default function CourseList() {
-  const {filters: {status, country}} = useCourseOptions();
-  const [courses, setCourses] = useState<Course[]>([]);
-
-  useEffect(() => {
-    if (!country || status.length === 0) {
-      return;
-    }
-
-    axios.post<Course[]>(
-        "course",
-        {
-          active: status.length === 2 ? undefined : status[0] === "Active",
-          country
-        })
-      .then(({data}) => {
-        setCourses(data);
-      });
-
-  }, [country, status]);
+  const courses = useCourses();
 
   return (
     <List
@@ -38,7 +18,7 @@ export default function CourseList() {
         xl: 3,
         xxl: 4,
       }}
-      dataSource={courses}
+      dataSource={Object.values(courses)}
       renderItem={(course) => (
         <List.Item>
           <CourseInfo course={course}/>

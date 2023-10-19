@@ -1,4 +1,4 @@
-import { DistanceMetric, Tee } from "@/app/course/types";
+import { DistanceMetric, Tee } from "@/store/course/types";
 import { Dayjs } from "dayjs";
 
 export type GolfGame = "Front 9" | "Back 9" | "18 Holes";

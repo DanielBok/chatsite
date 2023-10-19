@@ -1,9 +1,8 @@
-import { AccountReducer } from "@/store/account/types";
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import Cookies from "js-cookie";
 import * as A from "./thunks";
-import { JWT_COOKIE } from "./thunks";
+import { AccountReducer } from "./types";
+import { removeJWTCookie } from "./utils";
 
 const initialState: AccountReducer = {
   loading: false,
@@ -15,7 +14,7 @@ export const accountSlice = createSlice({
   initialState,
   reducers: {
     signOut: state => {
-      Cookies.remove(JWT_COOKIE);
+      removeJWTCookie();
       delete axios.defaults.headers.common["Authorization"];
       delete state.user;
     },

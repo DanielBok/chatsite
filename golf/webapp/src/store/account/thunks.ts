@@ -2,8 +2,6 @@ import { decodeTokenAndSetCookies } from "@/store/account/utils";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const JWT_COOKIE = "jwt";
-
 type TokenResponse = {
   token: string
 }

@@ -1,20 +1,13 @@
-import { useCourseOptions } from "@/app/course/context";
-import { Course, DistanceMetric, Tee } from "@/app/course/types";
 import { getConversionMap, TEE_COLOR_CLASS } from "@/constants";
+import { Course, DistanceMetric, Tee } from "@/store/course/types";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { Descriptions, Modal, Radio, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import React, { useState } from "react";
 
 
-export default function InfoModal() {
-  const {modal, setModal, course, setCourse} = useCourseOptions();
-
-  if (modal !== "info" || !course) {
-    return null;
-  }
-
-  const {
+export default function CourseInfoZoom(
+  {
     tee_info,
     location,
     country,
@@ -24,60 +17,59 @@ export default function InfoModal() {
     google_map_url,
     active,
     website
-  } = course;
-
-
-  const title = (
-    <>
-      <InfoCircleOutlined/>
-      <span className="ml-2">{courseName} Information</span>
-    </>
-  );
+  }: Course
+) {
+  const [open, setOpen] = useState(false);
 
   const tableData = formTableInfo({tee_info, par, index});
 
   return (
-    <Modal
-      title={title}
-      open={modal === "info"}
-      maskClosable={true}
-      onCancel={onCancel}
-      className="min-w-[800px]"
-      footer={null}
-    >
-      <Descriptions bordered={true}>
-        <Descriptions.Item label="Country">{country}</Descriptions.Item>
-        <Descriptions.Item label="Location">{location}</Descriptions.Item>
-        <Descriptions.Item label="Course">{courseName}</Descriptions.Item>
-        <Descriptions.Item label="Website" span={2}><a href={website}>{website}</a></Descriptions.Item>
-        <Descriptions.Item label="Is Active">
-          {
-            active
-              ? <span className="text-green-700">True</span>
-              : <span className="text-red-700">False</span>
-          }
-        </Descriptions.Item>
-        <Descriptions.Item label="Tee Info" span={3}>
-          <CourseHoleDataTable data={tableData} metric={tee_info[0].distance_metric}/>
-        </Descriptions.Item>
-        <Descriptions.Item label="Map" span={3}>
-          <iframe
-            title="Course Location"
-            src={google_map_url}
-            width={600}
-            height={450}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"/>
-        </Descriptions.Item>
+    <>
+      <div onClick={() => setOpen(true)} className="text-blue-500 hover:text-blue-700">
+        <InfoCircleOutlined key="more-info"/> More
+      </div>
+      <Modal
+        title={(
+          <>
+            <InfoCircleOutlined/>
+            <span className="ml-2">{courseName} Information</span>
+          </>
+        )}
+        open={open}
+        maskClosable={true}
+        onCancel={() => setOpen(false)}
+        className="min-w-[800px]"
+        footer={null}
+      >
+        <Descriptions bordered={true}>
+          <Descriptions.Item label="Country">{country}</Descriptions.Item>
+          <Descriptions.Item label="Location">{location}</Descriptions.Item>
+          <Descriptions.Item label="Course">{courseName}</Descriptions.Item>
+          <Descriptions.Item label="Website" span={2}><a href={website}>{website}</a></Descriptions.Item>
+          <Descriptions.Item label="Is Active">
+            {
+              active
+                ? <span className="text-green-700">True</span>
+                : <span className="text-red-700">False</span>
+            }
+          </Descriptions.Item>
+          <Descriptions.Item label="Tee Info" span={3}>
+            <CourseHoleDataTable data={tableData} metric={tee_info[0].distance_metric}/>
+          </Descriptions.Item>
+          <Descriptions.Item label="Map" span={3}>
+            <iframe
+              title="Course Location"
+              src={google_map_url}
+              width={600}
+              height={450}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"/>
+          </Descriptions.Item>
 
-      </Descriptions>
-    </Modal>
+        </Descriptions>
+      </Modal>
+    </>
   );
-
-  function onCancel() {
-    setModal(null);
-    setCourse(null);
-  }
 }
 
 function formTableInfo({tee_info, par, index}: Pick<Course, "tee_info" | "par" | "index">) {

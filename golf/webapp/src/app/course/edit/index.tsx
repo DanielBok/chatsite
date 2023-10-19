@@ -1,10 +1,10 @@
 import React from "react";
 
 
-export default function AddCoursePage() {
+export default function EditCoursePage() {
   return (
     <div>
-      Add Course - WIP
+      Edit Course [WIP]
     </div>
   );
 }

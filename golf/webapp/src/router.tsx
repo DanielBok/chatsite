@@ -2,7 +2,8 @@ import Home from "@/app";
 import ManageAccount from "@/app/account/manage";
 import SignIn from "@/app/account/signin";
 import Course from "@/app/course";
-import AddCourse from "@/app/course/add";
+import AddCoursePage from "@/app/course/add";
+import EditCoursePage from "@/app/course/edit";
 import CoursePerformance from "@/app/performance/course";
 import PerformanceLayout from "@/app/performance/PerformanceLayout";
 import RangePerformance from "@/app/performance/range";
@@ -33,7 +34,8 @@ const routes: RouteObject[] = [
         element: <Protected/>,
         children: [
           {path: "", element: <Course/>},
-          {path: "add", element: <AddCourse/>},
+          {path: "add", element: <AddCoursePage/>},
+          {path: "edit/:courseId", element: <EditCoursePage/>},
         ]
       },
       {
