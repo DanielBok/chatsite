@@ -171,3 +171,8 @@ returning id
             countries = [c for c, *_ in conn.execute("select distinct country from golf.course order by country")]
 
         return {'countries': countries}
+
+    @staticmethod
+    def delete_course(course_id: int):
+        with connection_context() as conn:
+            conn.execute("delete from golf.course where id = %s", (course_id,))

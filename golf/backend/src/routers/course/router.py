@@ -39,6 +39,12 @@ def update_course_status(payload: m.Course, repo: CourseRepository = Depends()):
     return repo.fetch_course_by_id(payload.id)
 
 
+@router.delete('/manage/{course_id}', dependencies=[Depends(is_admin)])
+def delete_course(course_id: int, repo: CourseRepository = Depends()):
+    repo.delete_course(course_id)
+    return "Okay"
+
+
 @router.post('/manage/{course_id}/tee-info', dependencies=[Depends(is_admin)], response_model=m.CourseTeeInfo)
 def add_course_tee_info(course_id: int, tee_info: m.CreateCourseTeeInfo, repo: CourseRepository = Depends()):
     tee_id = repo.add_tee_info(course_id, tee_info)
