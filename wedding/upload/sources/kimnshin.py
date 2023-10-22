@@ -4,7 +4,7 @@ from pathlib import Path
 
 from tqdm import tqdm
 
-from sources._libs import s3_client, upload
+from libs import s3_client, upload
 
 
 def main(photo_folder: str = r"C:\Users\danie\Downloads\wedding\Singapore\kimnshin"):
