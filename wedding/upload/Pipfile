@@ -8,6 +8,8 @@ requests = "*"
 boto3 = "*"
 boto3-stubs = {extras = ["essential"], version = "*"}
 tqdm = "*"
+pillow = "*"
+opencv-python = "*"
 
 [dev-packages]
 
