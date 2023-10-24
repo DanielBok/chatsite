@@ -13,7 +13,7 @@ def _load_do_env_vars():
     keys = {'DO_SPACES_ACCESS_ID', 'DO_SPACES_SECRET_KEY'}
     missing = keys - os.environ.keys()
     if len(missing) > 0:
-        env_file = Path(__file__).parent / '.env'
+        env_file = Path(__file__).parents[1] / '.env'
         if env_file.exists():
             with open(env_file) as f:
                 env_vars = dict([line.split('=', 1) for line in f.read().strip().split('\n')])
