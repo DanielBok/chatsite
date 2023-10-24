@@ -4,6 +4,9 @@ from pathlib import Path
 from typing import ContextManager
 
 from mypy_boto3_s3 import S3Client
+from tqdm import tqdm
+
+BUCKET = 'chatsite'
 
 
 def _load_do_env_vars():
@@ -46,7 +49,7 @@ def create_s3_client() -> S3Client:
 def upload(key: str, client: S3Client, filepath: Path, content_type: str):
     with open(filepath, mode='rb') as f:
         res = client.put_object(
-            Bucket='chatsite',
+            Bucket=BUCKET,
             Key=key,
             Body=f.read(),
             ACL="public-read",
@@ -57,3 +60,13 @@ def upload(key: str, client: S3Client, filepath: Path, content_type: str):
         return 0
     else:
         raise RuntimeError(res)
+
+
+def remove_objects(prefix='wedding-thumbnails/'):
+    if len(prefix) < 1 or '/' not in prefix:
+        raise RuntimeError("You're in danger of removing all the contents in the bucket!")
+
+    with s3_client() as client:
+        items = client.list_objects_v2(Bucket=BUCKET, Prefix=prefix)['Contents']
+        for item in tqdm(items, desc=f"Removing from {prefix}"):
+            client.delete_object(Bucket=BUCKET, Key=item["Key"])
