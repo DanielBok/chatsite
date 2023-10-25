@@ -3,9 +3,8 @@ import React from "react";
 
 export default function Home() {
   const links = [
-    "https://chatsite.sgp1.cdn.digitaloceanspaces.com/wedding/bali/official/IG.mp4",
-    "https://chatsite.sgp1.cdn.digitaloceanspaces.com/wedding/bali/official/wedding.mp4",
-    "https://chatsite.sgp1.cdn.digitaloceanspaces.com/wedding/bali/pre-wedding/slideshow.mp4",
+    "https://chatsite.sgp1.cdn.digitaloceanspaces.com/wedding/bali/1.official/highlights.mp4",
+    "https://chatsite.sgp1.cdn.digitaloceanspaces.com/wedding/pre-wedding/daniel-_and_-priscilla-connection-s_2023-05-31_1080p.mp4",
   ];
   const link = links[Math.floor(Math.random() * links.length)];
 
