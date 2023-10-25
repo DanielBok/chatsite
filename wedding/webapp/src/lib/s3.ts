@@ -52,7 +52,7 @@ export async function fetchThumbnails(
 
   function processKey(key: string) {
     key = key.replace(/^\/*/, "");
-    const [location, photoSource, guest = ''] = key.split("/").slice(1, -1);
+    const [location, photoSource, section] = key.split("/").slice(1, -1);
     const matches = key.match(/\/([\w\-_]+)\.(\d+)x(\d+)\.(\w+)$/)!;
 
     const name = matches[1];
@@ -67,12 +67,14 @@ export async function fetchThumbnails(
       src: `https://chatsite.sgp1.digitaloceanspaces.com/${srcUrlPath}`,
     };
 
+    const source = parseSource(photoSource);
+
     return {
       key,
       url,
       location: titleCase(location),
-      source: parseSource(photoSource),
-      guest,
+      source,
+      section: parseSection(section, location, source),
       contentType: (videoExt.has(ext) ? "video" : "image") as "video" | "image",
       dim: {
         width,
@@ -88,6 +90,18 @@ export async function fetchThumbnails(
         value = (/^(?:\d+\.)?(\w+)$/).exec(value)![1];
         return titleCase(value);
       }
+    }
+
+    function parseSection(value: string, loc: string, src: string) {
+      src = src.toLowerCase();
+      loc = loc.toLowerCase();
+
+      if (loc === "singapore" && src.indexOf("official") >= 0) {
+        return titleCase(value.match(/\d+\.(\w+)/)![1]);
+      } else if (loc === "bali" && src === "guest") {
+        return value;
+      }
+      return "";
     }
   }
 

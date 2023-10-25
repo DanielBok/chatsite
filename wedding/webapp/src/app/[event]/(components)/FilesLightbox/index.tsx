@@ -1,63 +1,64 @@
 "use client";
 
 import { useContentManagerContext } from "@/app/[event]/(components)/ContentManager/context";
+import { group, } from "radash";
 import React from "react";
-import PhotoAlbum from "react-photo-album";
-import Lightbox, { Slide } from "yet-another-react-lightbox";
-import Download from "yet-another-react-lightbox/plugins/download";
-import Share from "yet-another-react-lightbox/plugins/share";
-import Video from "yet-another-react-lightbox/plugins/video";
-import "yet-another-react-lightbox/styles.css";
-import GalleryThumbnail from "./GalleryThumbnail";
+import Album from "./Album";
 
 export default function FilesLightbox() {
-  const {
-    contents
-  } = useContentManagerContext();
-  const [index, setIndex] = React.useState(-1);
-
-  const contentList = Object.values(contents);
-  const photos = contentList.map(({url, dim}, index) => ({
-    src: url.thumbnail,
-    alt: index.toFixed(),
-    ...dim,
-  }));
-
-  const slides: Slide[] = contentList
-    .map(({url, contentType}, index) => {
-      if (contentType === "video") {
-        return {
-          type: "video",
-          autoPlay: true,
-          loop: true,
-          controls: true,
-          sources: [{src: url.src, type: "video/mp4"}],
-        } as Slide;
-      } else {
-        return {
-          src: url.src,
-          alt: index.toFixed(),
-        } as Slide;
-      }
-    });
+  const {contents} = useContentManagerContext();
 
   return (
     <div className="container">
-      <PhotoAlbum
-        layout="masonry"
-        photos={photos}
-        spacing={10}
-        renderPhoto={GalleryThumbnail}
-        onClick={({index: current}) => setIndex(current)}
-      />
+      {Object.entries(group(contents, e => e.source))
+        .map(([src, srcContents]) => {
+          if (!srcContents || srcContents.length === 0) {
+            return null;
+          }
 
-      <Lightbox
-        index={index}
-        slides={slides}
-        open={index >= 0}
-        close={() => setIndex(-1)}
-        plugins={[Download, Share, Video]}
-      />
+          if (srcContents[0].section === "") {
+            return (
+              <div key={src} className="flex flex-col mb-4">
+                <div className="text-md font-bold text-gray-400 underline mb-2">
+                  {src}
+                </div>
+                <Album contents={srcContents}/>
+              </div>
+            );
+          } else {
+            return (
+              <div key={src} className="flex flex-col mb-4">
+                <div className="text-md font-bold text-gray-400 underline">
+                  {src}
+                </div>
+                {Object.entries(group(srcContents, e => e.section))
+                  .map(([section, sectionContents]) => {
+                    if (!sectionContents || sectionContents.length === 0) {
+                      return null;
+                    }
+
+                    return <div key={section}>
+                      <div className="text-sm font-bold text-gray-300 underline mb-2 ml-2">
+                        {section}
+                      </div>
+                      <Album contents={sectionContents}/>
+                    </div>;
+                  })}
+              </div>
+            );
+          }
+        })}
     </div>
   );
 }
+
+const Section = ({section, children}: React.PropsWithChildren<{ section: string }>) => {
+  return (
+    <div key={section} className="flex flex-col mb-4">
+      <div className="text-md font-bold text-gray-400 underline mb-2">
+        {section}
+      </div>
+      {children}
+    </div>
+  );
+};
