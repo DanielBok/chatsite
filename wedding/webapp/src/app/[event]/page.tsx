@@ -1,6 +1,7 @@
 import { EventType } from "@/lib/pages";
 import { notFound } from "next/navigation";
 import React from "react";
+import ScrollTopButton from "./(components)/ScrollTopButton";
 import ContentManager from "./(components)/ContentManager";
 import FilesLightbox from "./(components)/FilesLightbox";
 import Header from "./(components)/Header";
@@ -19,6 +20,7 @@ export default async function Page({params: {event}}: NextPageParams<{ event: st
         <ContentManager event={evt} className="container bg-base-100">
           <FilesLightbox/>
         </ContentManager>
+        <ScrollTopButton/>
       </div>
     </div>
   );
