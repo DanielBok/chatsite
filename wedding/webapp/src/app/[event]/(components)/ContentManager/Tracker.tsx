@@ -44,7 +44,7 @@ export default function Tracker({children}: React.PropsWithChildren) {
     const params = [
       ["event", event],
       ["continuationToken", continuationToken],
-      ["maxKeys", 150]
+      ["maxKeys", 30]
     ].filter(([, v]) => v)
       .reduce((acc: string[], [k, v]) => [...acc, `${k}=${v}`], [])
       .join("&");
