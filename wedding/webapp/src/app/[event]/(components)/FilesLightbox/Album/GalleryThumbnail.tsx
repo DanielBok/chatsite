@@ -1,19 +1,21 @@
-import { useContentManagerContext } from "@/app/[event]/(components)/ContentManager/context";
 import { ContentInfo } from "@/app/[event]/(components)/ContentManager/types";
+import classNames from "classnames";
 import React from "react";
 import type { Photo, RenderPhotoProps } from "react-photo-album";
-
+import { useAlbumContext } from "./context";
 
 export default function GalleryThumbnail({
                                            photo,
                                            imageProps: {onClick},
                                          }: RenderPhotoProps) {
-  const index = parseInt(photo.alt!);
-
-  const {contentType, dim} = useContentManagerContext().contents[index];
+  const {contentType, dim} = useAlbumContext().contents[parseInt(photo.key!) as number];
 
   return (
-    <div className="card bg-base-100 shadow-xl cursor-pointer mb-4" onClick={onClick}>
+    <div
+      onClick={onClick}
+      className={classNames("card bg-base-100 shadow-xl cursor-pointer mb-4",
+        contentType === "video" ? "bg-indigo-200" : "bg-orange-200")}
+    >
       <div className="card-body p-3">
         <figure>
           <Content photo={photo} dim={dim} contentType={contentType}/>

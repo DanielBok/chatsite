@@ -1,7 +1,7 @@
 "use client";
 
 import { useContentManagerContext } from "@/app/[event]/(components)/ContentManager/context";
-import { group, } from "radash";
+import { orderedGroupBy } from "@/lib/functools";
 import React from "react";
 import Album from "./Album";
 
@@ -10,7 +10,7 @@ export default function FilesLightbox() {
 
   return (
     <div className="container">
-      {Object.entries(group(contents, e => e.source))
+      {orderedGroupBy(contents, e => e.source)
         .map(([src, srcContents]) => {
           if (!srcContents || srcContents.length === 0) {
             return null;
@@ -31,7 +31,7 @@ export default function FilesLightbox() {
                 <div className="text-md font-bold text-gray-400 underline">
                   {src}
                 </div>
-                {Object.entries(group(srcContents, e => e.section))
+                {orderedGroupBy(srcContents, e => e.section)
                   .map(([section, sectionContents]) => {
                     if (!sectionContents || sectionContents.length === 0) {
                       return null;

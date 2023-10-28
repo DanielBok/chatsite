@@ -28,13 +28,11 @@ export default function ContentManagerContextProvider({event, children}: React.P
   );
 
   function updateContent({contents, hasMore, continuationToken}: ContentManagerContextDataType) {
-    setData(prev => {
-      return {
-        contents: [...prev.contents, ...contents],
-        hasMore,
-        continuationToken,
-      };
-    });
+    setData(prev => ({
+      contents: [...prev.contents, ...contents],
+      hasMore,
+      continuationToken,
+    }));
   }
 }
 

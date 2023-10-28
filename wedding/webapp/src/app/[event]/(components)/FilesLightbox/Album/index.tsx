@@ -1,14 +1,13 @@
 "use client";
 
 import { ContentInfo } from "@/app/[event]/(components)/ContentManager/types";
-import GalleryThumbnail from "@/app/[event]/(components)/FilesLightbox/GalleryThumbnail";
+import GalleryThumbnail from "@/app/[event]/(components)/FilesLightbox/Album/GalleryThumbnail";
 import React from "react";
 import PhotoAlbum from "react-photo-album";
 import Lightbox, { Slide } from "yet-another-react-lightbox";
-import Download from "yet-another-react-lightbox/plugins/download";
-import Share from "yet-another-react-lightbox/plugins/share";
-import Video from "yet-another-react-lightbox/plugins/video";
+import { Download, Fullscreen, Share, Video } from "yet-another-react-lightbox/plugins";
 import "yet-another-react-lightbox/styles.css";
+import { AlbumContextProvider } from "./context";
 
 type Props = {
   contents: ContentInfo[]
@@ -17,9 +16,10 @@ type Props = {
 export default function Album({contents}: Props) {
   const [index, setIndex] = React.useState(-1);
 
-  const photos = contents.map(({url, dim}, index) => ({
+  const photos = contents.map(({url, key, dim}, index) => ({
+    key: index.toFixed(),
     src: url.thumbnail,
-    alt: index.toFixed(),
+    alt: key,
     ...dim,
   }));
 
@@ -43,7 +43,7 @@ export default function Album({contents}: Props) {
 
 
   return (
-    <div>
+    <AlbumContextProvider contents={contents}>
       <PhotoAlbum
         layout="masonry"
         photos={photos}
@@ -57,8 +57,8 @@ export default function Album({contents}: Props) {
         slides={slides}
         open={index >= 0}
         close={() => setIndex(-1)}
-        plugins={[Download, Share, Video]}
+        plugins={[Download, Fullscreen, Share, Video]}
       />
-    </div>
+    </AlbumContextProvider>
   );
 }
