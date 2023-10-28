@@ -6,7 +6,7 @@ export default function Information() {
     <div className="hero min-h-screen bg-base-200 bg-opacity-60">
       <div className="hero-content text-center">
         <div className="max-w-md">
-          <h1 className="text-5xl font-bold">Daniel and Priscilla</h1>
+          <h1 className="text-5xl font-bold">Crevette Claude and Mimolette</h1>
 
           <div className="divider"/>
 

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Arima } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({subsets: ["latin"]});
+const inter = Arima({weight: "100", subsets: ["latin"]});
 
 export const metadata: Metadata = {
   title: "Mimolette and Crevette",
