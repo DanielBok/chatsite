@@ -1,5 +1,4 @@
 import { PageSetup } from "@/lib/pages";
-import classNames from "classnames";
 import Link from "next/link";
 import React from "react";
 
@@ -15,7 +14,6 @@ export default function PageLinks() {
             className="m-4 p-2 font-bold font-lg underline text-blue-800">
             {x.desc}
           </Link>
-
         ))}
       </div>
     </div>
