@@ -51,14 +51,3 @@ export default function FilesLightbox() {
     </div>
   );
 }
-
-const Section = ({section, children}: React.PropsWithChildren<{ section: string }>) => {
-  return (
-    <div key={section} className="flex flex-col mb-4">
-      <div className="text-md font-bold text-gray-400 underline mb-2">
-        {section}
-      </div>
-      {children}
-    </div>
-  );
-};
