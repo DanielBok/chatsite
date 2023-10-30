@@ -13,3 +13,7 @@ export function orderedGroupBy<T, Key extends string | number | symbol>(array: r
     return acc;
   }, [] as [Key, T[]][]);
 }
+
+export function pickRandom<T>(items: T[]) {
+  return items[Math.floor(Math.random() * items.length)];
+}
