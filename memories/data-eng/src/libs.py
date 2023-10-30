@@ -7,6 +7,7 @@ from mypy_boto3_s3 import S3Client
 from tqdm import tqdm
 
 BUCKET = 'chatsite'
+ORIGIN = f'https://{BUCKET}.sgp1.digitaloceanspaces.com'
 
 
 def _load_do_env_vars():
