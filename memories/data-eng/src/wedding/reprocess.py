@@ -12,13 +12,11 @@ from src.libs import ORIGIN, s3_client, BUCKET
 def replace_all_files_metadata():
     keys = []
     with s3_client() as client:
-        for prefix in ['wedding-thumbnails/']:
-            token = None
+        # for prefix in ['wedding/', 'wedding-thumbnails/']:
+        for prefix in ['wedding/singapore', ]:
+            token = ''
             while True:
-                if isinstance(token, str):
-                    result = client.list_objects_v2(Bucket=BUCKET, Prefix=prefix, ContinuationToken=token)
-                else:
-                    result = client.list_objects_v2(Bucket=BUCKET, Prefix=prefix)
+                result = client.list_objects_v2(Bucket=BUCKET, Prefix=prefix, ContinuationToken=token)
                 keys.extend([x['Key'] for x in result['Contents']])
 
                 if result['IsTruncated']:
@@ -37,6 +35,12 @@ def replace_file_metadata(key: str):
     with s3_client() as client:
         meta = client.head_object(Bucket=BUCKET, Key=key)
         content_type = meta['ContentType']
+
+        if not (content_type.startswith('video') or content_type.startswith('image')):
+            if key.endswith('.jpg'):
+                content_type = 'image/jpeg'
+            elif key.endswith('.mp4'):
+                content_type = 'video/mp4'
 
         url = f"{ORIGIN}/{key}"
         if content_type == 'image/jpeg':
