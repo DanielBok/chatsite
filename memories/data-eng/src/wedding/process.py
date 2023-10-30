@@ -60,19 +60,38 @@ def move_and_upload_all_files():
 
 
 def _upload_original_file(fp: Path):
-    if fp.name.endswith('.mp4'):
-        content_type = 'video/mp4'
-    elif fp.name.endswith('.jpg'):
-        content_type = 'image/jpeg'
-    else:
-        raise TypeError(f"Invalid file extension '{fp.name}'. Only jpg and mp4 files are handled now")
+    content_type, width, height = _get_original_file_metadata(fp)
 
     with s3_client() as client:
         client.upload_file(
             Filename=fp.as_posix(),
             Bucket=BUCKET,
-            Key='/'.join(['wedding', fp.relative_to(PROCESSED_SOURCE_FOLDER).as_posix()]),
-            ExtraArgs={'ACL': "public-read", 'ContentType': content_type})
+            Key='/'.join(['memories/wedding', fp.relative_to(PROCESSED_SOURCE_FOLDER).as_posix()]),
+            ExtraArgs={'ACL': "public-read",
+                       'ContentType': content_type,
+                       'Metadata': {'width': str(width), 'height': str(height)}})
+
+
+def _get_original_file_metadata(fp: Path):
+    if fp.name.endswith('.mp4'):
+        content_type = 'video/mp4'
+        capture = cv2.VideoCapture(fp.as_posix())
+        try:
+            done, frame = capture.read()
+            assert done, "could not read video frame"
+            height, width, _ = frame.shape
+        finally:
+            capture.release()
+
+    elif fp.name.endswith('.jpg'):
+        content_type = 'image/jpeg'
+        with Image.open(fp) as img:
+            width, height = img.size
+
+    else:
+        raise TypeError(f"Invalid file extension '{fp.name}'. Only jpg and mp4 files are handled now")
+
+    return content_type, width, height
 
 
 def create_thumbnails_all_files():
@@ -97,11 +116,7 @@ def _create_thumbnail(fp: Path):
 
 def _form_thumbnail_filepath(fp: Path, width: int, height: int):
     assert width > 0 and height > 0, "invalid width and/or height value"
-
-    orig_name, ext = fp.name.rsplit('.', 1)
-    name = f"{orig_name}.{width}x{height}.{ext}"
-
-    return THUMBNAILS_FOLDER / fp.parent.relative_to(PROCESSED_SOURCE_FOLDER) / name
+    return THUMBNAILS_FOLDER / fp.parent.relative_to(PROCESSED_SOURCE_FOLDER) / fp.name
 
 
 def _create_image_thumbnail(fp: Path):
@@ -125,10 +140,11 @@ def _create_image_thumbnail(fp: Path):
         new_fp = _form_thumbnail_filepath(fp, width, height)
         res = client.put_object(
             Bucket='chatsite',
-            Key='/'.join(['wedding-thumbnails', new_fp.relative_to(THUMBNAILS_FOLDER).as_posix()]),
+            Key='/'.join(['memories/wedding-thumbnails', new_fp.relative_to(THUMBNAILS_FOLDER).as_posix()]),
             Body=resized_io.read(),
             ACL="public-read",
             ContentType='image/jpeg',
+            Metadata={'width': str(width), 'height': str(height)}
         )
 
         if res['ResponseMetadata']['HTTPStatusCode'] != 200:
@@ -187,5 +203,7 @@ def _create_video_thumbnail(fp: Path):
         client.upload_file(
             Filename=new_fp.as_posix(),
             Bucket=BUCKET,
-            Key='/'.join(['wedding-thumbnails', new_fp.relative_to(THUMBNAILS_FOLDER).as_posix()]),
-            ExtraArgs={'ACL': "public-read", 'ContentType': 'video/mp4'})
+            Key='/'.join(['memories/wedding-thumbnails', new_fp.relative_to(THUMBNAILS_FOLDER).as_posix()]),
+            ExtraArgs={'ACL': "public-read",
+                       'ContentType': 'video/mp4',
+                       'Metadata': {'width': str(width), 'height': str(height)}})

@@ -38,8 +38,9 @@ def replace_file_metadata(key: str):
         meta = client.head_object(Bucket=BUCKET, Key=key)
         content_type = meta['ContentType']
 
+        url = f"{ORIGIN}/{key}"
         if content_type == 'image/jpeg':
-            resp = requests.get(f'{ORIGIN}/{key}')
+            resp = requests.get(url)
             resp.raise_for_status()
 
             with requests.get(f'{ORIGIN}/{key}') as resp:
@@ -49,9 +50,11 @@ def replace_file_metadata(key: str):
                     width, height = img.size
 
         elif content_type == 'video/mp4':
+            capture = cv2.VideoCapture(url)
             try:
-                capture = cv2.VideoCapture(f'{ORIGIN}/{key}')
-                _, frame = capture.read()
+                done, frame = capture.read()
+                assert done, f"could not fetch video from {url}"
+
                 height, width, _ = frame.shape
             finally:
                 capture.release()
