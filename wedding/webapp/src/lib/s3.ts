@@ -28,8 +28,6 @@ function titleCase(x: string) {
     .join("");
 }
 
-const videoExt = new Set(["mp4", "mov", "avi", "wmv", "avchd", "webm", "flv"]);
-
 
 export async function fetchThumbnails(
   {
@@ -74,7 +72,7 @@ export async function fetchThumbnails(
       location: titleCase(location),
       source,
       section: parseSection(section, location, source),
-      contentType: meta.ContentType! as ContentType,
+      contentType: meta.ContentType!.split("/")[0] as ContentType,
       dim: {width, height},
       orientation: height > width ? "portrait" : "landscape" as ContentOrientation,
     };
@@ -137,7 +135,7 @@ export async function fetchContents() {
       location: titleCase(location),
       source,
       section: parseSection(section, location, source),
-      contentType: meta.ContentType! as ContentType,
+      contentType: meta.ContentType!.split("/")[0] as ContentType,
       dim: {width, height},
       orientation: height > width ? "portrait" : "landscape" as ContentOrientation,
     };
