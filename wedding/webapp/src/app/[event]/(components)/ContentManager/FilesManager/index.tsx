@@ -5,7 +5,7 @@ import { orderedGroupBy } from "@/lib/functools";
 import React from "react";
 import Album from "./Album";
 
-export default function FilesLightbox() {
+export default function FilesManager() {
   const {contents} = useContentManagerContext();
 
   return (

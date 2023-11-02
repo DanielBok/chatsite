@@ -1,21 +1,23 @@
 import { EventType } from "@/lib/pages";
 import React from "react";
 import ContentManagerContextProvider from "./context";
+import FilesManager from "./FilesManager";
+import ModeSelector from "./ModeSelector";
 import Tracker from "./Tracker";
 
-type Props = React.PropsWithChildren<{
+type Props = {
   event: EventType
-  className?: string
-}>
+}
 
-export default function ContentManager({event, className, children}: Props) {
+export default function ContentManager({event}: Props) {
   return (
-    <div className={className}>
-      <ContentManagerContextProvider event={event}>
+    <ContentManagerContextProvider event={event}>
+      <div className="container bg-base-100">
         <Tracker>
-          {children}
+          <FilesManager/>
         </Tracker>
-      </ContentManagerContextProvider>
-    </div>
+        <ModeSelector/>
+      </div>
+    </ContentManagerContextProvider>
   );
 }

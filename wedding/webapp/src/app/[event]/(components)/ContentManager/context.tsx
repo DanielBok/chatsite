@@ -6,9 +6,12 @@ import { ContentManagerContextDataType, ContentManagerContextType } from "./type
 
 
 const ContentManagerContext = createContext<ContentManagerContextType>({
+  mode: "View",
   contents: [],
   hasMore: true,
   updateContent: () => {
+  },
+  setMode: () => {
   }
 });
 
@@ -20,9 +23,10 @@ export default function ContentManagerContextProvider({event, children}: React.P
     contents: [],
     hasMore: true,
   });
+  const [mode, setMode] = useState<ContentManagerContextType["mode"]>("View");
 
   return (
-    <ContentManagerContext.Provider value={{...data, updateContent, event}}>
+    <ContentManagerContext.Provider value={{...data, updateContent, event, mode, setMode}}>
       {children}
     </ContentManagerContext.Provider>
   );
