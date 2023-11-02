@@ -1,7 +1,7 @@
 "use client";
 
 import { pickRandom } from "@/lib/functools";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useInterval } from "usehooks-ts";
 
 type Props = {
@@ -10,11 +10,12 @@ type Props = {
 
 
 export default function ImageLoop({images}: Props) {
-  const [image, setImage] = useState(pickRandom(images));
+  const [image, setImage] = useState("");
 
-  useInterval(() => {
-    setImage(pickRandom(images));
-  }, 5000);
+  useEffect(setRandomImage, [images]);
+  useInterval(setRandomImage, 5000);
+
+  if (image === "") return null;
 
   return (
     // eslint-disable-next-line @next/next/no-img-element
@@ -24,4 +25,8 @@ export default function ImageLoop({images}: Props) {
       className="h-screen w-screen bg-black absolute md:hidden object-contain"
     />
   );
+
+  function setRandomImage() {
+    setImage(pickRandom(images));
+  }
 }
