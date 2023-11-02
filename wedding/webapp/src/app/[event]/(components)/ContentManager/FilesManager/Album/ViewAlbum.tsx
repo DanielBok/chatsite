@@ -1,12 +1,12 @@
 "use client";
 
-import GalleryThumbnail from "./GalleryThumbnail";
+import { useAlbumContext } from "@/app/[event]/(components)/ContentManager/FilesManager/context/album";
+import GalleryThumbnail from "./Thumbnails/GalleryThumbnail";
 import React, { useState } from "react";
 import PhotoAlbum from "react-photo-album";
 import Lightbox, { Slide } from "yet-another-react-lightbox";
 import { Download, Fullscreen, Share, Video } from "yet-another-react-lightbox/plugins";
 import "yet-another-react-lightbox/styles.css";
-import { useAlbumContext } from "./context";
 
 export default function ViewAlbum() {
   const [index, setIndex] = useState(-1)

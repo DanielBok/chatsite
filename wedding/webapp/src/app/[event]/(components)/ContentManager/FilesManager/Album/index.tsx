@@ -2,8 +2,9 @@
 
 import { ContentInfo } from "@/app/[event]/(components)/ContentManager/types";
 import React from "react";
+import AlbumContextProvider from "../context/album";
+import { AlbumDownloadContextProvider } from "../context/download";
 import BaseAlbum from "./BaseAlbum";
-import AlbumContextProvider from "./context";
 
 
 type Props = {
@@ -12,8 +13,10 @@ type Props = {
 
 export default function Album({contents}: Props) {
   return (
-    <AlbumContextProvider contents={contents}>
-      <BaseAlbum/>
-    </AlbumContextProvider>
+    <AlbumDownloadContextProvider>
+      <AlbumContextProvider contents={contents}>
+        <BaseAlbum/>
+      </AlbumContextProvider>
+    </AlbumDownloadContextProvider>
   );
 }
