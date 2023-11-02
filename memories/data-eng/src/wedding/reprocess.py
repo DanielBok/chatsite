@@ -12,8 +12,8 @@ from src.libs import ORIGIN, s3_client, BUCKET
 def replace_all_files_metadata():
     keys = []
     with s3_client() as client:
-        # for prefix in ['wedding/', 'wedding-thumbnails/']:
-        for prefix in ['wedding/singapore', ]:
+        for prefix in ['memories/wedding/',
+                       'memories/wedding-thumbnails/']:
             token = ''
             while True:
                 result = client.list_objects_v2(Bucket=BUCKET, Prefix=prefix, ContinuationToken=token)
