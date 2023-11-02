@@ -96,11 +96,7 @@ def _get_original_file_metadata(fp: Path):
 
 def create_thumbnails_all_files():
     with ThreadPoolExecutor() as pool:
-        futures = []
-        for fp in PROCESSED_SOURCE_FOLDER.rglob('*'):
-            if fp.is_file():
-                futures.append(pool.submit(_create_thumbnail, fp))
-
+        futures = [pool.submit(_create_thumbnail, fp) for fp in PROCESSED_SOURCE_FOLDER.rglob('*') if fp.is_file()]
         for _ in tqdm(as_completed(futures), desc="Thumbnails", total=len(futures)):
             pass
 
