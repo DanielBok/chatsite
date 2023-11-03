@@ -10,6 +10,7 @@ type ContentOrientation = "portrait" | "landscape";
 
 const BUCKET = "chatsite";
 const ORIGIN = `https://${BUCKET}.sgp1.digitaloceanspaces.com`;
+const DELIM = "::";
 
 const s3Client = new S3Client({
   forcePathStyle: true,
@@ -62,6 +63,7 @@ export async function fetchThumbnails(
     const meta = await s3Client.send(new HeadObjectCommand({Bucket: BUCKET, Key: key}));
     const width = parseInt(meta.Metadata!["width"]);
     const height = parseInt(meta.Metadata!["height"]);
+    const tags = meta.Metadata!["tags"]?.split(DELIM) || [];
 
     const thumbnailUrl = `${ORIGIN}/${key}`;
     const source = parseSource(photoSource);
@@ -74,6 +76,7 @@ export async function fetchThumbnails(
       section: parseSection(section, location, source),
       contentType: meta.ContentType!.split("/")[0] as ContentType,
       dim: {width, height},
+      tags,
       orientation: height > width ? "portrait" : "landscape" as ContentOrientation,
     };
   }
@@ -126,6 +129,7 @@ export async function fetchContents() {
     const meta = await s3Client.send(new HeadObjectCommand({Bucket: BUCKET, Key: key}));
     const width = parseInt(meta.Metadata!["width"]);
     const height = parseInt(meta.Metadata!["height"]);
+    const tags = meta.Metadata!["tags"]?.split(DELIM) || [];
 
     const source = parseSource(photoSource);
 
@@ -137,6 +141,7 @@ export async function fetchContents() {
       section: parseSection(section, location, source),
       contentType: meta.ContentType!.split("/")[0] as ContentType,
       dim: {width, height},
+      tags,
       orientation: height > width ? "portrait" : "landscape" as ContentOrientation,
     };
   }
@@ -168,12 +173,12 @@ export const cacheFetchContents = cache(async () => await fetchContents());
 
 
 export async function updateTags(key: string, tags: string[]) {
-  // new tags are lower cased, unique and sorted
+  // new tags are lower cased, unique, non-empty and sorted
   const joinedTag = Array.from(
     new Set(
       tags.map(s => s.toLowerCase().trim().replace(/\s{2,}/, " "))
     )
-  ).sort().join("::");
+  ).filter(e => e).sort().join(DELIM);
 
   const head = await s3Client.send(new HeadObjectCommand({
     Bucket: BUCKET,
