@@ -11,6 +11,8 @@ export type ContentManagerContextType = {
   hasMore: boolean
   updateContent: (v: ContentManagerContextDataType) => void
   setMode: (v: ContentManagerContextType["mode"]) => void
+  tagFilter: string
+  setTagFilter: (f: string) => void
 }
 
 export type ContentManagerContextDataType = Pick<ContentManagerContextType, "contents" | "hasMore" | "continuationToken">;

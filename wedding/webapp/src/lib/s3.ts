@@ -34,11 +34,11 @@ export async function fetchThumbnails(
   {
     event,
     continuationToken,
-    maxKeys = 50,
+    maxKeys = 50
   }: {
     event?: EventType
     continuationToken?: string
-    maxKeys?: number,
+    maxKeys?: number
   }) {
 
   const result = await s3Client.send(new ListObjectsV2Command({
@@ -81,7 +81,7 @@ async function processThumbnail(key: string) {
   const meta = await s3Client.send(new HeadObjectCommand({Bucket: BUCKET, Key: key}));
   const width = parseInt(meta.Metadata!["width"]);
   const height = parseInt(meta.Metadata!["height"]);
-  const tags = meta.Metadata!["tags"]?.split(DELIM) || [];
+  const tags = (meta.Metadata!["tags"]?.split(DELIM) || []).sort();
 
   const thumbnailUrl = `${ORIGIN}/${key}`;
   const source = parseSource(photoSource);

@@ -12,6 +12,9 @@ const ContentManagerContext = createContext<ContentManagerContextType>({
   updateContent: () => {
   },
   setMode: () => {
+  },
+  tagFilter: "",
+  setTagFilter: () => {
   }
 });
 
@@ -24,9 +27,20 @@ export default function ContentManagerContextProvider({event, children}: React.P
     hasMore: true,
   });
   const [mode, setMode] = useState<ContentManagerContextType["mode"]>("Edit");
+  const [tagFilter, setTagFilter] = useState("");
 
   return (
-    <ContentManagerContext.Provider value={{...data, updateContent, event, mode, setMode}}>
+    <ContentManagerContext.Provider value={
+      {
+        ...data,
+        updateContent,
+        event,
+        mode,
+        setMode,
+        tagFilter,
+        setTagFilter
+      }
+    }>
       {children}
     </ContentManagerContext.Provider>
   );

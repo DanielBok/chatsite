@@ -1,5 +1,5 @@
 import { useAlbumContext } from "@/app/[event]/(components)/ContentManager/FilesManager/context";
-import React from "react";
+import React, { useMemo } from "react";
 import { RenderPhotoProps } from "react-photo-album";
 import Thumbnail from "../Thumbnail";
 import Badge from "./Badge";
@@ -9,9 +9,8 @@ import EditModal from "./EditModal";
 export default function EditThumbnail({photo}: RenderPhotoProps) {
   const index = parseInt(photo.key!);
   const {contentType, dim, tags} = useAlbumContext().contents[index];
-  const colors = getColorList(tags.length);
+  const colors = useMemo(() => getColorList(tags.length), [tags, index]);
   const modalID = `edit-model[${photo.src}]`;
-
 
   return (
     <>

@@ -6,7 +6,7 @@ import { useContentManagerContext } from "../../context";
 import { ContentManagerContextDataType } from "../../types";
 
 /**
- * Fetches more data when the user has scrolled to the end
+ * Fetches more data when the user has scrolled to the end. Initial load from FilesManager useEffect
  */
 export default function Tracker({children}: React.PropsWithChildren) {
   const {
@@ -16,14 +16,6 @@ export default function Tracker({children}: React.PropsWithChildren) {
     event,
     updateContent
   } = useContentManagerContext();
-
-  useEffect(() => {
-    const controller = new AbortController();
-    fetchMoreContent(controller.signal);
-    return () => controller.abort();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <InfiniteScroll
