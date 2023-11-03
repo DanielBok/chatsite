@@ -1,5 +1,5 @@
 import { EventType } from "@/lib/pages";
-import { HeadObjectCommand, ListObjectsV2Command, S3Client } from "@aws-sdk/client-s3";
+import { CopyObjectCommand, HeadObjectCommand, ListObjectsV2Command, S3Client } from "@aws-sdk/client-s3";
 import { cache } from "react";
 
 export const revalidate = 3600 * 24;
@@ -165,3 +165,37 @@ function parseSection(value: string, loc: string, src: string) {
 }
 
 export const cacheFetchContents = cache(async () => await fetchContents());
+
+
+export async function updateTags(key: string, tags: string[]) {
+  // new tags are lower cased, unique and sorted
+  const joinedTag = Array.from(
+    new Set(
+      tags.map(s => s.toLowerCase().trim().replace(/\s{2,}/, " "))
+    )
+  ).sort().join("::");
+
+  const head = await s3Client.send(new HeadObjectCommand({
+    Bucket: BUCKET,
+    Key: key
+  }));
+
+  // drop the old tags key since we are replacing it
+  const {tags: _, ...metadata} = head.Metadata!;
+
+  const {$metadata: {httpStatusCode}} = await s3Client.send(new CopyObjectCommand({
+    Bucket: BUCKET,
+    Key: key,
+    CopySource: `${BUCKET}/${key}`,
+    ACL: "public-read",
+    Metadata: {...metadata, tags: joinedTag},
+    MetadataDirective: "REPLACE",
+    ContentType: head.ContentType,
+  }));
+
+  if (httpStatusCode !== 200) {
+    throw new Error("Did not update tags successfully");
+  }
+
+  return {key, tags: joinedTag};
+}
