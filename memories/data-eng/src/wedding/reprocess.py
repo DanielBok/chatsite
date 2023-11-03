@@ -81,5 +81,21 @@ def replace_file_metadata(key: str):
                            ContentType=content_type)
 
 
+def update_file_metadata(key: str):
+    with s3_client() as client:
+        meta = client.head_object(Bucket=BUCKET, Key=key)
+        content_type = meta['ContentType']
+        tags = [x.lower() for x in {* meta['Metadata'].pop('tags', "").split('::'), content_type.split('/')[0]} if x]
+
+        new_metadata = {**meta['Metadata'], 'tags': '::'.join(tags)}
+        client.copy_object(Bucket=BUCKET,
+                           Key=key,
+                           CopySource={'Bucket': BUCKET, 'Key': key},
+                           ACL='public-read',
+                           Metadata=new_metadata,
+                           MetadataDirective='REPLACE',
+                           ContentType=content_type)
+
+
 if __name__ == '__main__':
     replace_all_files_metadata()
