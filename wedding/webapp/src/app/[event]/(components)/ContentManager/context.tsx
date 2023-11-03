@@ -23,7 +23,7 @@ export default function ContentManagerContextProvider({event, children}: React.P
     contents: [],
     hasMore: true,
   });
-  const [mode, setMode] = useState<ContentManagerContextType["mode"]>("Download");
+  const [mode, setMode] = useState<ContentManagerContextType["mode"]>("View");
 
   return (
     <ContentManagerContext.Provider value={{...data, updateContent, event, mode, setMode}}>
