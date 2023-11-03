@@ -9,7 +9,7 @@ export default function FilesManager() {
   const {contents} = useContentManagerContext();
 
   return (
-    <div className="container">
+    <div className="p-4">
       {orderedGroupBy(contents, e => e.source)
         .map(([src, srcContents]) => {
           if (!srcContents || srcContents.length === 0) {

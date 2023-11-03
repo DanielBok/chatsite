@@ -1,10 +1,11 @@
+import EditThumbnail from "./Thumbnails/EditThumbnail";
 import React from "react";
 import PhotoAlbum from "react-photo-album";
 import { useAlbumContext } from "../context";
-import DownloadThumbnail from "./Thumbnails/DownloadThumbnail";
 import { contentsToPhotos, PHOTO_ALBUM_SPACING, photoAlbumColumns } from "./utils";
 
-export default function DownloadAlbum() {
+
+export default function EditAlbum() {
   const photos = contentsToPhotos(useAlbumContext().contents);
 
   return (
@@ -13,7 +14,7 @@ export default function DownloadAlbum() {
       photos={photos}
       spacing={PHOTO_ALBUM_SPACING}
       columns={photoAlbumColumns}
-      renderPhoto={DownloadThumbnail}
+      renderPhoto={EditThumbnail}
     />
   );
 }

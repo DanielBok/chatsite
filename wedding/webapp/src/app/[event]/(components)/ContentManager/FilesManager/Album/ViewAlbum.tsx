@@ -1,23 +1,19 @@
 "use client";
 
 import { useAlbumContext } from "@/app/[event]/(components)/ContentManager/FilesManager/context";
-import GalleryThumbnail from "./Thumbnails/GalleryThumbnail";
 import React, { useState } from "react";
 import PhotoAlbum from "react-photo-album";
 import Lightbox, { Slide } from "yet-another-react-lightbox";
 import { Download, Fullscreen, Share, Video } from "yet-another-react-lightbox/plugins";
 import "yet-another-react-lightbox/styles.css";
+import GalleryThumbnail from "./Thumbnails/GalleryThumbnail";
+import { contentsToPhotos, PHOTO_ALBUM_SPACING, photoAlbumColumns } from "./utils";
 
 export default function ViewAlbum() {
-  const [index, setIndex] = useState(-1)
-  const {contents, } = useAlbumContext();
+  const [index, setIndex] = useState(-1);
+  const {contents,} = useAlbumContext();
 
-  const photos = contents.map(({url, key, dim}, index) => ({
-    key: index.toFixed(),
-    src: url.thumbnail,
-    alt: key,
-    ...dim,
-  }));
+  const photos = contentsToPhotos(contents);
 
   const slides: Slide[] = contents
     .map(({url, contentType}, index) => {
@@ -43,7 +39,8 @@ export default function ViewAlbum() {
       <PhotoAlbum
         layout="masonry"
         photos={photos}
-        spacing={10}
+        spacing={PHOTO_ALBUM_SPACING}
+        columns={photoAlbumColumns}
         renderPhoto={GalleryThumbnail}
         onClick={({index: current}) => setIndex(current)}
       />
