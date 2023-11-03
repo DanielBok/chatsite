@@ -3,8 +3,8 @@
 import classNames from "classnames";
 import React from "react";
 import { VscAdd } from "react-icons/vsc";
-import { useContentManagerContext } from "./context";
-import { ContentManagerContextType } from "./types";
+import { useContentManagerContext } from "../../context";
+import { ContentManagerContextType } from "../../types";
 
 const MODES: ContentManagerContextType["mode"][] = ["View", "Download", "Edit"];
 

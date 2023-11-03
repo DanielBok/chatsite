@@ -1,6 +1,6 @@
 "use client";
 
-import { useAlbumContext } from "@/app/[event]/(components)/ContentManager/FilesManager/context/album";
+import { useAlbumContext } from "@/app/[event]/(components)/ContentManager/FilesManager/context";
 import GalleryThumbnail from "./Thumbnails/GalleryThumbnail";
 import React, { useState } from "react";
 import PhotoAlbum from "react-photo-album";

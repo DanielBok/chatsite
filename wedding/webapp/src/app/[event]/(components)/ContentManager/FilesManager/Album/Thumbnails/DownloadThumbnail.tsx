@@ -1,25 +1,20 @@
 import classNames from "classnames";
+import { saveAs } from "file-saver";
 import React from "react";
 import { RenderPhotoProps } from "react-photo-album";
-import { useAlbumContext } from "../../context/album";
-import { useAlbumDownloadContext, useSubAlbumDownloadContext } from "../../context/download";
+import { useAlbumContext } from "../../context";
 import Thumbnail from "./Thumbnail";
 
 
-export default function DownloadThumbnail({
-                                            photo,
-                                            imageProps: {onClick},
-                                          }: RenderPhotoProps) {
+export default function DownloadThumbnail({photo}: RenderPhotoProps) {
   const index = parseInt(photo.key!);
-  const selected = useSubAlbumDownloadContext().selected.hasOwnProperty(index)
-  const {contentType, dim} = useAlbumContext().contents[index];
+  const {contentType, dim, url} = useAlbumContext().contents[index];
 
   return (
     <div
-      onClick={onClick}
-      className={classNames("card bg-base-100 shadow-xl cursor-pointer mb-4",
-        selected ? "bg-green-600" :
-          contentType === "video" ? "bg-indigo-200" : "bg-orange-200")}
+      className={classNames("card bg-base-100 shadow-xl mb-4 cursor-pointer",
+        contentType === "video" ? "bg-indigo-200" : "bg-orange-200")}
+      onClick={saveFile}
     >
       <div className="card-body p-3">
         <figure>
@@ -28,4 +23,13 @@ export default function DownloadThumbnail({
       </div>
     </div>
   );
+
+  function saveFile() {
+    const filename = photo.src.split("/").slice(-1)[0];
+
+    fetch(url.src)
+      .then(response => response.blob())
+      .then(blob => saveAs(blob, filename))
+      .catch(e => console.error(e));
+  }
 }

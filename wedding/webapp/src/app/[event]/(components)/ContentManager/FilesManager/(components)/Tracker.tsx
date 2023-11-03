@@ -2,8 +2,8 @@
 
 import React, { useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useContentManagerContext } from "./context";
-import { ContentManagerContextDataType } from "./types";
+import { useContentManagerContext } from "../../context";
+import { ContentManagerContextDataType } from "../../types";
 
 /**
  * Fetches more data when the user has scrolled to the end

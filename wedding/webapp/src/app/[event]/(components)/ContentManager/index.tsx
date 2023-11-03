@@ -2,8 +2,8 @@ import { EventType } from "@/lib/pages";
 import React from "react";
 import ContentManagerContextProvider from "./context";
 import FilesManager from "./FilesManager";
-import ModeSelector from "./ModeSelector";
-import Tracker from "./Tracker";
+import ModeSelector from "./FilesManager/(components)/ModeSelector";
+import Tracker from "./FilesManager/(components)/Tracker";
 
 type Props = {
   event: EventType

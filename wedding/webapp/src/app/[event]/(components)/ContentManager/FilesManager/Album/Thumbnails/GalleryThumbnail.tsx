@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import React from "react";
 import type { RenderPhotoProps } from "react-photo-album";
-import { useAlbumContext } from "../../context/album";
+import { useAlbumContext } from "../../context";
 import Thumbnail from "./Thumbnail";
 
 export default function GalleryThumbnail({
