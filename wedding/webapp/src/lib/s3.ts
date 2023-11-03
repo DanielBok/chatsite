@@ -48,38 +48,13 @@ export async function fetchThumbnails(
     MaxKeys: maxKeys
   }));
 
-  const contents = await Promise.all(result.Contents!.map(({Key}) => processKey(Key!)));
+  const contents = await Promise.all(result.Contents!.map(({Key}) => processThumbnail(Key!)));
 
   return {
     contents,
     continuationToken: result.NextContinuationToken,
     hasMore: result.IsTruncated!
   };
-
-  async function processKey(key: string) {
-    key = key.replace(/^\/*/, "");
-    const [location, photoSource, section] = key.split("/").slice(2, -1);
-
-    const meta = await s3Client.send(new HeadObjectCommand({Bucket: BUCKET, Key: key}));
-    const width = parseInt(meta.Metadata!["width"]);
-    const height = parseInt(meta.Metadata!["height"]);
-    const tags = meta.Metadata!["tags"]?.split(DELIM) || [];
-
-    const thumbnailUrl = `${ORIGIN}/${key}`;
-    const source = parseSource(photoSource);
-
-    return {
-      key,
-      url: {thumbnail: thumbnailUrl, src: thumbnailUrl.replace("/wedding-thumbnails/", "/wedding/")},
-      location: titleCase(location),
-      source,
-      section: parseSection(section, location, source),
-      contentType: meta.ContentType!.split("/")[0] as ContentType,
-      dim: {width, height},
-      tags,
-      orientation: height > width ? "portrait" : "landscape" as ContentOrientation,
-    };
-  }
 
   function getPrefix(event?: EventType) {
     const prefix = `memories/wedding-thumbnails`;
@@ -97,6 +72,31 @@ export async function fetchThumbnails(
         throw new Error(`Invalid event value: ${event}`);
     }
   }
+}
+
+async function processThumbnail(key: string) {
+  key = key.replace(/^\/*/, "");
+  const [location, photoSource, section] = key.split("/").slice(2, -1);
+
+  const meta = await s3Client.send(new HeadObjectCommand({Bucket: BUCKET, Key: key}));
+  const width = parseInt(meta.Metadata!["width"]);
+  const height = parseInt(meta.Metadata!["height"]);
+  const tags = meta.Metadata!["tags"]?.split(DELIM) || [];
+
+  const thumbnailUrl = `${ORIGIN}/${key}`;
+  const source = parseSource(photoSource);
+
+  return {
+    key,
+    url: {thumbnail: thumbnailUrl, src: thumbnailUrl.replace("/wedding-thumbnails/", "/wedding/")},
+    location: titleCase(location),
+    source,
+    section: parseSection(section, location, source),
+    contentType: meta.ContentType!.split("/")[0] as ContentType,
+    dim: {width, height},
+    tags,
+    orientation: height > width ? "portrait" : "landscape" as ContentOrientation,
+  };
 }
 
 export async function fetchContents() {
@@ -172,6 +172,11 @@ function parseSection(value: string, loc: string, src: string) {
 export const cacheFetchContents = cache(async () => await fetchContents());
 
 
+/**
+ * Tags are only applicable for thumbnails
+ * @param key Bucket key
+ * @param tags New tags to replace old tags in the metadata section
+ */
 export async function updateTags(key: string, tags: string[]) {
   // new tags are lower cased, unique, non-empty and sorted
   const joinedTag = Array.from(
@@ -202,5 +207,5 @@ export async function updateTags(key: string, tags: string[]) {
     throw new Error("Did not update tags successfully");
   }
 
-  return {key, tags: joinedTag};
+  return await processThumbnail(key);
 }

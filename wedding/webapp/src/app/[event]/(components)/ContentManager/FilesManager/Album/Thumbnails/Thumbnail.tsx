@@ -32,7 +32,7 @@ export default function Thumbnail({contentType, dim, photo, onClick, body}: Prop
   }
 }
 
-export function ThumbnailVisual({contentType, dim, photo}: Pick<Props, "contentType" | "dim" | "photo">) {
+function ThumbnailVisual({contentType, dim, photo}: Pick<Props, "contentType" | "dim" | "photo">) {
   switch (contentType) {
     case "video": {
       return <video
