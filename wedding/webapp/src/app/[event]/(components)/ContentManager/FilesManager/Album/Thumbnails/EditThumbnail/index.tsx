@@ -9,7 +9,7 @@ import EditModal from "./EditModal";
 export default function EditThumbnail({photo}: RenderPhotoProps) {
   const index = parseInt(photo.key!);
   const {contentType, dim, tags} = useAlbumContext().contents[index];
-  const colors = useMemo(() => getColorList(tags.length), [tags, index]);
+  const colors = useMemo(() => getColorList(tags.length), [tags]);
   const modalID = `edit-model[${photo.src}]`;
 
   return (
