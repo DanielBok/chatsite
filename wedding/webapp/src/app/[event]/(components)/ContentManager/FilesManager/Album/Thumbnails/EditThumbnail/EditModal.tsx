@@ -62,7 +62,10 @@ export default function EditModal({id, src, tags}: Props) {
               value={newTag}
               onChange={e => setNewTag(e.target.value)}
               onKeyUp={e => {
-                if (e.key === "Enter") addTag();
+                if (e.key === "Enter") {
+                  if (e.ctrlKey) updateTags();
+                  else addTag();
+                }
               }}
             />
             <button
