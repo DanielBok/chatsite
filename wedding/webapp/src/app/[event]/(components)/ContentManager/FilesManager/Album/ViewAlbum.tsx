@@ -11,7 +11,7 @@ import { contentsToPhotos, PHOTO_ALBUM_SPACING, photoAlbumColumns } from "./util
 
 export default function ViewAlbum() {
   const [index, setIndex] = useState(-1);
-  const {contents,} = useAlbumContext();
+  const {contents} = useAlbumContext();
 
   const photos = contentsToPhotos(contents);
 

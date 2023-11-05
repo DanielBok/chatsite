@@ -57,7 +57,9 @@ export default function FilesManager() {
     }
 
     return () => controller.abort();
-  }, [contents.length, hasMore, event, continuationToken, tagFilter, updateContent]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [event]);
 
   return (
     <div className="p-4">

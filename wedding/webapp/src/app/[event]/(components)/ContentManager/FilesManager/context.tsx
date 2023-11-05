@@ -1,14 +1,17 @@
 import { ContentInfo } from "@/app/[event]/(components)/ContentManager/types";
-import React, { createContext, PropsWithChildren, useContext, useState } from "react";
+import React, { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
 
 type AlbumContentType = {
   contents: ContentInfo[]
+  setContents: (contents: ContentInfo[]) => void
   updateContent: (c: ContentInfo) => void
 }
 
 
 const AlbumContext = createContext<AlbumContentType>({
   contents: [],
+  setContents: () => {
+  },
   updateContent: () => {
   }
 });
@@ -16,13 +19,17 @@ const AlbumContext = createContext<AlbumContentType>({
 export const useAlbumContext = () => useContext(AlbumContext);
 
 export default function AlbumContextProvider({
-                                               contents: _contents,
+                                               contents: items,
                                                children
                                              }: PropsWithChildren<Pick<AlbumContentType, "contents">>) {
-  const [contents, setContents] = useState(_contents);
+  const [contents, setContents] = useState<ContentInfo[]>([]);
+
+  useEffect(() => {
+    setContents(items);
+  }, [items]);
 
   return (
-    <AlbumContext.Provider value={{contents, updateContent}}>
+    <AlbumContext.Provider value={{contents, setContents, updateContent}}>
       {children}
     </AlbumContext.Provider>
   );
