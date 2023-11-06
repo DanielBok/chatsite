@@ -17,3 +17,29 @@ export function orderedGroupBy<T, Key extends string | number | symbol>(array: r
 export function pickRandom<T>(items: T[]) {
   return items[Math.floor(Math.random() * items.length)];
 }
+
+
+export function range(start: number, stop?: number, step?: number) {
+  const numbers: number[] = [];
+  if (!stop) {
+    stop = start;
+    start = 0;
+    step = 1;
+  } else if (!step) {
+    step = 1;
+  }
+
+  if (step === 0) {
+    throw new Error("Step cannot be 0");
+  } else if (start < stop && step < 0) {
+    throw new Error("Invalid range, step must be greater than 0 if start < stop");
+  } else if (start > stop && step > 0) {
+    throw new Error("Invalid range, step must be less than 0 if start > stop");
+  }
+
+  for (let i = start; (step > 0 ? i < stop : i > stop); i += step) {
+    numbers.push(i);
+  }
+
+  return numbers;
+}
