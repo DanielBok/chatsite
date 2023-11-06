@@ -41,6 +41,8 @@ function ThumbnailVisual({contentType, dim, photo}: Pick<Props, "contentType" | 
         onMouseOut={event => (event.target as HTMLVideoElement).pause()}
         width={dim.width}
         height={dim.height}
+        loop
+        className="w-full"
       />;
     }
     case "image": {
@@ -49,7 +51,9 @@ function ThumbnailVisual({contentType, dim, photo}: Pick<Props, "contentType" | 
         src={photo.src}
         alt={photo.alt!}
         width={dim.width}
-        height={dim.height}/>;
+        height={dim.height}
+        className="w-full"
+      />;
     }
   }
 }
