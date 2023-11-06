@@ -26,7 +26,7 @@ export default function ContentManagerContextProvider({event, children}: React.P
     contents: [],
     hasMore: true,
   });
-  const [mode, setMode] = useState<ContentManagerContextType["mode"]>("Edit");
+  const [mode, setMode] = useState<ContentManagerContextType["mode"]>("View");
   const [tagFilter, setTagFilter] = useState("");
 
   return (
