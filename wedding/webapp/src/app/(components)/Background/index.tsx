@@ -7,7 +7,6 @@ export default async function Background() {
     "https://chatsite.sgp1.cdn.digitaloceanspaces.com/memories/wedding/bali/1.official/highlights.mp4",
     "https://chatsite.sgp1.cdn.digitaloceanspaces.com/memories/wedding/bali/1.official/video-full.mp4",
     "https://chatsite.sgp1.cdn.digitaloceanspaces.com/memories/wedding/pre-wedding/daniel-_and_-priscilla-connection-s_2023-05-31_1080p.mp4",
-    "https://chatsite.sgp1.cdn.digitaloceanspaces.com/memories/wedding/bali/1.official/shorts.mp4"
   ];
   const images = (await cacheFetchContents())
     .filter(x => x.orientation === "portrait" && x.contentType === "image")
