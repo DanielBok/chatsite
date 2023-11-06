@@ -1,36 +1,11 @@
 "use client";
 
-import { useContentManagerContext } from "@/app/[event]/(components)/ContentManager/context";
-import { ContentInfo, ContentManagerContextDataType } from "@/app/[event]/(components)/ContentManager/types";
 import { orderedGroupBy } from "@/lib/functools";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
+import { useContentManagerContext } from "../context";
+import { useFilteredContents } from "../hooks";
+import { ContentManagerContextDataType } from "../types";
 import Album from "./Album";
-import Fuse from "fuse.js";
-
-
-const useFuseContents = () => {
-  const {contents} = useContentManagerContext();
-  return useMemo(() => new Fuse<ContentInfo>(contents.map(e => ({...e, searchField: e.tags.join(" ")})), {
-      keys: ["searchField"],
-      shouldSort: true,
-      includeScore: true,
-      ignoreLocation: true,
-      threshold: 0.4,
-    }),
-    [contents]);
-};
-
-const useFilteredContents = () => {
-  const {contents} = useContentManagerContext();
-  const fuse = useFuseContents();
-  const pattern = useContentManagerContext().tagFilter.split(/\s{2,}/).join(" ");
-
-  if (!pattern) {
-    return contents;
-  }
-
-  return fuse.search(pattern).map(e => e.item);
-};
 
 export default function FilesManager() {
   const {hasMore, updateContent, event, continuationToken, tagFilter} = useContentManagerContext();

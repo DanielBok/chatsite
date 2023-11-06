@@ -1,8 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useDebouncedCallback } from "use-debounce";
 import { useContentManagerContext } from "../../context";
+import { useFilteredContents } from "../../hooks";
 import { ContentManagerContextDataType } from "../../types";
 
 /**
@@ -10,18 +12,28 @@ import { ContentManagerContextDataType } from "../../types";
  */
 export default function Tracker({children}: React.PropsWithChildren) {
   const {
-    contents,
     hasMore,
     continuationToken,
     event,
-    updateContent
+    updateContent,
+    tagFilter,
   } = useContentManagerContext();
+
+  const debouncedFetch = useDebouncedCallback(fetchMoreContent, 1000);
+  const contents = useFilteredContents();
+
+  useEffect(() => {
+    if (contents.length === 0 && hasMore) {
+      debouncedFetch();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contents]);
 
   return (
     <InfiniteScroll
       dataLength={contents.length}
       hasMore={hasMore}
-      next={fetchMoreContent}
+      next={debouncedFetch}
       loader={(
         <div className="flex justify-center items-center">
           <span className="loading loading-dots loading-md"/>
@@ -36,7 +48,8 @@ export default function Tracker({children}: React.PropsWithChildren) {
     const params = [
       ["event", event],
       ["continuationToken", continuationToken],
-      ["maxKeys", 30]
+      ["maxKeys", 30],
+      ["filter", tagFilter],
     ].filter(([, v]) => v)
       .reduce((acc: string[], [k, v]) => [...acc, `${k}=${v}`], [])
       .join("&");

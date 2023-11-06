@@ -19,6 +19,7 @@ export default function ContentManager({event}: Props) {
         <Tracker>
           <FilesManager/>
         </Tracker>
+
         <Footer/>
       </div>
     </ContentManagerContextProvider>

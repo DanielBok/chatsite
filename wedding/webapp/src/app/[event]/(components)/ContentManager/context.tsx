@@ -26,7 +26,7 @@ export default function ContentManagerContextProvider({event, children}: React.P
     contents: [],
     hasMore: true,
   });
-  const [mode, setMode] = useState<ContentManagerContextType["mode"]>("View");
+  const [mode, setMode] = useState<ContentManagerContextType["mode"]>("Edit");
   const [tagFilter, setTagFilter] = useState("");
 
   return (
@@ -46,11 +46,15 @@ export default function ContentManagerContextProvider({event, children}: React.P
   );
 
   function updateContent({contents, hasMore, continuationToken}: ContentManagerContextDataType) {
-    setData(prev => ({
-      contents: [...prev.contents, ...contents],
-      hasMore,
-      continuationToken,
-    }));
+    setData(prev => {
+      const existing = new Set(prev.contents.map(e => e.key));
+
+      return ({
+        contents: [...prev.contents, ...contents.filter(e => !existing.has(e.key))],
+        hasMore,
+        continuationToken,
+      });
+    });
   }
 }
 
