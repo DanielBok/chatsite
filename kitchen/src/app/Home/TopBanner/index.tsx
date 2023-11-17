@@ -1,6 +1,7 @@
 import { APP_NAME } from "@/constants";
 import React from "react";
 import { Image } from "antd";
+import { Link } from "react-router-dom";
 import CatImage from "./cat-eating.jpg";
 
 
@@ -21,10 +22,11 @@ export default function TopBanner() {
           Fear not, <b>{APP_NAME}</b> is here to help you
         </p>
         <div className="flex justify-center mx-auto">
-          <button
+          <Link
+            to="/cookbook"
             className="hover:underline bg-sky-500 text-white font-bold rounded-full py-2 md:py-4 px-4">
             View Cookbook
-          </button>
+          </Link>
           <button
             className="ml-2 md:ml-4 hover:underline bg-white text-gray-800 font-bold rounded-full py-2 md:py-4 px-4">
             Random Recipe
