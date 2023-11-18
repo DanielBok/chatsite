@@ -11,6 +11,7 @@ export type Timings = {
   pressureRelease: ScalarRange | "quick"
   airCrisp: ScalarRange
   bakeRoast: ScalarRange
+  broil: ScalarRange
   total: ScalarRange
 }
 

@@ -1,10 +1,11 @@
-import { Recipe } from "./types";
 import { alphabetical } from "radash";
+import BakedMacaroniAndCheese from "./static/baked-macaroni-and-cheese.png";
 
 import HerbRoastedChicken from "./static/herb-roasted-chicken.png";
-import StickyStLouisRibs from "./static/sticky-st-louis-ribs.png";
 import PankoCrustedCodWithQuinoa from "./static/panko-crusted-cod-with-quinoa.png";
-import BakedMacaroniAndCheese from "./static/baked-macaroni-and-cheese.png";
+import StickyStLouisRibs from "./static/sticky-st-louis-ribs.png";
+import TeriyakiChickenBroccoliRice from "./static/teriyaki-chicken-broccoli-rice.png";
+import { Recipe } from "./types";
 
 
 const recipes: Recipe[] = [
@@ -45,6 +46,7 @@ const recipes: Recipe[] = [
       pressureRelease: 10,
       airCrisp: 7,
       bakeRoast: 0,
+      broil: 0,
     },
     image: BakedMacaroniAndCheese,
     tips: [
@@ -85,6 +87,7 @@ const recipes: Recipe[] = [
       pressureRelease: 5,
       airCrisp: {min: 8, max: 18},
       bakeRoast: 0,
+      broil: 0,
     },
     image: HerbRoastedChicken,
     tips: [
@@ -125,6 +128,7 @@ const recipes: Recipe[] = [
       pressureRelease: 1,
       airCrisp: 0,
       bakeRoast: {min: 12, max: 14},
+      broil: 0,
     },
     image: PankoCrustedCodWithQuinoa
   },
@@ -161,11 +165,50 @@ const recipes: Recipe[] = [
       pressureRelease: 1,
       airCrisp: 15,
       bakeRoast: 0,
+      broil: 0,
     },
     image: StickyStLouisRibs,
     tips: [
       "The Ninja® roasting rack insert makes it easy to hold up the ribs while cooking. It is available for purchase on ninjaaccessories.com."
     ]
+  },
+  {
+    name: "Teriyaki Chicken, Broccoli & Rice",
+    difficulty: 1,
+    servings: 2,
+    ingredients: [
+      {searchKey: "Rice", description: "1 cup long-grain white rice, rinsed"},
+      {searchKey: "Chicken Stock", description: "1 cup chicken stock"},
+      {searchKey: "Vegetables", description: "1/2 cup frozen mixed vegetables"},
+      {searchKey: "Kosher Salt", description: "2 teaspoons kosher salt, divided"},
+      {searchKey: "Ground Black Pepper", description: "2 teaspoons ground black pepper, divided"},
+      {searchKey: "Adobo Seasoning", description: "1 tablespoon Adobo seasoning"},
+      {searchKey: "Chicken Breast", description: "2 uncooked fresh boneless skinless chicken breasts (8 ounces each)"},
+      {searchKey: "Broccoli", description: "1 head broccoli, cut in 2-inch florets"},
+      {searchKey: "Extra Virgin Olive Oil", description: "1 tablespoon extra virgin olive oil"},
+      {searchKey: "Teriyaki Sauce", description: "1/4 cup teriyaki sauce"},
+    ],
+    directions: [
+      `Place rice, chicken stock, frozen vegetables, 1 teaspoon salt, 1 teaspoon pepper, and Adobo seasoning into the pot; stir to combine.`,
+      `Place chicken breasts on reversible rack, making sure rack is in the higher position. Place rack inside pot over rice mixture.`,
+      `Assemble pressure lid, making sure the pressure release valve is in the SEAL position. Select PRESSURE and set to high (HI). Set time to 2 minutes. Select START/STOP to begin.`,
+      `While chicken and rice are cooking, toss broccoli in a bowl with the olive oil and remaining salt and pepper`,
+      `When pressure cooking is complete, allow pressure to natural release for 10 minutes. After 10 minutes, quick release any remaining pressure by turning the pressure release valve to the VENT position. Carefully remove lid when unit has finished releasing pressure.`,
+      `Brush tops of chicken breasts liberally with teriyaki sauce. Add broccoli to rack around chicken.`,
+      `Close crisping lid. Select BROIL and set time to 12 minutes. Select START/STOP to begin.`,
+      `Check after 10 minutes for desired doneness. Cooking is complete when internal temperature of chicken reaches 165°F. Serve chicken with rice and broccoli.`,
+    ],
+    timing: {
+      prep: 10,
+      cook: 0,
+      pressureBuild: 8,
+      pressureCook: 2,
+      pressureRelease: 10,
+      airCrisp: 0,
+      bakeRoast: 0,
+      broil: 12,
+    },
+    image: TeriyakiChickenBroccoliRice,
   },
 ].map(({timing, ...rest}, id) => {
   const total = Object.entries(timing).reduce((acc, [k, v]) => {
