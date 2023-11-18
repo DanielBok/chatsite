@@ -1,8 +1,12 @@
+import classNames from "classnames";
 import React from "react";
 
+type Props = {
+  className?: string
+}
 
-export default function Separator() {
+export default function Separator({className}: Props) {
   return (
-    <span className="border-l-black border-l"/>
+    <span className={classNames("border-l-black border-l", className)}/>
   );
 }
