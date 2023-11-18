@@ -12,7 +12,7 @@ import RecipeStatistics from "./Statistics";
 
 export default function RecipeDetail() {
   const backAddress = useLocation().pathname.split("/").slice(0, -1).join("/");
-  const recipeId = useParams<{ recipeId: Required<string> }>().recipeId!;
+  const recipeId = useParams<{ recipeId: Required<string> }>().recipeId!.toLowerCase();
   const recipe = useNinjaCookbookContext().recipes[recipeId];
 
   return (

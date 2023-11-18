@@ -244,5 +244,6 @@ function processKey(name: string) {
   return name.replace("&", "and")
     .replace(/[,.]/g, "")
     .replace(/\s+/g, "-")
-    .replace(/-{2,}/g, "-");
+    .replace(/-{2,}/g, "-")
+    .toLowerCase();
 }

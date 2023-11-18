@@ -1,3 +1,4 @@
+import RandomButton from "./RandomButton";
 import { APP_NAME } from "@/constants";
 import React from "react";
 import { Image } from "antd";
@@ -27,10 +28,7 @@ export default function TopBanner() {
             className="hover:underline bg-sky-500 text-white font-bold rounded-full py-2 md:py-4 px-4">
             View Cookbook
           </Link>
-          <button
-            className="ml-2 md:ml-4 hover:underline bg-white text-gray-800 font-bold rounded-full py-2 md:py-4 px-4">
-            Random Recipe
-          </button>
+          <RandomButton/>
         </div>
       </div>
     </div>
