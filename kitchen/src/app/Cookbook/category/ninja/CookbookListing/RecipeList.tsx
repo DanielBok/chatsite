@@ -12,12 +12,12 @@ export default function RecipeList() {
     <List
       itemLayout="vertical"
       size="large"
+      grid={{gutter: 6, xs: 1, sm: 1, md: 1, lg: 2, xl: 2, xxl: 3}}
       dataSource={recipes}
-      bordered
       renderItem={(item, index) => (
         <List.Item
           key={index}
-          className="w-full flex justify-between p-4"
+          className="w-full flex justify-between p-4 shadow shadow-gray-400"
         >
           <Link
             to={`${item.id}`}
