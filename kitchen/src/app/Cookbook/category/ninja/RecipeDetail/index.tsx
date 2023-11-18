@@ -1,7 +1,7 @@
 import { useNinjaCookbookContext } from "@/app/Cookbook/category/ninja/context";
 
 import { RollbackOutlined } from "@ant-design/icons";
-import { Image, Space } from "antd";
+import { Divider, Image, Space, Tooltip } from "antd";
 import React from "react";
 import { useLocation, useParams } from "react-router";
 import { Link } from "react-router-dom";
@@ -19,15 +19,19 @@ export default function RecipeDetail() {
     <div className="flex flex-col p-4">
       <div className="flex flex-row justify-between items-center my-4">
         <div className="font-bold text-3xl text-gray-700">{recipe.name}</div>
-        <Link to={backAddress}>
-          <RollbackOutlined className="text-2xl cursor-pointer hover:scale-105 text-blue-700"/>
-        </Link>
+        <Tooltip title="Return">
+          <Link to={backAddress}>
+            <RollbackOutlined className="text-2xl cursor-pointer hover:scale-115 text-blue-700"/>
+          </Link>
+        </Tooltip>
       </div>
 
+      <RecipeStatistics timing={recipe.timing}
+                        servings={recipe.servings}
+                        difficulty={recipe.difficulty}/>
+      <Divider/>
+
       <Space direction="vertical" size={6} className="w-full flex flex-col">
-        <RecipeStatistics timing={recipe.timing}
-                          servings={recipe.servings}
-                          difficulty={recipe.difficulty}/>
 
         <Ingredients ingredients={recipe.ingredients}/>
         <Directions directions={recipe.directions}/>

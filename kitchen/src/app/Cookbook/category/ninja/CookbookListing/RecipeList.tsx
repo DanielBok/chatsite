@@ -1,9 +1,10 @@
+import Difficulty from "@/app/Cookbook/category/ninja/(components)/Difficulty";
+import Separator from "@/app/Cookbook/category/ninja/(components)/Separator";
 import { Image, List, Space } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
 import { useNinjaCookbookContext } from "../context";
-import Difficulty from "./Difficulty";
-import ScalarRangeItem from "./ScalarRangeItem";
+import ScalarRangeItem from "@/app/Cookbook/category/ninja/(components)/ScalarRangeItem";
 
 
 export default function RecipeList() {
@@ -46,7 +47,3 @@ export default function RecipeList() {
     />
   );
 }
-
-const Separator = () => (
-  <span className="border-l-black h-full border-l-2 p-0.5"/>
-);
