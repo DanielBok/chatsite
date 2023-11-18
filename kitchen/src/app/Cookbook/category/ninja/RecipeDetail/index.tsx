@@ -1,5 +1,4 @@
 import { useNinjaCookbookContext } from "@/app/Cookbook/category/ninja/context";
-
 import { RollbackOutlined } from "@ant-design/icons";
 import { Divider, Image, Space, Tooltip } from "antd";
 import React from "react";
@@ -7,13 +6,14 @@ import { useLocation, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import Directions from "./Directions";
 import Ingredients from "./Ingredients";
+import RecipeTips from "./RecipeTips";
 import RecipeStatistics from "./Statistics";
 
 
 export default function RecipeDetail() {
   const backAddress = useLocation().pathname.split("/").slice(0, -1).join("/");
-  const index = parseInt(useParams<{ recipeId: Required<string> }>().recipeId!);
-  const recipe = useNinjaCookbookContext().recipes[index];
+  const recipeId = useParams<{ recipeId: Required<string> }>().recipeId!;
+  const recipe = useNinjaCookbookContext().recipes[recipeId];
 
   return (
     <div className="flex flex-col p-4">
@@ -31,10 +31,19 @@ export default function RecipeDetail() {
                         difficulty={recipe.difficulty}/>
       <Divider/>
 
-      <Space direction="vertical" size={6} className="w-full flex flex-col">
+      <Space direction="vertical" size={6} className="w-full flex flex-col items-center">
 
-        <Ingredients ingredients={recipe.ingredients}/>
-        <Directions directions={recipe.directions}/>
+        <Space className="w-full flex flex-col md:hidden">
+          <Ingredients ingredients={recipe.ingredients}/>
+          <Directions directions={recipe.directions}/>
+        </Space>
+
+        <div className="w-full hidden md:flex flex-row justify-between">
+          <Ingredients ingredients={recipe.ingredients} className="w-1/2"/>
+          <Directions directions={recipe.directions} className="w-1/2"/>
+        </div>
+
+        <RecipeTips tips={recipe.tips}/>
 
         <Image
           src={recipe.image}

@@ -210,7 +210,7 @@ const recipes: Recipe[] = [
     },
     image: TeriyakiChickenBroccoliRice,
   },
-].map(({timing, ...rest}, id) => {
+].map(({timing, ...rest}) => {
   const total = Object.entries(timing).reduce((acc, [k, v]) => {
     if (k === "pressureRelease") {
       return acc;
@@ -228,7 +228,7 @@ const recipes: Recipe[] = [
 
 
   return {
-    id,
+    id: processKey(rest.name),
     ...rest,
     timing: {
       ...timing,
@@ -237,4 +237,12 @@ const recipes: Recipe[] = [
   };
 });
 
-export default alphabetical(recipes, e => e.name.toLowerCase());
+export default alphabetical(recipes, e => e.name.toLowerCase())
+  .reduce((acc, r) => ({...acc, [r.id]: r}), {} as Record<string, Recipe>);
+
+function processKey(name: string) {
+  return name.replace("&", "and")
+    .replace(/[,.]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-{2,}/g, "-");
+}

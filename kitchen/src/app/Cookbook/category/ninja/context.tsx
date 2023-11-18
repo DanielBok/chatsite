@@ -4,9 +4,9 @@ import original from "./recipes";
 import { Recipe } from "./recipes/types";
 
 type NinjaCookbookContextType = {
-  original: Recipe[]
-  recipes: Recipe[]
-  setRecipes: React.Dispatch<React.SetStateAction<Recipe[]>>
+  original: Record<string, Recipe>
+  recipes: Record<string, Recipe>
+  setRecipes: React.Dispatch<React.SetStateAction<Record<string, Recipe>>>
 }
 
 const NinjaCookbookContext = createContext({} as NinjaCookbookContextType);

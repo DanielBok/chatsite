@@ -42,7 +42,6 @@ export default function RecipeStatistics({
       ? null
       : (
         <ScalarRangeItem
-          key={key}
           value={value}
           units="mins"
           title={timingNameMap[key]}
@@ -63,17 +62,16 @@ export default function RecipeStatistics({
         />
       </Space>
 
-      <Space className="flex flex-row flex-wrap" size={[12, 0]}>
+      <div className="flex flex-row flex-wrap">
         {timingKeys
           .filter(k => !!timingComponents[k])
-          .map((k) =>
-            k === "total" ? timingComponents[k] : (
-              <>
-                {timingComponents[k]}
-                <Separator/>
-              </>
-            ))}
-      </Space>
+          .map((k) => (
+            <span className="flex flex-row flex-wrap" key={k}>
+              {timingComponents[k]}
+              {k !== "total" && <Separator className="mx-4"/>}
+            </span>
+          ))}
+      </div>
 
     </div>
   );

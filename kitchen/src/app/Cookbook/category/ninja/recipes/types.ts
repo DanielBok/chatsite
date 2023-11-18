@@ -16,7 +16,7 @@ export type Timings = {
 }
 
 export type Recipe = {
-  id: number
+  id: string
   name: string
   difficulty: number
   servings: ScalarRange

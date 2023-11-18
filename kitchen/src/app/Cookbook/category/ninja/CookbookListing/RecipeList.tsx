@@ -13,14 +13,14 @@ export default function RecipeList() {
       itemLayout="vertical"
       size="large"
       grid={{gutter: 6, xs: 1, sm: 1, md: 1, lg: 2, xl: 2, xxl: 3}}
-      dataSource={recipes}
+      dataSource={Object.values(recipes)}
       renderItem={(item, index) => (
         <List.Item
           key={index}
           className="w-full flex justify-between p-4 shadow shadow-gray-400"
         >
           <Link
-            to={`${item.id}`}
+            to={item.id}
             className="flex flex-col w-full mr-4 cursor-pointer">
             <h2 className="text-lg md:text-2xl">{item.name}</h2>
             <div className="flex-grow"/>
