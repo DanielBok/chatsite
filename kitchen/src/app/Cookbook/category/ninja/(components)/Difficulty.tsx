@@ -20,7 +20,7 @@ export default function Difficulty({level, maxLevel = 3}: Props) {
   return (
     <div className="flex flex-row items-center">
       <div className="mr-2 font-bold text-sm">Level:</div>
-      <div>
+      <div className="flex">
         {stars.map((Icon, index) => <Icon key={index} className="text-sm"/>)}
       </div>
     </div>

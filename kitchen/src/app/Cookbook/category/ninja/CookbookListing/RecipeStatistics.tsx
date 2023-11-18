@@ -17,7 +17,7 @@ export default function RecipeStatistics({servings, difficulty, timing: {total}}
 
   return (
     <>
-      <Space size={6} className="hidden md:flex flex-row">
+      <Space size={6} className="hidden md:flex flex-row flex-wrap">
         {components[0]}
         <Separator/>
         {components[1]}
@@ -25,7 +25,7 @@ export default function RecipeStatistics({servings, difficulty, timing: {total}}
         {components[2]}
       </Space>
 
-      <div className="flex-col items-start md:hidden">
+      <div className="flex-col items-start md:hidden flex-wrap">
         {components}
       </div>
     </>
