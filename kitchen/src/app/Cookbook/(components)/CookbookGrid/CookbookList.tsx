@@ -13,7 +13,7 @@ export default function CookbookList() {
         <List.Item className="w-full p-3 md:p-4 shadow-md shadow-gray-400">
           <Link to={item.link}>
             <div className="flex flex-row justify-between">
-              <Space className="flex flex-col justify-start " direction="vertical" size={8}>
+              <Space className="flex flex-col justify-start md:min-h-0" direction="vertical" size={8}>
                 <div className="text-lg font-bold">{item.source}</div>
                 <div className="text-xs">{item.description}</div>
               </Space>

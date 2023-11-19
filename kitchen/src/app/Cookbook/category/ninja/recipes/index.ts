@@ -1,11 +1,13 @@
 import { alphabetical } from "radash";
 import BakedMacaroniAndCheese from "./static/baked-macaroni-and-cheese.png";
+import BuffaloChickenWings from "./static/buffalo-chicken-wings.png";
 
 import HerbRoastedChicken from "./static/herb-roasted-chicken.png";
 import PankoCrustedCodWithQuinoa from "./static/panko-crusted-cod-with-quinoa.png";
 import StickyStLouisRibs from "./static/sticky-st-louis-ribs.png";
 import TeriyakiChickenBroccoliRice from "./static/teriyaki-chicken-broccoli-rice.png";
-import { Recipe } from "./types";
+
+import { Recipe, Timings } from "./types";
 
 
 const recipes: Recipe[] = [
@@ -54,6 +56,87 @@ const recipes: Recipe[] = [
     ]
   },
   {
+    name: "Buffalo Chicken Wings",
+    difficulty: 1,
+    servings: {min: 4, max: 6},
+    ingredients: [
+      {searchKey: "Water", description: "1/2 cup water"},
+      {
+        searchKey: "Chicken Wings, Drums Flats",
+        description: "2 pounds frozen chicken wings, drums and flats separated"
+      },
+      {searchKey: "Canola", description: "2 tablespoons canola oil"},
+      {searchKey: "Buffalo Sauce", description: "2 tablespoons Buffalo sauce"},
+      {searchKey: "Kosher Salt", description: "2 teaspoons Kosher Salt"},
+    ],
+    directions: [
+      `Pour water into pot. Place wings into the Cook & Crisp™ Basket and place basket in pot. Assemble the pressure lid, making sure the pressure release valve is in the SEAL position.`,
+      ` Select PRESSURE and set HIGH. Set time to 5 minutes. Select START/STOP to begin.`,
+      `3 When pressure cooking is complete, quick release the pressure by turning the pressure release valve to the VENT position. Carefully remove lid when unit has finished releasing pressure.`,
+      `Pat wings dry with paper towels and toss with 2 tablespoons oil in the basket.`,
+      `5 Close crisping lid. Select AIR CRISP, set temperature to 390°F, and set time to 15 minutes. Select START/STOP to begin.`,
+      `After 7 minutes, open lid, then lift basket and shake wings or toss them with silicone-tipped tongs. Lower basket back into pot and close lid to resume cooking.`,
+      `7 While the wings are cooking, stir together Buffalo sauce and salt in a large mixing bowl.`,
+      ` When cooking is complete, transfer wings to the bowl with buffalo sauce and toss to coat. `,
+    ],
+    timing: {
+      prep: 10,
+      cook: 20,
+      pressureBuild: 6,
+      pressureCook: 0,
+      pressureRelease: "quick" as Timings["pressureRelease"],
+      airCrisp: 0,
+      bakeRoast: 0,
+      broil: 0,
+    },
+    image: BuffaloChickenWings,
+    tips: [
+      `Want to use fresh wings instead of frozen? Rather than pressure cooking, simply place fresh wings in the basket and toss with 2 tablespoons canola oil. Then Air Crisp at 390°F for 24–28 minutes.`
+    ]
+  },
+  {
+    name: "Frozen Chicken Dinner",
+    difficulty: 2,
+    servings: 2,
+    ingredients: [
+      {searchKey: "Olive Oil", description: "2 tablespoons olive oil, divided"},
+      {searchKey: "Onion", description: "1 small onion, peeled, diced "},
+      {searchKey: "Rice", description: "1 cup wild rice blend"},
+      {searchKey: "Kosher Salt", description: "3 teaspoons kosher salt, divided"},
+      {searchKey: "Ras el Hanout", description: `1 tablespoon Moroccan seasoning “Ras el Hanout”`},
+      {searchKey: "Chicken Stock", description: "3/4 cup chicken stock"},
+      {searchKey: "Chicken Breast", description: "2 frozen chicken breasts (8-10 ounces each)"},
+      {searchKey: "Green Beans", description: "1 bag (12 ounces) green beans, trimmed "},
+      {searchKey: "Black Pepper", description: "1 teaspoon black pepper, divided"},
+      {searchKey: "Parsley", description: "1/4 cup fresh parsley, chopped"},
+      {searchKey: "Honey Mustard Sauce", description: "1/4 cup honey mustard sauce"},
+
+    ],
+    directions: [
+      `Select SEAR/SAUTÉ and set to HIGH. Allow to preheat for 5 minutes`,
+      `After 5 minutes, add 1 tablespoon oil and onion. Cook, stirring occasionally, for 3 minutes, until onions are fragrant. Add wild rice, 2 teaspoons salt, and Moroccan seasoning. Cook, stirring frequently, until the rice is coated with oil and very shiny. Add chicken stock and stir to incorporate. `,
+      `Place frozen chicken breasts on reversible rack, making sure rack is in the higher position. Place rack inside pot over rice mixture.`,
+      `Assemble pressure lid, making sure the pressure release valve is in the SEAL position.`,
+      `Select PRESSURE and set to HIGH. Set time to 22 minutes. Select START/STOP to begin. `,
+      `While chicken and rice are cooking, toss green beans in a bowl with the remaining oil, salt, and pepper.`,
+      `When pressure cooking is complete, allow pressure to naturally release for 10 minutes. After 10 minutes, quick release any remaining pressure by turning the pressure release valve to the VENT position. Carefully remove lid when unit has finished releasing pressure.`,
+      `Lift reversible rack out of the pot. Stir parsley into rice, then add green beans directly on top of the rice.`,
+      `Brush chicken breasts on all sides with honey mustard sauce, then return the reversible rack to the pot over rice and green beans.`,
+      `Close crisping lid. Select BROIL and set time to 10 minutes. Select START/STOP to begin.`,
+      `Cooking is complete when internal temperature reaches 165°F. Serve chicken with green beans and rice.`,
+    ],
+    timing: {
+      prep: 10,
+      cook: {min: 37, max: 40},
+      pressureBuild: 8,
+      pressureCook: 0,
+      pressureRelease: 10,
+      airCrisp: 0,
+      bakeRoast: 0,
+      broil: 0,
+    },
+  },
+  {
     name: "Herb-Roasted Chicken",
     difficulty: 1,
     servings: 4,
@@ -86,6 +169,47 @@ const recipes: Recipe[] = [
       pressureCook: 22,
       pressureRelease: 5,
       airCrisp: {min: 8, max: 18},
+      bakeRoast: 0,
+      broil: 0,
+    },
+    image: HerbRoastedChicken,
+    tips: [
+      "Use cooking spray in place of oil to evenly coat large cuts of protein in the Cook & Crisp Basket."
+    ]
+  },
+  {
+    name: "Miso-Glazed Salmon & Bok Choy",
+    difficulty: 2,
+    servings: 4,
+    ingredients: [
+      {searchKey: "Chicken", description: "1 whole uncooked chicken (4 1/2–5 pounds)"},
+      {searchKey: "Lemon Juice", description: "Juice of 2 lemons (1/4 cup lemon juice)"},
+      {searchKey: "Water", description: "1/4 cup hot water"},
+      {searchKey: "Honey", description: "1/4 cup honey"},
+      {searchKey: "Kosher Salt", description: "2 tablespoons plus 2 tablespoons kosher salt, divided"},
+      {searchKey: "Black Peppercorns", description: "1 tablespoon whole black peppercorns"},
+      {searchKey: "Fresh Thyme", description: "5 sprigs fresh thyme"},
+      {searchKey: "Garlic", description: "5 cloves garlic, peeled, smashed"},
+      {searchKey: "Canola Oil", description: "1 tablespoon canola oil"},
+      {searchKey: "Ground Black Pepper", description: "2 teaspoons ground black pepper"},
+    ],
+    directions: [
+      `Place rice and water into the pot. Stir to combine. Place reversible rack in pot, making sure rack is in the higher position.`,
+      `Season salmon with salt, then place on rack. Assemble pressure lid, making sure the pressure release valve is in the SEAL position`,
+      `Select PRESSURE and set to HIGH. Set time to 2 minutes. Select START/STOP to begin.`,
+      `While salmon and rice are cooking, stir together miso and butter to form a paste. Toss bok choy with mirin and sesame oil.`,
+      `When pressure cooking is complete, quick release the pressure by moving the pressure release valve to the VENT position. Carefully remove lid when unit has finished releasing pressure.`,
+      `Gently pat salmon dry with paper towel, then spread miso butter evenly on top of the fillets. Add bok choy to the rack.`,
+      `Close crisping lid. Select BROIL and set time to 7 minutes. Select START/STOP to begin, checking for doneness after 5 minutes.`,
+      `When cooking is complete, remove salmon from rack and serve with bok choy and rice. Garnish with sesame seeds, if desired.`,
+    ],
+    timing: {
+      prep: 10,
+      cook: {min: 7, max: 9},
+      pressureBuild: 5,
+      pressureCook: 0,
+      pressureRelease: "quick" as Timings["pressureRelease"],
+      airCrisp: 0,
       bakeRoast: 0,
       broil: 0,
     },
@@ -225,7 +349,6 @@ const recipes: Recipe[] = [
 
     return acc;
   }, {min: 0, max: 0});
-
 
   return {
     id: processKey(rest.name),
