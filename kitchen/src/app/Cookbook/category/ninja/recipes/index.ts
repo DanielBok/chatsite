@@ -4,8 +4,10 @@ import BuffaloChickenWings from "./static/buffalo-chicken-wings.png";
 import HerbRoastedChicken from "./static/herb-roasted-chicken.png";
 import MisoGlazedSalmonAndBokChoy from "./static//miso-glazed-salmon-and-bok-choy.png";
 import PankoCrustedCodWithQuinoa from "./static/panko-crusted-cod-with-quinoa.png";
+import PotatoWedge from "./static/potato-wedge.png";
 import StickyStLouisRibs from "./static/sticky-st-louis-ribs.png";
 import TeriyakiChickenBroccoliRice from "./static/teriyaki-chicken-broccoli-rice.png";
+import WholeRoastedSicilianCauliflower from "./static/whole-roasted-sicilian-cauliflower.png";
 
 import { Recipe, Timings } from "./types";
 
@@ -255,6 +257,83 @@ const recipes: Recipe[] = ([
       broil: 0,
     },
     image: PankoCrustedCodWithQuinoa
+  },
+  {
+    name: "Potato Wedges",
+    difficulty: 1,
+    servings: 4,
+    ingredients: [
+      {searchKey: "Water", description: "1/2 cup water"},
+      {searchKey: "Potato", description: "4 Idaho potatoes, cut in 2-inch wedges"},
+      {searchKey: "Extra Virgin Olive Oil", description: "2 tablespoons extra virgin olive oil, divided"},
+      {searchKey: "Oregano Leaves", description: "1 tablespoon fresh oregano leaves, minced"},
+      {searchKey: "Garlic", description: "4 cloves garlic, peeled, minced"},
+      {searchKey: "Juice", description: "Juice of 1 lemon"},
+      {searchKey: "Kosher Salt", description: "2 teaspoons kosher salt"},
+      {searchKey: "Ground Black Pepper", description: "1 teaspoon ground black pepper"},
+    ],
+    directions: [
+      `Pour water into the pot. Place potatoes into the Cook & Crisp™ Basket and place basket into pot.`,
+      `Assemble pressure lid, making sure the pressure release valve is in the SEAL position. Select PRESSURE and set to LOW. Set time to 3 minutes. Select START/STOP to begin.`,
+      `While potatoes are cooking, stir together 1 tablespoon olive oil with oregano, garlic, lemon juice, salt, and pepper in a small bowl. Set aside.`,
+      `When pressure cooking is complete, quick release the pressure by moving the pressure release valve to the VENT position. Carefully remove lid when unit has finished releasing pressure.`,
+      `Pour remaining olive oil over the potatoes in the basket, shaking to coat evenly.`,
+      `Close the crisping lid. Select AIR CRISP, set temperature to 400°F, and set time to 18 minutes. Select START/STOP to begin. Check potatoes after 12 minutes. Continue cooking for up to 18 minutes for desired crispiness.`,
+      `When cooking is complete, remove potatoes from basket. Toss with oregano dressing and serve.`,
+    ],
+    timing: {
+      prep: 15,
+      cook: {min: 15, max: 21},
+      pressureBuild: 6,
+      pressureCook: 0,
+      pressureRelease: "quick",
+      airCrisp: 0,
+      bakeRoast: 0,
+      broil: 0,
+    },
+    image: PotatoWedge,
+    tips: [
+      `For crispier results, add another teaspoon of oil in step 5, and when Air Crisping, shake the basket or toss potatoes with silicone-tipped tongs every 6 minutes`
+    ]
+  },
+  {
+    name: "Whole Roasted Sicilian Cauliflower",
+    difficulty: 2,
+    servings: 4,
+    ingredients: [
+      {searchKey: "Water", description: "1/2 cup water "},
+      {searchKey: "Cauliflower", description: "1 medium head cauliflower, leaves removed"},
+      {searchKey: "Olive Oil", description: "1/4 cup olive oil"},
+      {searchKey: "Garlic", description: "4 cloves garlic, peeled, minced"},
+      {searchKey: "Capers", description: "2 tablespoons capers, rinsed, minced"},
+      {searchKey: "Red Pepper", description: "1 teaspoon crushed red pepper"},
+      {searchKey: "Parmesan Cheese", description: "1/2 cup grated Parmesan cheese"},
+      {searchKey: "Parsley", description: "1 tablespoon fresh parsley, chopped for garnish"},
+    ],
+    directions: [
+      `Place water and Cook & Crisp™ Basket in pot.`,
+      `With a knife, cut an X into the head of cauliflower, slicing about halfway down. Place cauliflower into the basket.`,
+      `Assemble pressure lid, making sure the pressure release valve is in the SEAL position. Select PRESSURE and set to LOW. Set time to 3 minutes. Select START/STOP to begin.`,
+      `In a small bowl, stir together olive oil, garlic, capers, and crushed red pepper.`,
+      `When pressure cooking is complete, quick release the pressure by moving the pressure release valve to the VENT position. Carefully remove lid when unit has finished releasing pressure.`,
+      `Spread the oil mixture evenly over the cauliflower, placing some of it into the center of the cauliflower. Sprinkle Parmesan cheese evenly over the cauliflower.`,
+      `Close crisping lid. Select AIR CRISP, set temperature to 390°F, and set time to 10 minutes. Select START/STOP to begin.`,
+      `When cooking is complete, transfer cauliflower to a serving platter using a large spatula. Garnish with fresh parsley.`,
+    ],
+    timing: {
+      prep: 10,
+      cook: 13,
+      pressureBuild: 5,
+      pressureCook: 0,
+      pressureRelease: "quick",
+      airCrisp: 0,
+      bakeRoast: 0,
+      broil: 0,
+    },
+    image: WholeRoastedSicilianCauliflower,
+    tips: [
+      "Since capers are briny, be sure to taste the cauliflower before adding salt to this dish."
+    ]
   },
   {
     name: "Sticky St. Louis Ribs",
