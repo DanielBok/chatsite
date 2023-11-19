@@ -10,7 +10,7 @@ import TeriyakiChickenBroccoliRice from "./static/teriyaki-chicken-broccoli-rice
 import { Recipe, Timings } from "./types";
 
 
-const recipes: Recipe[] = [
+const recipes: Recipe[] = ([
   {
     name: "Baked Macaroni & Cheese",
     difficulty: 1,
@@ -334,31 +334,70 @@ const recipes: Recipe[] = [
     },
     image: TeriyakiChickenBroccoliRice,
   },
-].map(({timing, ...rest}) => {
-  const total = Object.entries(timing).reduce((acc, [k, v]) => {
-    if (k === "pressureRelease") {
-      return acc;
-    }
-
-    if (typeof v === "number") {
-      v = {min: v, max: v};
-    }
-    v = v as { min: number, max: number };
-    acc.min += v.min;
-    acc.max += v.max;
-
-    return acc;
-  }, {min: 0, max: 0});
-
-  return {
-    id: processKey(rest.name),
-    ...rest,
+  {
+    name: "Upside-Down Loaded Chicken Nachos",
+    difficulty: 3,
+    servings: 8,
+    ingredients: [
+      {searchKey: "Chicken Breasts", description: "4 frozen boneless skinless chicken breasts (8–12 ounces each)"},
+      {searchKey: "Red Salsa", description: "1 jar (16 ounces) red salsa"},
+      {searchKey: "Refried Beans", description: "1 can (14 ounces) refried beans"},
+      {searchKey: "Kosher Salt", description: "1 tablespoon kosher salt"},
+      {searchKey: "Taco Seasoning", description: "2 tablespoons taco seasoning"},
+      {searchKey: "Tortilla Chip", description: "1/4 bag (4 ounces) tortilla chips, divided"},
+      {searchKey: "Mexican Cheese Blend", description: "1 1/2 bags (12 ounces) Mexican cheese blend, divided"},
+    ],
+    directions: [
+      `Place frozen chicken and salsa into the pot. Assemble pressure lid, making sure the pressure release valve is in the SEAL position.`,
+      `Select PRESSURE and set to HIGH. Set time to 20 minutes. Select START/STOP to begin.`,
+      `When pressure cooking is complete, quick release the pressure by moving the pressure release valve to the VENT position. Carefully remove lid when unit has finished releasing pressure`,
+      `Using silicone-tipped utensils, shred the chicken in the pot. Add the refried beans, salt, and taco seasoning and stir well to incorporate.`,
+      `Arrange half the tortilla chips evenly on top of the chicken mixture, then cover chips with half the cheese. Repeat with a second layer of the remaining tortilla chips topped with the remaining cheese`,
+      `Close crisping lid. Select AIR CRISP, set temperature to 360°F, and set time to 5 minutes. Select START/STOP to begin. For crispier results, add additional time`,
+      `When cooking is complete, garnish nachos with guacamole, sour cream, and scallions and serve.`,
+    ],
+    topping: [
+      "Guacamole",
+      "Sour cream",
+      "Fresh scallions, sliced",
+    ],
     timing: {
-      ...timing,
-      total: total.min === total.max ? total.min : total
-    }
-  };
-});
+      prep: 10,
+      cook: 25,
+      pressureBuild: 12,
+      pressureCook: 0,
+      pressureRelease: "quick",
+      airCrisp: 0,
+      bakeRoast: 0,
+      broil: 0,
+    },
+  },
+] as (Omit<Recipe, "timing" | "id"> & { timing: Omit<Timings, "total"> })[])
+  .map(({timing, ...rest}) => {
+    const total = Object.entries(timing).reduce((acc, [k, v]) => {
+      if (k === "pressureRelease") {
+        return acc;
+      }
+
+      if (typeof v === "number") {
+        v = {min: v, max: v};
+      }
+      v = v as { min: number, max: number };
+      acc.min += v.min;
+      acc.max += v.max;
+
+      return acc;
+    }, {min: 0, max: 0});
+
+    return {
+      id: processKey(rest.name),
+      ...rest,
+      timing: {
+        ...timing,
+        total: total.min === total.max ? total.min : total
+      }
+    };
+  });
 
 export default alphabetical(recipes, e => e.name.toLowerCase())
   .reduce((acc, r) => ({...acc, [r.id]: r}), {} as Record<string, Recipe>);

@@ -26,6 +26,7 @@ export type Recipe = {
   }[]
   directions: React.ReactNode[]
   timing: Timings
+  topping?: string[]
   tips?: React.ReactNode[]
   image?: string
 }
