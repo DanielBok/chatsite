@@ -22,7 +22,7 @@ export default function RecipeList() {
           <Link
             to={item.id}
             className="flex flex-col w-full mr-4 cursor-pointer">
-            <h2 className="text-lg md:text-2xl">{item.name}</h2>
+            <h2 className="text-lg md:text-2xl md:h-20">{item.name}</h2>
             <div className="flex-grow"/>
             <RecipeStatistics
               timing={item.timing}
@@ -32,7 +32,7 @@ export default function RecipeList() {
           </Link>
 
           <div className="flex items-center">
-            <Image src={item.image} className="w-[175px] md:w-[250px] rounded shadow"/>
+            <Image src={item.image} className="w-[125px] md:w-[200px] md:max-h-[70px] rounded shadow"/>
           </div>
         </List.Item>
       )}

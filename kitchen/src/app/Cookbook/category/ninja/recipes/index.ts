@@ -1,8 +1,8 @@
 import { alphabetical } from "radash";
 import BakedMacaroniAndCheese from "./static/baked-macaroni-and-cheese.png";
 import BuffaloChickenWings from "./static/buffalo-chicken-wings.png";
-
 import HerbRoastedChicken from "./static/herb-roasted-chicken.png";
+import MisoGlazedSalmonAndBokChoy from "./static//miso-glazed-salmon-and-bok-choy.png";
 import PankoCrustedCodWithQuinoa from "./static/panko-crusted-cod-with-quinoa.png";
 import StickyStLouisRibs from "./static/sticky-st-louis-ribs.png";
 import TeriyakiChickenBroccoliRice from "./static/teriyaki-chicken-broccoli-rice.png";
@@ -213,7 +213,7 @@ const recipes: Recipe[] = [
       bakeRoast: 0,
       broil: 0,
     },
-    image: HerbRoastedChicken,
+    image: MisoGlazedSalmonAndBokChoy,
     tips: [
       "Use cooking spray in place of oil to evenly coat large cuts of protein in the Cook & Crisp Basket."
     ]
