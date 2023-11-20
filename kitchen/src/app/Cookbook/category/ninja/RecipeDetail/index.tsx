@@ -6,6 +6,7 @@ import { useLocation, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import Directions from "./Directions";
 import Ingredients from "./Ingredients";
+import RecipeExtras from "./RecipeExtras";
 import RecipeTips from "./RecipeTips";
 import RecipeStatistics from "./Statistics";
 
@@ -36,11 +37,13 @@ export default function RecipeDetail() {
         <Space className="w-full flex flex-col md:hidden">
           <Ingredients ingredients={recipe.ingredients}/>
           <Directions directions={recipe.directions}/>
+          <RecipeExtras extra={recipe.extra}/>
         </Space>
 
-        <div className="w-full hidden md:flex flex-row justify-between">
-          <Ingredients ingredients={recipe.ingredients} className="w-1/2"/>
-          <Directions directions={recipe.directions} className="w-1/2"/>
+        <div className="w-full hidden md:flex flex-row basis-1/2 justify-between flex-wrap">
+          <Ingredients ingredients={recipe.ingredients} className="w-1/2 min-w-[50%]"/>
+          <Directions directions={recipe.directions} className="w-1/2 min-w-[50%]"/>
+          <RecipeExtras extra={recipe.extra} className="w-1/2  min-w-[50%]"/>
         </div>
 
         <RecipeTips tips={recipe.tips}/>

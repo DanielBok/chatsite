@@ -10,6 +10,7 @@ type Props = Pick<Recipe, "difficulty" | "servings" | "timing">
 
 const timingNameMap: Record<keyof Timings, string> = {
   prep: "PREP",
+  chill: "CHILL",
   cook: "COOK",
   airCrisp: "AIR CRISP",
   bakeRoast: "BAKE/ROAST",
