@@ -1,5 +1,6 @@
 import { alphabetical } from "radash";
 import BakedMacaroniAndCheese from "./static/baked-macaroni-and-cheese.png";
+import BuffaloCauliflowerBites from "./static/buffalo-cauliflower-bites.png";
 import BuffaloChickenWings from "./static/buffalo-chicken-wings.png";
 import HerbRoastedChicken from "./static/herb-roasted-chicken.png";
 import MisoGlazedSalmonAndBokChoy from "./static//miso-glazed-salmon-and-bok-choy.png";
@@ -44,18 +45,50 @@ const recipes: Recipe[] = ([
     ],
     timing: {
       prep: 10,
-      cook: 0,
       pressureBuild: 7,
-      pressureCook: 0,
       pressureRelease: 10,
       airCrisp: 7,
-      bakeRoast: 0,
-      broil: 0,
     },
     image: BakedMacaroniAndCheese,
     tips: [
       `To make this mac & cheese more kid friendly, remove onion powder, garlic powder, and mustard powder, and serve the kids before adding the bread crumb topping.`
     ]
+  },
+  {
+    name: "Buffalo Cauliflower Bites",
+    difficulty: 3,
+    servings: 6,
+    ingredients: [
+      {searchKey: "Cauliflower", description: "2 heads cauliflower, trimmed, cut in 2-inch florets"},
+      {searchKey: "Water", description: "1 1/2 cup water"},
+      {searchKey: "Cornstarch", description: "1 1/2 cups cornstarch"},
+      {searchKey: "Flour", description: "1/2 cup all-purpose flour"},
+      {searchKey: "Baking Powder", description: "2 teaspoons baking powder"},
+      {searchKey: "Garlic Powder", description: "1 teaspoon garlic powder"},
+      {searchKey: "Onion Powder", description: "1 teaspoon onion powder"},
+      {searchKey: "Kosher Salt", description: "1 teaspoon kosher salt"},
+      {searchKey: "Black Pepper", description: "1 teaspoon black pepper"},
+      {searchKey: "Eggs", description: "2 eggs"},
+      {searchKey: "Buffalo Wing Sauce", description: "1/3 cup buffalo wing sauce"},
+    ],
+    directions: [
+      `Place cauliflower and 1/2 cup water into the pot. Assemble pressure lid, making sure the pressure release valve is in the SEAL position.`,
+      `Select PRESSURE and set to LOW. Set time to 2 minutes. Select START/STOP to begin`,
+      `When pressure cooking is complete, quick release the pressure by turning the pressure release valve to the VENT position. Carefully remove lid when unit has finished releasing pressure. Drain cauliflower and chill in refrigerator until cooled, about 10 minutes.`,
+      `Whisk together cornstarch, flour, baking powder, garlic powder, onion powder, salt, and pepper. Whisk in eggs and 1 cup water until batter is smooth. Add chilled cauliflower to bowl with batter and gently toss until well coated. Transfer coated cauliflower to baking sheet and chill in freezer for 20 minutes.`,
+      `Close crisping lid. Preheat the unit by selecting AIR CRISP, setting the temperature to 360°F, and setting the time to 5 minutes.`,
+      `Meanwhile, arrange half the cauliflower in an even layer in the bottom of the Cook & Crisp™ Basket. After 5 minutes, place basket into the pot.`,
+      `Close crisping lid. Select AIR CRISP, set temperature to 360°F, and set time to 20 minutes. Select START/STOP to begin. When first batch of cauliflower is crisp and golden, transfer to a bowl. Repeat with remaining chilled cauliflower.`,
+      `When cooking is complete, microwave hot sauce for 30 seconds, then toss with cooked cauliflower. Serve immediately.`,
+    ],
+    timing: {
+      prep: 10,
+      chill: 30,
+      cook: 42,
+      pressureBuild: 6,
+      pressureRelease: "quick",
+    },
+    image: BuffaloCauliflowerBites,
   },
   {
     name: "Buffalo Chicken Wings",
@@ -73,20 +106,20 @@ const recipes: Recipe[] = ([
     ],
     directions: [
       `Pour water into pot. Place wings into the Cook & Crisp™ Basket and place basket in pot. Assemble the pressure lid, making sure the pressure release valve is in the SEAL position.`,
-      ` Select PRESSURE and set HIGH. Set time to 5 minutes. Select START/STOP to begin.`,
-      `3 When pressure cooking is complete, quick release the pressure by turning the pressure release valve to the VENT position. Carefully remove lid when unit has finished releasing pressure.`,
+      `Select PRESSURE and set HIGH. Set time to 5 minutes. Select START/STOP to begin.`,
+      `When pressure cooking is complete, quick release the pressure by turning the pressure release valve to the VENT position. Carefully remove lid when unit has finished releasing pressure.`,
       `Pat wings dry with paper towels and toss with 2 tablespoons oil in the basket.`,
-      `5 Close crisping lid. Select AIR CRISP, set temperature to 390°F, and set time to 15 minutes. Select START/STOP to begin.`,
+      `Close crisping lid. Select AIR CRISP, set temperature to 390°F, and set time to 15 minutes. Select START/STOP to begin.`,
       `After 7 minutes, open lid, then lift basket and shake wings or toss them with silicone-tipped tongs. Lower basket back into pot and close lid to resume cooking.`,
-      `7 While the wings are cooking, stir together Buffalo sauce and salt in a large mixing bowl.`,
-      ` When cooking is complete, transfer wings to the bowl with buffalo sauce and toss to coat. `,
+      `While the wings are cooking, stir together Buffalo sauce and salt in a large mixing bowl.`,
+      `When cooking is complete, transfer wings to the bowl with buffalo sauce and toss to coat. `,
     ],
     timing: {
       prep: 10,
       cook: 20,
       pressureBuild: 6,
       pressureCook: 0,
-      pressureRelease: "quick" as Timings["pressureRelease"],
+      pressureRelease: "quick",
       airCrisp: 0,
       bakeRoast: 0,
       broil: 0,
@@ -95,6 +128,44 @@ const recipes: Recipe[] = ([
     tips: [
       `Want to use fresh wings instead of frozen? Rather than pressure cooking, simply place fresh wings in the basket and toss with 2 tablespoons canola oil. Then Air Crisp at 390°F for 24–28 minutes.`
     ]
+  },
+  {
+    name: "Carnitas Tacos",
+    difficulty: 2,
+    servings: 12,
+    ingredients: [
+      {searchKey: "Pork Shoulder", description: "2 pounds uncooked boneless pork shoulder cut in 1-inch cubes"},
+      {searchKey: "Garlic", description: "6 cloves garlic, peeled, crushed"},
+      {searchKey: "Orang", description: "Juice and zest of 1/2 orange"},
+      {searchKey: "Dried Oregano", description: "1 teaspoon dried oregano (or 20 leaves fresh)"},
+      {searchKey: "Kosher Salt", description: "2 teaspoons kosher salt"},
+      {searchKey: "Ground Black Pepper", description: "1 teaspoon ground black pepper"},
+      {searchKey: "Chilli Powder", description: "1 1/2 teaspoons chilli powder"},
+      {searchKey: "Onion", description: "/2 large onion, peeled"},
+      {searchKey: "Chicken / Vegetable Stock", description: "1/2 cup chicken stock or vegetable stock"},
+      {searchKey: "Agave Nectar", description: "2 tablespoons agave nectar"},
+      {searchKey: "Cilantro / Parsley", description: "1 tablespoon fresh cilantro or parsley, chopped"},
+      {searchKey: "Corn / Flour Tortillas", description: "12 (6-inch) corn or flour tortillas, for serving"},
+    ],
+    directions: [
+      `Place pork, garlic, orange juice and zest, oregano, salt, pepper, and chili powder in pot. Stir to combine.`,
+      `Place onion and stock in pot. Assemble pressure lid, making sure the pressure release valve is in the SEAL position.`,
+      `Select PRESSURE and set to HIGH. Set time to 20 minutes. Select START/STOP to begin.`,
+      `When pressure cooking is complete, quick release the pressure by moving the pressure release valve to the VENT position. Carefully remove lid when unit has finished releasing pressure.`,
+      `Select SEAR/SAUTE and set to MD:HI. Select START/STOP. Using silicone-tipped tongs, remove onion from pot and shred pork. Allow pork to simmer for 10 minutes, or until the liquid in pot is reduced, stirring occasionally.`,
+      `Once liquid is reduced, stir agave nectar into the shredded pork. Close crisping lid. Select BROIL and set time to 8 minutes. Select START/STOP to begin.`,
+      `When cooking is complete, stir in cilantro or parsley and add salt if needed. Place carnitas into tortillas and assemble with your favorite toppings.`,
+    ],
+    timing: {
+      prep: 15,
+      cook: 40,
+      pressureBuild: 7,
+      pressureCook: 0,
+      pressureRelease: "quick",
+      airCrisp: 0,
+      bakeRoast: 0,
+      broil: 0,
+    },
   },
   {
     name: "Frozen Chicken Dinner",
@@ -297,45 +368,6 @@ const recipes: Recipe[] = ([
     ]
   },
   {
-    name: "Whole Roasted Sicilian Cauliflower",
-    difficulty: 2,
-    servings: 4,
-    ingredients: [
-      {searchKey: "Water", description: "1/2 cup water "},
-      {searchKey: "Cauliflower", description: "1 medium head cauliflower, leaves removed"},
-      {searchKey: "Olive Oil", description: "1/4 cup olive oil"},
-      {searchKey: "Garlic", description: "4 cloves garlic, peeled, minced"},
-      {searchKey: "Capers", description: "2 tablespoons capers, rinsed, minced"},
-      {searchKey: "Red Pepper", description: "1 teaspoon crushed red pepper"},
-      {searchKey: "Parmesan Cheese", description: "1/2 cup grated Parmesan cheese"},
-      {searchKey: "Parsley", description: "1 tablespoon fresh parsley, chopped for garnish"},
-    ],
-    directions: [
-      `Place water and Cook & Crisp™ Basket in pot.`,
-      `With a knife, cut an X into the head of cauliflower, slicing about halfway down. Place cauliflower into the basket.`,
-      `Assemble pressure lid, making sure the pressure release valve is in the SEAL position. Select PRESSURE and set to LOW. Set time to 3 minutes. Select START/STOP to begin.`,
-      `In a small bowl, stir together olive oil, garlic, capers, and crushed red pepper.`,
-      `When pressure cooking is complete, quick release the pressure by moving the pressure release valve to the VENT position. Carefully remove lid when unit has finished releasing pressure.`,
-      `Spread the oil mixture evenly over the cauliflower, placing some of it into the center of the cauliflower. Sprinkle Parmesan cheese evenly over the cauliflower.`,
-      `Close crisping lid. Select AIR CRISP, set temperature to 390°F, and set time to 10 minutes. Select START/STOP to begin.`,
-      `When cooking is complete, transfer cauliflower to a serving platter using a large spatula. Garnish with fresh parsley.`,
-    ],
-    timing: {
-      prep: 10,
-      cook: 13,
-      pressureBuild: 5,
-      pressureCook: 0,
-      pressureRelease: "quick",
-      airCrisp: 0,
-      bakeRoast: 0,
-      broil: 0,
-    },
-    image: WholeRoastedSicilianCauliflower,
-    tips: [
-      "Since capers are briny, be sure to taste the cauliflower before adding salt to this dish."
-    ]
-  },
-  {
     name: "Sticky St. Louis Ribs",
     difficulty: 2,
     servings: 4,
@@ -373,6 +405,46 @@ const recipes: Recipe[] = ([
     image: StickyStLouisRibs,
     tips: [
       "The Ninja® roasting rack insert makes it easy to hold up the ribs while cooking. It is available for purchase on ninjaaccessories.com."
+    ]
+  },
+  {
+    name: "Stuffed Peppers",
+    difficulty: 1,
+    servings: 6,
+    ingredients: [
+      {searchKey: "Garlic Powder", description: "1 tablespoon garlic powder"},
+      {searchKey: "Black Pepper", description: "1 teaspoon black pepper"},
+      {searchKey: "Ground Cinnamon", description: "1 tablespoon ground cinnamon"},
+      {searchKey: "Ground Cloves", description: "1/2 teaspoon ground cloves"},
+      {searchKey: "Kosher Salt", description: "1 1/2 tablespoons kosher salt, divided"},
+      {searchKey: "Paprika", description: "3 tablespoons paprika"},
+      {searchKey: "Ground Cumin", description: "1 1/2 teaspoons ground cumin"},
+      {searchKey: "Ground Beef", description: "1 pound uncooked ground beef"},
+      {searchKey: "Onion", description: "1 small onion, peeled, finely chopped"},
+      {searchKey: "Brown Rice", description: "1 cup brown rice"},
+      {searchKey: "Chicken Stock", description: "1 cup chicken stock"},
+      {searchKey: "White Wine", description: "1/4 cup dry white wine"},
+      {searchKey: "Bell Peppers", description: "4 large bell peppers, seeds and stems removed, tops chopped"},
+      {searchKey: "Cashews", description: "1 cup whole cashews, chopped"},
+      {searchKey: "Parsley", description: "1/2 cup fresh parsley, chopped"},
+    ],
+    directions: [
+      `In a small mixing bowl, stir together the garlic powder, black pepper, cinnamon, cloves, 1 1/2 teaspoons salt, paprika, and cumin; set aside.`,
+      `Add beef, onion, rice, stock, wine, and 2 tablespoons spice mix to the pot, breaking apart meat. Assemble pressure lid, making sure the pressure release valve is in the SEAL position.`,
+      `Select PRESSURE and set to HIGH. Set time to 15 minutes. Select START/STOP to begin`,
+      `When pressure cooking is complete, naturally release the pressure for 10 minutes, then quick release any remaining pressure by moving the pressure release valve to the VENT position. Carefully remove lid when unit has finished releasing pressure.`,
+      `Stir meat mixture, then add chopped pepper tops, cashews, fresh parsley, and remaining salt. Using a rubber or wooden spoon, stuff mixture into the 4 bell peppers.`,
+      `Place stuffed peppers in the pot. Close crisping lid. Select BAKE/ROAST, set temperature to 360°F, and set time to 15 minutes. Select START/STOP to begin.`,
+      `When cooking is complete, serve immediately.`,
+    ],
+    timing: {
+      prep: 10,
+      cook: 0,
+      pressureBuild: 6,
+      pressureRelease: 10,
+    },
+    tips: [
+      `Save remaining spice blend and use it for roasting vegetables or seasoning fish.`
     ]
   },
   {
@@ -414,6 +486,45 @@ const recipes: Recipe[] = ([
     image: TeriyakiChickenBroccoliRice,
   },
   {
+    name: "Tex-Mex Meatloaf",
+    difficulty: 2,
+    servings: {min: 6, max: 8},
+    ingredients: [
+      {searchKey: "Ground Beef", description: "1 pound uncooked ground beef"},
+      {searchKey: "Egg", description: "1 egg"},
+      {searchKey: "Bell Pepper", description: "1 bell pepper, diced"},
+      {searchKey: "Jalapeno Pepper", description: "1/2 jalapeño pepper, seeds removed, minced"},
+      {searchKey: "Onion", description: "1 small onion, peeled, diced"},
+      {searchKey: "Corn Tortillas", description: "3 corn tortillas, roughly chopped"},
+      {searchKey: "Garlic Power", description: "1 tablespoon garlic powder"},
+      {searchKey: "Ground Cumin", description: "2 teaspoons ground cumin"},
+      {searchKey: "Chilli Powder", description: "2 teaspoons chili powder"},
+      {searchKey: "Cayenne Powder", description: "1 teaspoon cayenne pepper"},
+      {searchKey: "Kosher Salt", description: "2 teaspoons kosher salt"},
+      {searchKey: "Cilantro Leaves", description: "1/4 cup fresh cilantro leaves"},
+      {searchKey: "Barbecue Sauce", description: "1/4 barbecue sauce, divided"},
+      {searchKey: "Water", description: "1 cup water"},
+      {searchKey: "Corn Chips", description: "1 cup corn chips, crushed"},
+    ],
+    directions: [
+      `Stir together beef, egg, bell pepper, jalapeño pepper, onion, tortillas, spices, cilantro, and 2 tablespoons barbecue sauce in a large mixing bowl.`,
+      `Place meat mixture in the Ninja® loaf pan* (or an 8 1/2-inch loaf pan) and cover tightly with aluminum foil.`,
+      `Pour water into pot. Place the loaf pan on the reversible rack, making sure rack is in the lower position. Place rack with pan in pot. Assemble the pressure lid, making sure the pressure release valve is in the SEAL position.`,
+      `Select PRESSURE and set to HIGH. Set time to 15 minutes. Select START/STOP to begin.`,
+      `When pressure cooking is complete, quick release the pressure by moving the pressure release valve to the VENT position. Carefully remove lid when unit has finished releasing pressure.`,
+      `Carefully remove foil from loaf pan and close crisping lid. Select BAKE/ROAST, set temperature to 360°F, and set time to 15 minutes. Select START/STOP to begin`,
+      `While the meatloaf is cooking, stir together the crushed corn chips and 2 tablespoons barbecue sauce in a bowl.`,
+      `After 7 minutes, open lid and top meatloaf with the corn chip mixture. Close lid to resume cooking.`,
+      `When cooking is complete, remove meatloaf from pot and allow to cool for 10 minutes before serving.`,
+    ],
+    timing: {
+      prep: 15,
+      cook: 30,
+      pressureBuild: 6,
+      pressureRelease: "quick",
+    },
+  },
+  {
     name: "Upside-Down Loaded Chicken Nachos",
     difficulty: 3,
     servings: 8,
@@ -435,11 +546,13 @@ const recipes: Recipe[] = ([
       `Close crisping lid. Select AIR CRISP, set temperature to 360°F, and set time to 5 minutes. Select START/STOP to begin. For crispier results, add additional time`,
       `When cooking is complete, garnish nachos with guacamole, sour cream, and scallions and serve.`,
     ],
-    topping: [
-      "Guacamole",
-      "Sour cream",
-      "Fresh scallions, sliced",
-    ],
+    extra: {
+      "Topping": [
+        "Guacamole",
+        "Sour cream",
+        "Fresh scallions, sliced",
+      ],
+    },
     timing: {
       prep: 10,
       cook: 25,
@@ -451,9 +564,48 @@ const recipes: Recipe[] = ([
       broil: 0,
     },
   },
-] as (Omit<Recipe, "timing" | "id"> & { timing: Omit<Timings, "total"> })[])
-  .map(({timing, ...rest}) => {
-    const total = Object.entries(timing).reduce((acc, [k, v]) => {
+  {
+    name: "Whole Roasted Sicilian Cauliflower",
+    difficulty: 2,
+    servings: 4,
+    ingredients: [
+      {searchKey: "Water", description: "1/2 cup water "},
+      {searchKey: "Cauliflower", description: "1 medium head cauliflower, leaves removed"},
+      {searchKey: "Olive Oil", description: "1/4 cup olive oil"},
+      {searchKey: "Garlic", description: "4 cloves garlic, peeled, minced"},
+      {searchKey: "Capers", description: "2 tablespoons capers, rinsed, minced"},
+      {searchKey: "Red Pepper", description: "1 teaspoon crushed red pepper"},
+      {searchKey: "Parmesan Cheese", description: "1/2 cup grated Parmesan cheese"},
+      {searchKey: "Parsley", description: "1 tablespoon fresh parsley, chopped for garnish"},
+    ],
+    directions: [
+      `Place water and Cook & Crisp™ Basket in pot.`,
+      `With a knife, cut an X into the head of cauliflower, slicing about halfway down. Place cauliflower into the basket.`,
+      `Assemble pressure lid, making sure the pressure release valve is in the SEAL position. Select PRESSURE and set to LOW. Set time to 3 minutes. Select START/STOP to begin.`,
+      `In a small bowl, stir together olive oil, garlic, capers, and crushed red pepper.`,
+      `When pressure cooking is complete, quick release the pressure by moving the pressure release valve to the VENT position. Carefully remove lid when unit has finished releasing pressure.`,
+      `Spread the oil mixture evenly over the cauliflower, placing some of it into the center of the cauliflower. Sprinkle Parmesan cheese evenly over the cauliflower.`,
+      `Close crisping lid. Select AIR CRISP, set temperature to 390°F, and set time to 10 minutes. Select START/STOP to begin.`,
+      `When cooking is complete, transfer cauliflower to a serving platter using a large spatula. Garnish with fresh parsley.`,
+    ],
+    timing: {
+      prep: 10,
+      cook: 13,
+      pressureBuild: 5,
+      pressureCook: 0,
+      pressureRelease: "quick",
+      airCrisp: 0,
+      bakeRoast: 0,
+      broil: 0,
+    },
+    image: WholeRoastedSicilianCauliflower,
+    tips: [
+      "Since capers are briny, be sure to taste the cauliflower before adding salt to this dish."
+    ]
+  },
+] as (Omit<Recipe, "timing" | "id"> & { timing: Omit<Partial<Timings>, "total"> })[])
+  .map(({timing: partialTiming, ...rest}) => {
+    const total = Object.entries(partialTiming).reduce((acc, [k, v]) => {
       if (k === "pressureRelease") {
         return acc;
       }
@@ -468,13 +620,19 @@ const recipes: Recipe[] = ([
       return acc;
     }, {min: 0, max: 0});
 
+    const timing = (["prep", "chill", "cook", "pressureBuild", "pressureCook", "pressureRelease", "airCrisp", "bakeRoast", "broil"] as (keyof Timings)[])
+      .reduce((acc, key) => {
+        if (!acc.hasOwnProperty(key)) {
+          acc[key] = 0;
+        }
+        return acc;
+      }, {total: total.min === total.max ? total.min : total, ...partialTiming} as Timings);
+
+
     return {
       id: processKey(rest.name),
       ...rest,
-      timing: {
-        ...timing,
-        total: total.min === total.max ? total.min : total
-      }
+      timing
     };
   });
 

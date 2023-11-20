@@ -5,6 +5,7 @@ export type ScalarRange = number | { min: number, max: number }
 
 export type Timings = {
   prep: ScalarRange
+  chill: ScalarRange
   cook: ScalarRange
   pressureBuild: ScalarRange
   pressureCook: ScalarRange
@@ -26,7 +27,7 @@ export type Recipe = {
   }[]
   directions: React.ReactNode[]
   timing: Timings
-  topping?: string[]
+  extra?: Record<string, string[]>
   tips?: React.ReactNode[]
   image?: string
 }
