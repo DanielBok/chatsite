@@ -3,7 +3,12 @@ services:
     extends:
       file: compose.db.yml
       service: db
-
+  
+  mongo:
+    extends:
+      file: compose.db.yml
+      service: mongo
 
 volumes:
   db-data:
+  mongo-data:
