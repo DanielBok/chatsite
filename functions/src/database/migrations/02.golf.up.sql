@@ -1,3 +1,5 @@
+create schema golf;
+
 create type golf.game as enum ('Front 9', 'Back 9', '18 Holes');
 create type golf.tee as enum ('Green', 'Red', 'Yellow', 'White', 'Blue', 'Black', 'Silver', 'Gold');
 create type golf.distance_metric as enum ('meter', 'yard');

@@ -8,19 +8,23 @@ from psycopg_pool import ConnectionPool
 
 T = TypeVar('T')
 
-conn_string = "postgresql://{user}:{password}@{host}:{port}/chatsite".format(
-    user=os.getenv('DB_USER', 'user'),
-    password=os.getenv('DB_PASSWORD', 'password'),
-    host=os.getenv('DB_HOST', 'localhost'),
-    port=os.getenv('DB_PORT', 5432),
-)
-
 _pool: Optional[ConnectionPool] = None
 
 
-def pool():
+def pool(host=os.getenv('DB_HOST', 'localhost'),
+         port=os.getenv('DB_PORT', 5432),
+         user=os.getenv('DB_USER', 'user'),
+         password=os.getenv('DB_PASSWORD', 'password'),
+         recreate_pool=False):
     global _pool
-    if _pool is None:
+    if _pool is None or recreate_pool:
+        conn_string = "postgresql://{user}:{password}@{host}:{port}/chatsite".format(
+            user=user,
+            password=password,
+            host=host,
+            port=port,
+        )
+
         _pool = ConnectionPool(conn_string, open=True)
 
     if _pool._closed:
@@ -35,6 +39,15 @@ def close_pool():
     if _pool is not None:
         _pool.close()
         _pool = None
+
+
+def get_connection():
+    """
+    Gets a raw connection object. Used for debugging purposes. For all other usages,
+    please use the connection/cursor context to properly close the connection after
+    code is complete.
+    """
+    return pool().getconn()
 
 
 @contextmanager

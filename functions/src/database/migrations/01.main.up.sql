@@ -1,5 +1,14 @@
 create schema main;
 
+create table main.migration
+(
+    id    serial primary key,
+    level int not null
+);
+
+insert into main.migration (level)
+values (1);
+
 create table main.user
 (
     id         serial primary key,
@@ -11,4 +20,3 @@ create table main.user
 );
 
 create unique index uq_main_user_idx on main.user (lower(username));
-
