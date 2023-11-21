@@ -3,6 +3,7 @@ import NinjaCookbookContextProvider from "@/app/Cookbook/category/ninja/context"
 import CookbookListing from "@/app/Cookbook/category/ninja/CookbookListing";
 import RecipeDetail from "@/app/Cookbook/category/ninja/RecipeDetail";
 import Home from "@/app/Home";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import MainLayout from "@/components/MainLayout";
 import React from "react";
 import { RouteObject } from "react-router";
@@ -12,6 +13,7 @@ const router: RouteObject[] = [
   {
     path: "/",
     element: <Home/>,
+    errorElement: <ErrorBoundary/>,
   },
   {
     path: "/cookbook",
