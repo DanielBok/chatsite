@@ -6,7 +6,7 @@ from src.database.manager import MigrationManager
 from src.lib.responses import Ok
 from src.repository.seed import seed_application
 
-router = APIRouter(prefix="/__data-ops", tags=["Data operations"])
+router = APIRouter(prefix="/dev", tags=["Data operations"])
 
 
 @router.get('/db/reset')

@@ -6,7 +6,7 @@ import src.routers.golf.course.responses as resp
 from src.repository.golf.course.repo import CourseRepository
 from src.services.authentication import is_admin
 
-router = APIRouter(prefix="/course", tags=["Course Management"])
+router = APIRouter(prefix="/golf/course", tags=["Course Management"])
 
 
 @router.get('/filters', response_model=resp.CourseFilterOptions)

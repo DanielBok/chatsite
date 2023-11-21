@@ -7,7 +7,7 @@ from src.repository.golf.course.repo import CourseRepository
 from src.repository.golf.score.repo import ScoreRepository
 from src.services.authentication import auth_svc
 
-router = APIRouter(prefix="/performance", tags=["Golf Performance", "Scores", "Course Performance"])
+router = APIRouter(prefix="/golf/performance", tags=["Golf Performance", "Scores", "Course Performance"])
 
 
 @router.get("/", response_model=list[resp.Score])
