@@ -12,6 +12,7 @@ python-multipart = "*"
 boto3 = "*"
 boto3-stubs = {extras = ["essential"], version = "*"}
 pytz = "*"
+pymongo = "*"
 
 [dev-packages]
 
