@@ -9,6 +9,7 @@ class MigrationManager:
         self.migration_folder = Path(__file__).parent / 'migrations'
 
     def migrate(self, direction: Literal['up', 'down'], levels: int):
+        """Migrates the database based on the migration sql files"""
         with connection_context() as conn:
             if levels <= 0:
                 raise ValueError("Levels must be a positive value")
@@ -63,6 +64,7 @@ class MigrationManager:
         return content, level
 
     def get_migration_level(self):
+        """Gets the current migration level"""
         with connection_context() as conn:
             exists = conn.execute("""
             select * 
@@ -87,3 +89,21 @@ class MigrationManager:
             raise RuntimeError("There are more than one migration id!")
 
         return ids[0][0]
+
+    def reset(self):
+        """Brings the database down to nothing then recreates it again"""
+        self.wipe()
+        self.migrate_to_latest()
+
+    def wipe(self):
+        """Wipes the database of everything"""
+        level = self.get_migration_level()
+        if level > 0:
+            self.migrate('down', level)
+
+    def migrate_to_latest(self):
+        """Update the database to the latest schema from wherever it currently is"""
+        level = self.get_migration_level()
+        latest = max(int(x.name.split('.')[0]) for x in self.migration_folder.glob('*.up.sql'))
+        if level < latest:
+            self.migrate('up', latest - level)

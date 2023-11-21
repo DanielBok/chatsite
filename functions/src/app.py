@@ -30,10 +30,6 @@ def create_app():
     _add_healthcheck(app)
     _add_routes(app)
 
-    if IS_DEBUG:
-        from src.routers.dbops import router
-        app.include_router(router)
-
     return app
 
 
@@ -87,6 +83,9 @@ def _add_routes(app: FastAPI):
 
     for router_py in routers_dir.rglob('router.py'):
         module = import_module('.'.join(router_py.relative_to(root_dir).parts).replace('.py', ''))
+        if hasattr(module, 'DEBUG_ONLY') and module.DEBUG_ONLY and IS_DEBUG:
+            continue
+
         if hasattr(module, 'router'):
             app.include_router(module.router)
 
