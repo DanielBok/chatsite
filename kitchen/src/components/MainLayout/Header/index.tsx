@@ -2,7 +2,7 @@ import { APP_NAME } from "@/constants";
 import React from "react";
 import { Image } from "antd";
 import { Link } from "react-router-dom";
-import CatLogo from "./cat-logo.webp";
+import CatLogo from "./cat-logo.jpg";
 import WebHeader from "./WebHeader";
 import MobileHeader from "./MobileHeader";
 
