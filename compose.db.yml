@@ -15,19 +15,5 @@ services:
     ports:
       - "5432:5432"
 
-  mongo:
-    image: mongo
-    restart: always
-    env_file:
-      - .env
-    volumes:
-      - type: volume
-        source: mongo-data
-        target: /data/db
-    ports:
-      - "27017:27017"
-
-
 volumes:
   db-data:
-  mongo-data:

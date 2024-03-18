@@ -1,4 +1,5 @@
 import Cookbook from "@/app/Cookbook";
+import AddRecipePage from "src/app/Cookbook/add";
 import NinjaCookbookContextProvider from "@/app/Cookbook/category/ninja/context";
 import CookbookListing from "@/app/Cookbook/category/ninja/CookbookListing";
 import RecipeDetail from "@/app/Cookbook/category/ninja/RecipeDetail";
@@ -20,12 +21,13 @@ const router: RouteObject[] = [
     element: <MainLayout/>,
     children: [
       {path: "", element: <Cookbook/>},
+      {path: "add", element: <AddRecipePage/>},
       {
         path: "ninja",
         element: <NinjaCookbookContextProvider/>,
         children: [
           {path: "", element: <CookbookListing/>},
-          {path: ":recipeId", element: <RecipeDetail/>}
+          {path: ":recipeId", element: <RecipeDetail/>},
         ]
       },
     ]

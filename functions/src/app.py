@@ -6,7 +6,7 @@ from pathlib import Path
 
 from fastapi import FastAPI, Response, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
-
+from starlette_exporter import PrometheusMiddleware, handle_metrics
 from constants import APP_NAME, IS_DEBUG
 from src.database.connector import pool, close_pool
 
@@ -20,7 +20,7 @@ def create_app():
     _verify_env_vars_defined()
 
     app = FastAPI(title=APP_NAME,
-                  description="API service to keep track of my golf statistics",
+                  description="Chateau des Chats API Service",
                   version=VERSION,
                   docs_url=None,
                   redoc_url="/docs",
@@ -46,9 +46,6 @@ def _verify_env_vars_defined():
             'DB_USER',
             'DB_PASSWORD',
             'DB_PORT',
-            'MONGO_USER',
-            'MONGO_PASSWORD',
-            'MONGO_PORT',
             'DO_SPACES_ACCESS_ID',
             'DO_SPACES_SECRET_KEY',
         }
@@ -78,6 +75,9 @@ def _add_middlewares(app: FastAPI):
         allow_methods=['*'],
         allow_headers=['*']
     )
+
+    app.add_middleware(PrometheusMiddleware, app_name='ChateauDesChats')
+    app.add_route('/metrics', handle_metrics)
 
 
 def _add_routes(app: FastAPI):
