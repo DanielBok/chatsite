@@ -22,7 +22,7 @@ class AccountRepository:
     def get_accounts():
         with connection_context() as conn:
             with conn.cursor(row_factory=class_row(m.Account)) as cur:
-                return cur.execute("select * from golf.player").fetchall()
+                return cur.execute('select * from main."user"').fetchall()
 
     def create_account(self, acc: m.CreateAccount) -> int:
         """Creates a new account and returns the account's ID"""
@@ -32,10 +32,10 @@ class AccountRepository:
         }
         with connection_context() as conn:
             # first player will always be admiun
-            payload['is_admin'] = conn.execute("""select id from golf.player""").rowcount == 0
+            payload['is_admin'] = conn.execute('select id from main."user"').rowcount == 0
 
             account_id, *_ = conn.execute("""
-            insert into golf.player (username, name, password, is_admin, image_path) 
+            insert into main."user" (username, name, password, is_admin, image_path) 
             values (%(username)s, %(name)s, %(password)s, %(is_admin)s, %(image_path)s)
             returning id
             """, payload).fetchone()
@@ -56,7 +56,7 @@ class AccountRepository:
         if len(update_fields) > 0:
             with connection_context() as conn:
                 conn.execute(f"""
-                update golf.player
+                update main."user"
                 set {', '.join(update_fields)}
                 where id=%(id)s
                 """, payload)
@@ -74,7 +74,7 @@ class AccountRepository:
         with connection_context() as conn, conn.cursor(row_factory=class_row(m.Account)) as cur:
             return cur.execute(f"""
             select id, name, username, password, is_admin, image_path
-            from golf.player
+            from main."user"
             where {filter_field} = %s
             """, (username_or_id,)).fetchone()
 
@@ -90,4 +90,4 @@ class AccountRepository:
     @staticmethod
     def delete_account(account_id: int):
         with connection_context() as conn:
-            conn.execute("delete from golf.player where id = %s", (account_id,))
+            conn.execute('delete from main."user" where id = %s', (account_id,))

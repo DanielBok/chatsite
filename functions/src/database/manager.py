@@ -1,6 +1,8 @@
 from pathlib import Path
 from typing import Literal
 
+from psycopg import Connection
+
 from src.database.connector import connection_context
 
 
@@ -14,7 +16,7 @@ class MigrationManager:
             if levels <= 0:
                 raise ValueError("Levels must be a positive value")
 
-            current_level = self.get_migration_level()
+            current_level = self.get_migration_level(connection=conn)
 
             match direction:
                 case 'up':
@@ -46,9 +48,11 @@ class MigrationManager:
             if len(contents) > 0:
                 for sql in contents:
                     conn.execute(sql)
+                conn.commit()
 
-                conn.execute("update main.migration set level = %s where id = %s",
-                             (new_migration_level, self._get_migration_id()))
+                if self.migration_table_exists(connection=conn):
+                    conn.execute("update main.migration set level = %s where id = %s",
+                                 (new_migration_level, self._get_migration_id(connection=conn)))
 
             return new_migration_level
 
@@ -63,26 +67,29 @@ class MigrationManager:
 
         return content, level
 
-    def get_migration_level(self):
-        """Gets the current migration level"""
-        with connection_context() as conn:
-            exists = conn.execute("""
+    @staticmethod
+    def migration_table_exists(*, connection: Connection = None):
+        with connection_context(connection=connection) as conn:
+            return conn.execute("""
             select * 
             from information_schema.tables 
             where table_schema = 'main' and table_name = 'migration';
             """).rowcount == 1
 
-            if not exists:
+    def get_migration_level(self, *, connection: Connection = None):
+        """Gets the current migration level"""
+        with connection_context(connection=connection) as conn:
+            if not self.migration_table_exists(connection=conn):
                 return 0
 
             return conn.execute("""
             select level 
             from main.migration
-            where id = %s""", (self._get_migration_id())).fetchone()[0]
+            where id = %s""", (self._get_migration_id(connection=conn),)).fetchone()[0]
 
     @staticmethod
-    def _get_migration_id():
-        with connection_context() as conn:
+    def _get_migration_id(*, connection: Connection = None):
+        with connection_context(connection=connection) as conn:
             ids = conn.execute("select id from main.migration").fetchall()
 
         if len(ids) > 1:

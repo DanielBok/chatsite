@@ -51,9 +51,12 @@ def get_connection():
 
 
 @contextmanager
-def connection_context(timeout: float = None) -> ContextManager[Connection]:
-    with pool().connection(timeout=timeout) as conn:  # type: Connection
-        yield conn
+def connection_context(timeout: float = None, connection: Connection = None) -> ContextManager[Connection]:
+    if isinstance(connection, Connection):
+        yield connection
+    else:
+        with pool().connection(timeout=timeout) as conn:  # type: Connection
+            yield conn
 
 
 @contextmanager

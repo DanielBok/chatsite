@@ -7,6 +7,7 @@ from pathlib import Path
 from fastapi import FastAPI, Response, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from starlette_exporter import PrometheusMiddleware, handle_metrics
+
 from constants import APP_NAME, IS_DEBUG
 from src.database.connector import pool, close_pool
 
@@ -86,7 +87,7 @@ def _add_routes(app: FastAPI):
 
     for router_py in routers_dir.rglob('router.py'):
         module = import_module('.'.join(router_py.relative_to(root_dir).parts).replace('.py', ''))
-        if hasattr(module, 'DEBUG_ONLY') and module.DEBUG_ONLY and IS_DEBUG:
+        if IS_DEBUG and hasattr(module, 'DEBUG_ONLY') and not module.DEBUG_ONLY:
             continue
 
         if hasattr(module, 'router'):
