@@ -1,13 +1,16 @@
 import os
-from base64 import b64decode
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import Optional, Annotated
 
 import jwt
-from fastapi import Header, Depends, HTTPException, status
+import pytz
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
 
 import src.repository.main.account.models as m
 from src.repository.main.account.repo import AccountRepository
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="main/account/login")
 
 
 class AuthenticationService:
@@ -19,7 +22,7 @@ class AuthenticationService:
         return "HS256"
 
     def construct_token(self, acc: m.Account):
-        nbt = datetime.utcnow()  # not before time
+        nbt = datetime.now(pytz.UTC)  # not before time
         exp = nbt + timedelta(days=7)  # expiration time
 
         payload = {
@@ -36,7 +39,7 @@ class AuthenticationService:
 
     def fetch_with_jwt_token(self, authorization: str, repo: AccountRepository) -> Optional[m.Account]:
         *_, token = authorization.split(' ')
-        utc_now_ts = datetime.utcnow().timestamp()
+        utc_now_ts = datetime.now(pytz.UTC).timestamp()
         try:
             payload = jwt.decode(token, self._secret, algorithms=self._algorithm)
             if payload['nbt'] <= utc_now_ts <= payload['exp']:
@@ -48,31 +51,28 @@ class AuthenticationService:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                 detail="Invalid JWT credentials")
 
-    @staticmethod
-    def fetch_with_basic_auth(authorization: str, repo: AccountRepository) -> Optional[m.Account]:
-        uid, pwd = b64decode(authorization.split(' ')[1]).decode('utf-8').split(':')
-        acc = repo.get_account(uid)
+    #
+    # def fetch_with_basic_auth(self, authorization: str, repo: AccountRepository) -> Optional[m.Account]:
+    #     uid, pwd = b64decode(authorization.split(' ')[1]).decode('utf-8').split(':')
+    #
+    #     return self.fetch_account(repo, uid, pwd)
 
+    @staticmethod
+    def fetch_account(repo: AccountRepository, uid: str, pwd: str) -> Optional[m.Account]:
+        acc = repo.get_account(uid)
         # returns the account if it is not None and has a valid password
         return acc if acc is not None and repo.validate_account(acc, pwd) else None
 
-    def __call__(self,
-                 authorization: str | None = Header(None),
-                 repo: AccountRepository = Depends()):
-        if authorization is None:
+    def __call__(self, token: Annotated[str, Depends(oauth2_scheme)], repo: AccountRepository = Depends()) -> m.Account:
+        if token is None:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                 detail="Need to provide log in details via token or username/password")
 
-        if authorization.startswith('Bearer'):
-            acc = self.fetch_with_jwt_token(authorization, repo)
-        else:
-            acc = self.fetch_with_basic_auth(authorization, repo)
-
-        if acc is None:
+        if (acc := self.fetch_with_jwt_token(token, repo)) is None:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                 detail='Invalid credentials')
-
-        return acc
+        else:
+            return acc
 
 
 auth_svc = AuthenticationService()
