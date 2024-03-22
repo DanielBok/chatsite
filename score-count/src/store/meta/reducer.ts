@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { MetaReducer } from "./types.ts";
 import Cookies from "js-cookie";
+import { MetaReducer } from "./types.ts";
 
 const COOKIES_KEY = "META_COOKIE";
 
@@ -40,4 +40,3 @@ export const metaSlice = createSlice({
 });
 
 export type { MetaReducer };
-export const {startup, setName} = metaSlice.actions;
