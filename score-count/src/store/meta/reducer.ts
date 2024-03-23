@@ -18,7 +18,7 @@ function tryLoadFromCookies(): MetaReducer | null {
   }
 }
 
-function saveMetaToCookie(uuid: string, name: string) {
+function saveMetaToCookie(uuid: string, name: string | null) {
   const data = {name, uuid};
   Cookies.set(COOKIES_KEY, JSON.stringify(data), {expires: 7});  // expires in 7 days
 }
@@ -32,13 +32,15 @@ export const metaSlice = createSlice({
       state.name = dat.name;
       state.uuid = dat.uuid;
     },
-    setName(state, action: PayloadAction<string>) {
-      state.name = action.payload;
+    setName(state, action: PayloadAction<string | null>) {
+      const name = action.payload;
+
+      state.name = name;
       if (state.uuid === "") {
         state.uuid = crypto.randomUUID();
       }
 
-      saveMetaToCookie(state.uuid, state.name);
+      saveMetaToCookie(state.uuid, name);
     }
   }
 });

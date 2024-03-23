@@ -15,7 +15,7 @@ export default function SetNamePage() {
       size={2}
     >
       <div className="text-4xl mb-2">Hello Stranger!</div>
-      <div className="mb-2">Before we start, tell us who you are</div>
+      <div className="mb-2 text-lg">Before we start, tell us who you are</div>
       <Input
         prefix={<UserOutlined/>}
         placeholder="Your game name"
