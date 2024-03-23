@@ -34,6 +34,10 @@ export const metaSlice = createSlice({
     },
     setName(state, action: PayloadAction<string>) {
       state.name = action.payload;
+      if (state.uuid === "") {
+        state.uuid = crypto.randomUUID();
+      }
+
       saveMetaToCookie(state.uuid, state.name);
     }
   }
