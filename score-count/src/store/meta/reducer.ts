@@ -20,7 +20,7 @@ function tryLoadFromCookies(): MetaReducer | null {
 
 function saveMetaToCookie(uuid: string, name: string) {
   const data = {name, uuid};
-  Cookies.set(COOKIES_KEY, JSON.stringify(data));
+  Cookies.set(COOKIES_KEY, JSON.stringify(data), {expires: 7});  // expires in 7 days
 }
 
 export const metaSlice = createSlice({
