@@ -29,7 +29,7 @@ export const metaSlice = createSlice({
   reducers: {
     startup(state) {
       const dat = tryLoadFromCookies() || {name: "", uuid: crypto.randomUUID()};
-      state.name = dat.name;
+      state.name = dat.name || null;
       state.uuid = dat.uuid;
     },
     setName(state, action: PayloadAction<string | null>) {

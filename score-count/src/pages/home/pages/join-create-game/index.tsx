@@ -1,11 +1,15 @@
-import { useAppDispatch, useRootSelector } from "@/store";
+import { useAppDispatch } from "@/store";
 import { metaSlice } from "@/store/meta/reducer.ts";
 import { Space } from "antd";
 import ActionButton from "./ActionButton";
+import CreateGameModal from "./CreateGameModal";
 
 
-export default function JoinCreateGamePage() {
-  const name = useRootSelector(s => s.meta.name)!;
+type Props = {
+  username: string
+}
+
+export default function JoinCreateGamePage({username}: Props) {
   const dispatch = useAppDispatch();
 
   return (
@@ -14,13 +18,11 @@ export default function JoinCreateGamePage() {
       size={2}
       direction="vertical"
     >
-      <div className="text-4xl mb-2">Hello {name}!</div>
+      <div className="text-4xl mb-2">Hello {username}!</div>
       <div className="text-lg mb-4">What would you like to do?</div>
       <Space className="flex flex-col md:flex-row" size={16}>
 
-        <ActionButton className="border-blue-500 hover:bg-blue-500 text-blue-700">
-          Create Room
-        </ActionButton>
+        <CreateGameModal/>
 
         <ActionButton className="border-emerald-500 hover:bg-emerald-500 text-emerald-700">
           Join Room

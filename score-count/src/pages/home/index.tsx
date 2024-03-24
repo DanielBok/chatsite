@@ -4,12 +4,12 @@ import { useRootSelector } from "@/store";
 
 
 export default function Home() {
-  const hasNotSetName = useRootSelector((state) => state.meta.name === null);
+  const name = useRootSelector((state) => state.meta.name);
 
   return (
     <div className="bg-white h-screen w-screen flex justify-center items-center container">
       <div>
-        {hasNotSetName ? <SetNamePage/> : <JoinCreateGamePage/>}
+        {name ? <JoinCreateGamePage username={name}/> : <SetNamePage/> }
       </div>
     </div>
   );
