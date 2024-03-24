@@ -12,13 +12,15 @@ export const joinGame = createAsyncThunk(
 
 export const createGame = createAsyncThunk(
   "game/create",
-  async (name: string, {rejectWithValue}) => {
+  async (payload: Omit<T.CreateRoomResponse, "id">, {rejectWithValue, fulfillWithValue}) => {
     try {
       const {data} = await axios.post<T.CreateRoomResponse>(
-        makeUrl("/sc/game"), {name});
-      return data;
+        makeUrl("/sc/game"), payload
+      );
+      return fulfillWithValue(data);
     } catch (e) {
-      return rejectWithValue(e);
+      const {detail} = (e as AppAxiosError).response!.data;
+      return rejectWithValue(detail);
     }
   }
 );

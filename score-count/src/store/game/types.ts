@@ -15,4 +15,5 @@ export type GameReducer = {
 export type CreateRoomResponse = {
   id: number
   name: string
+  maxPlayers: number
 }

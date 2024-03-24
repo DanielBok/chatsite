@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { GameReducer } from "./types.ts";
 import * as A from "./thunks.ts";
+import { GameReducer } from "./types.ts";
 
 const initialState: GameReducer = {
   room: null,

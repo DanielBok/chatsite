@@ -1,5 +1,9 @@
+import { useAppDispatch } from "@/store";
+import { createGame } from "@/store/game/thunks.ts";
+import { CreateRoomResponse } from "@/store/game/types.ts";
 import { Input, InputNumber, Modal, Slider, Space } from "antd";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ActionButton from "./ActionButton";
 
 
@@ -7,6 +11,8 @@ export default function CreateGameModal() {
   const [open, setOpen] = useState(false);
   const [roomName, setRoomName] = useState("");
   const [maxPlayers, setMaxPlayers] = useState(1);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -22,7 +28,16 @@ export default function CreateGameModal() {
         centered
         open={open}
         onOk={() => {
-          setOpen(false);
+          (dispatch(createGame({name: roomName, maxPlayers})))
+            .then((res) => {
+              if ((res.type as string).endsWith("fulfilled")) {
+                const {id} = res.payload as CreateRoomResponse;
+                navigate(`/game/${id}`);
+              }
+            })
+            .finally(() => {
+              setOpen(false);
+            });
         }}
         okText="Create"
         onCancel={() => setOpen(false)}
