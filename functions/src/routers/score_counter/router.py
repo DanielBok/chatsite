@@ -45,12 +45,7 @@ async def create_game(payload: req.CreateGameRequest, repo: Annotated[ScoreCount
 @router.websocket("/game/ws-mock/{game_id}")
 async def mock_ws_handler(websocket: WebSocket,
                           manager: WebSocketAnnotation,
-                          repo: Annotated[ScoreCounterRepo, Depends()],
                           game_id: int):
-    game = repo.get_current_game(game_id)
-    if manager.num_players(game_id) >= game.maxPlayers:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Game already at maximum capacity")
-
     await websocket.accept()
 
     socket_id = manager.connect(websocket, game_id)
@@ -67,7 +62,7 @@ async def mock_ws_handler(websocket: WebSocket,
             import random
             import asyncio
             try:
-                await asyncio.sleep(6)
+                await asyncio.sleep(2)
                 new_scores = [
                     {**s, 'score': s['score'] + random.randint(-10, 10)}
                     for s in scores
