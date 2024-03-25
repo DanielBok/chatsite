@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import * as A from "./thunks.ts";
-import { GameReducer } from "./types.ts";
+import * as A from "./thunks";
+import * as T from "./types";
 
-const initialState: GameReducer = {
+const initialState: T.GameReducer = {
   room: null,
-  scores: [],
   loading: {
     room: "success"
   },
@@ -16,23 +15,23 @@ export const gameSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: builder => {
-    builder.addCase(A.createGame.fulfilled, (
-      state, {payload}) => {
-      state.room = payload;
-      state.loading.room = "success";
-    }).addCase(A.createGame.pending,
-        (state) => {
-          state.room = null;
-          state.scores = [];
-          state.loading.room = "pending";
-          state.error = null;
-        })
-      .addCase(A.createGame.rejected, (state, {payload}) => {
-        state.room = null;
-        state.loading.room = "error";
-        console.log(payload);
+    [A.createGame, A.checkGameDetails]
+      .forEach(thunk => {
+        builder.addCase(thunk.fulfilled, (
+          state, {payload}) => {
+          state.room = payload;
+          state.loading.room = "success";
+        }).addCase(thunk.pending,
+            (state) => {
+              state.room = null;
+              state.loading.room = "pending";
+              state.error = null;
+            })
+          .addCase(thunk.rejected, (state, {payload}) => {
+            state.room = null;
+            state.loading.room = "error";
+            console.log(payload);
+          });
       });
   }
 });
-
-export type { GameReducer };
