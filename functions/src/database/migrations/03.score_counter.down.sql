@@ -1,0 +1,1 @@
+drop schema score_counter cascade;
