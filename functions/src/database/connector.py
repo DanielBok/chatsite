@@ -60,6 +60,8 @@ def connection_context(timeout: float = None, connection: Connection = None) -> 
 
 
 @contextmanager
-def cursor_context(timeout: float = None, row_factory: Optional[RowFactory[T]] = None) -> ContextManager[Cursor[T]]:
-    with connection_context(timeout) as conn, conn.cursor(row_factory=row_factory) as cur:
+def cursor_context(timeout: float = None,
+                   row_factory: Optional[RowFactory[T]] = None,
+                   connection: Connection = None) -> ContextManager[Cursor[T]]:
+    with connection_context(timeout, connection=connection) as conn, conn.cursor(row_factory=row_factory) as cur:
         yield cur
