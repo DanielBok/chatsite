@@ -67,11 +67,9 @@ async def _lifespan(app: FastAPI):
 
 
 def _add_middlewares(app: FastAPI):
-    origins = os.environ.get("CORS_ORIGINS", 'http://localhost:3000' if IS_DEBUG else '*').split(',')
-    # allow CORS when debugging
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=origins,
+        allow_origins='*',
         allow_credentials=True,
         allow_methods=['*'],
         allow_headers=['*']
