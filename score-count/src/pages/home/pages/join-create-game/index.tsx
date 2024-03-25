@@ -1,5 +1,5 @@
 import { useAppDispatch } from "@/store";
-import { metaSlice } from "@/store/meta/reducer.ts";
+import { metaSlice } from "@/store/meta/reducer";
 import { Space } from "antd";
 import ActionButton from "./ActionButton";
 import CreateGameModal from "./CreateGameModal";

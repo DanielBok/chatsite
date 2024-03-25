@@ -1,5 +1,5 @@
-import { GameReducer } from "@/store/game/types.ts";
-import { MetaReducer } from "@/store/meta/types.ts";
+import { GameReducer } from "@/store/game/types";
+import { MetaReducer } from "@/store/meta/types";
 
 export type RootState = {
   game: GameReducer,

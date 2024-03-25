@@ -1,5 +1,5 @@
 import { useAppDispatch } from "@/store";
-import { metaSlice } from "@/store/meta/reducer.ts";
+import { metaSlice } from "@/store/meta/reducer";
 import { UserOutlined } from "@ant-design/icons";
 import { Button, Input, Space } from "antd";
 import { useState } from "react";

@@ -1,6 +1,6 @@
 // import WebSocket from "ws";
-import { metaSlice } from "@/store/meta/reducer.ts";
-import { rootReducer, RootState } from "@/store/reducer.ts";
+import { metaSlice } from "@/store/meta/reducer";
+import { rootReducer, RootState } from "@/store/reducer";
 import { configureStore } from "@reduxjs/toolkit";
 import { isEqual } from "radash";
 import { useDispatch, useSelector } from "react-redux";

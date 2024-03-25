@@ -1,6 +1,6 @@
 import { useAppDispatch } from "@/store";
-import { createGame } from "@/store/game/thunks.ts";
-import { CreateRoomResponse } from "@/store/game/types.ts";
+import { createGame } from "@/store/game/thunks";
+import { CreateRoomResponse } from "@/store/game/types";
 import { Input, InputNumber, Modal, Slider, Space } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
