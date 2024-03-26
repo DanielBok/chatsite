@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
+import { v4 as uuid4 } from "uuid";
 import { MetaReducer } from "./types";
 
 const COOKIES_KEY = "META_COOKIE";
@@ -28,7 +29,7 @@ export const metaSlice = createSlice({
   initialState,
   reducers: {
     startup(state) {
-      const dat = tryLoadFromCookies() || {name: "", uuid: crypto.randomUUID()};
+      const dat = tryLoadFromCookies() || {name: "", uuid: uuid4()};
       state.name = dat.name || null;
       state.uuid = dat.uuid;
     },
