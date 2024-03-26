@@ -27,10 +27,9 @@ export const gameSlice = createSlice({
               state.loading.room = "pending";
               state.error = null;
             })
-          .addCase(thunk.rejected, (state, {payload}) => {
+          .addCase(thunk.rejected, (state) => {
             state.room = null;
             state.loading.room = "error";
-            console.log(payload);
           });
       });
   }
