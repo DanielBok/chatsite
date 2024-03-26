@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import GameWaitingPage from "./components/GameWaitingPage";
 import ScoreTable from "./components/ScoreTable";
+import ScoreUpdater from "./components/ActionsRow";
 import { ScoreContextProvider } from "./context";
 
 
@@ -35,12 +36,17 @@ export default function GamePage() {
 
   return (
     <ScoreContextProvider gameId={id}>
-      <div className="flex flex-col items-center justify-center w-full h-screen">
-        <div className="container flex flex-col items-center justify-center">
-          <div className="text-lg">
-            Playing Game: <span className="font-bold">{room!.name}</span>
+      <div className="flex flex-col items-center w-full">
+        <div className="container flex flex-col items-center shadow-2xl min-h-[96vh]">
+          <div className="px-8 pt-4 pb-2 rounded">
+            <div className="text-lg text-center">
+              Playing Game: <span className="font-bold">{room!.name}</span>
+            </div>
+
+            <ScoreTable/>
+
+            <ScoreUpdater/>
           </div>
-          <ScoreTable/>
         </div>
       </div>
     </ScoreContextProvider>
