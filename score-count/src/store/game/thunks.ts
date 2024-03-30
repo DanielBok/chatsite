@@ -10,14 +10,19 @@ export const joinGame = createAsyncThunk(
   }
 );
 
-export const createGame = createAsyncThunk(
+export const createGame = createAsyncThunk<
+  T.CreateRoomResponse,
+  Omit<T.CreateRoomResponse, "id">,
+  { rejectValue: string }
+>(
   "game/create",
-  async (payload: Omit<T.CreateRoomResponse, "id">, {rejectWithValue, fulfillWithValue}) => {
+  async ({name, maxPlayers}, {rejectWithValue, fulfillWithValue}) => {
     try {
-      const {data} = await axios.post<T.CreateRoomResponse>(
-        makeUrl("/sc/game"), payload
-      );
-      return fulfillWithValue(data);
+      const {data: {max_players, ...data}} = await axios.post<Omit<T.CreateRoomResponse, "maxPlayers"> & {
+        max_players: number
+      }>
+      (makeUrl("/sc/game"), {name, max_players: maxPlayers});
+      return fulfillWithValue({...data, maxPlayers: max_players});
     } catch (e) {
       const {detail} = (e as AppAxiosError).response!.data;
       return rejectWithValue(detail);
@@ -25,9 +30,13 @@ export const createGame = createAsyncThunk(
   }
 );
 
-export const checkGameDetails = createAsyncThunk(
+export const checkGameDetails = createAsyncThunk<
+  T.CreateRoomResponse,
+  number,
+  { rejectValue: string }
+>(
   "game/check",
-  async (gameId: number, {rejectWithValue, fulfillWithValue}) => {
+  async (gameId, {rejectWithValue, fulfillWithValue}) => {
     try {
       const {data} = await axios.get<T.CreateRoomResponse>(makeUrl(`/sc/game/${gameId}`));
       return fulfillWithValue(data);

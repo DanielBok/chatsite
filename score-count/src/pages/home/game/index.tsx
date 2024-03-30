@@ -2,9 +2,10 @@ import { useAppDispatch, useRootSelector } from "@/store";
 import { checkGameDetails } from "@/store/game/thunks";
 import { useEffect } from "react";
 import { Navigate, useParams } from "react-router-dom";
+import ScoreUpdater from "./components/ActionsRow";
+import GameLoadErrorPage from "./components/GameLoadErrorPage";
 import GameWaitingPage from "./components/GameWaitingPage";
 import ScoreTable from "./components/ScoreTable";
-import ScoreUpdater from "./components/ActionsRow";
 import { ScoreContextProvider } from "./context";
 
 
@@ -19,7 +20,7 @@ const useGameId = (): number | null => {
 
 export default function GamePage() {
   const id = useGameId();
-  const room = useRootSelector(s => s.game.room);
+  const [room, loadingState] = useRootSelector(({game}) => [game.room, game.loading.room]);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -30,7 +31,9 @@ export default function GamePage() {
 
   if (!id) {
     return <Navigate to="/"/>;
-  } else if (!room) {
+  } else if (loadingState === "error") {
+    return <GameLoadErrorPage gameId={id}/>;
+  } else if (loadingState === "pending" || !room) {
     return <GameWaitingPage/>;
   }
 

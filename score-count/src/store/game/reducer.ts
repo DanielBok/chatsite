@@ -17,20 +17,24 @@ export const gameSlice = createSlice({
   extraReducers: builder => {
     [A.createGame, A.checkGameDetails]
       .forEach(thunk => {
-        builder.addCase(thunk.fulfilled, (
-          state, {payload}) => {
-          state.room = payload;
-          state.loading.room = "success";
-        }).addCase(thunk.pending,
+        builder
+          .addCase(thunk.fulfilled,
+            (state, {payload}) => {
+              state.room = payload;
+              state.loading.room = "success";
+            })
+          .addCase(thunk.pending,
             (state) => {
               state.room = null;
               state.loading.room = "pending";
               state.error = null;
             })
-          .addCase(thunk.rejected, (state) => {
-            state.room = null;
-            state.loading.room = "error";
-          });
+          .addCase(thunk.rejected,
+            (state, {payload}) => {
+              state.room = null;
+              state.error = payload!;
+              state.loading.room = "error";
+            });
       });
   }
 });
