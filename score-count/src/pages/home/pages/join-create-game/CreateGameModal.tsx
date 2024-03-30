@@ -9,8 +9,9 @@ import ActionButton from "./ActionButton";
 
 export default function CreateGameModal() {
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState("");
   const [roomName, setRoomName] = useState("");
-  const [maxPlayers, setMaxPlayers] = useState(1);
+  const [maxPlayers, setMaxPlayers] = useState(4);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -29,14 +30,15 @@ export default function CreateGameModal() {
         open={open}
         onOk={() => {
           (dispatch(createGame({name: roomName, maxPlayers})))
-            .then((res) => {
-              if ((res.type as string).endsWith("fulfilled")) {
-                const {id} = res.payload as CreateRoomResponse;
+            .then(({type, payload}) => {
+              if (type.endsWith("fulfilled")) {
+                const {id} = payload as CreateRoomResponse;
                 navigate(`/game/${id}`);
+                setError("");
+                setOpen(false);
+              } else if (type.endsWith("rejected")) {
+                setError(payload as string);
               }
-            })
-            .finally(() => {
-              setOpen(false);
             });
         }}
         okText="Create"
@@ -46,14 +48,17 @@ export default function CreateGameModal() {
       >
         <Space direction="vertical" size={4} className="w-full mb-8">
           <div>
-            <div className="text-base font-semibold my-2">Room name</div>
+            <div className="text-base font-semibold my-2">Game name</div>
             <Input
-              placeholder="Room name"
+              placeholder="Name"
               value={roomName}
               maxLength={100}
               onChange={(e) => setRoomName(e.target.value)}
               className="w-full"
             />
+            {error && (
+              <div className="text-red-600">{error}</div>
+            )}
           </div>
 
           <div>
@@ -61,7 +66,7 @@ export default function CreateGameModal() {
             <div className="flex flex-row">
               <Slider
                 min={1}
-                max={100}
+                max={20}
                 onChange={(v) => setMaxPlayers(v)}
                 value={maxPlayers}
                 className="grow"
