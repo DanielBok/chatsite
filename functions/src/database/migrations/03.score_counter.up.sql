@@ -4,9 +4,9 @@ create table score_counter.game
 (
     id            serial primary key,
     name          varchar(300) not null,
-    creation_time timestamp    not null         default now(),
-    max_players   int check ( max_players > 1 ) default 100,
-    end_time      timestamp
+    creation_time timestamp    not null                               default current_timestamp,
+    max_players   int check ( max_players >= 1 and max_players <= 20) default 4,
+    end_time      timestamp    not null                               default current_timestamp + interval '6 hours'
 );
 
 create unique index uq_sc_game_name on score_counter.game (UPPER(name));

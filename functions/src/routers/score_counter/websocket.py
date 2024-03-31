@@ -4,6 +4,7 @@ from collections import defaultdict
 from typing import Annotated
 
 from fastapi import WebSocket, Depends
+from starlette.websockets import WebSocketState
 
 
 class GameWSManager:
@@ -48,7 +49,12 @@ class GameWSManager:
         ws = self._games[game_id][socket_id]
         if not isinstance(message, str):
             message = json.dumps(message)
-        await ws.send_text(message)
+
+        if ws.application_state == WebSocketState.DISCONNECTED:
+            # somehow websocket not cleaned up, clean up now
+            del self._games[game_id][socket_id]
+        else:
+            await ws.send_text(message)
 
     async def broadcast(self, game_id: int, message: str | dict | list):
         """Emits message to all websockets in game"""

@@ -1,55 +1,56 @@
 from psycopg.rows import class_row
 from pydantic import PositiveInt
 
-import src.repository.score_counter.models as m
+from src.models.score_counter import dat, req, rsp
 from src.database.connector import connection_context, cursor_context
-from src.routers.score_counter.response import CreateGameResponse
 
 
 class ScoreCounterRepo:
     @staticmethod
     def get_current_game(game_id: int):
-        with cursor_context(row_factory=class_row(CreateGameResponse)) as cur:
+        with cursor_context(row_factory=class_row(rsp.CreateGameResponse)) as cur:
             return cur.execute("""
             select id, name, max_players, creation_time 
             from score_counter.game 
             where id = %(id)s
-              and end_time is null
+              and end_time > current_timestamp
             """, {'id': game_id}).fetchone()
 
     @staticmethod
-    def create_game(name: str, max_players: PositiveInt) -> tuple[CreateGameResponse | None, str | None]:
+    def create_game(payload: req.CreateGameRequest) -> tuple[rsp.CreateGameResponse | None, None | str]:
         with connection_context() as conn:
-            name = name.strip()
+            name = payload.name.strip()
 
             is_existing_game = conn.execute("""
             select count(*) from 
             score_counter.game
-            where end_time IS NULL
+            where end_time > current_timestamp
               and upper(name) = %(name)s
             """, {'name': name.upper()}).fetchone()[0] > 0
 
             if is_existing_game:
                 return None, "Game already exists"
 
-            with cursor_context(row_factory=class_row(CreateGameResponse), connection=conn) as cur:
+            with cursor_context(row_factory=class_row(rsp.CreateGameResponse), connection=conn) as cur:
                 details = cur.execute("""
-                insert into score_counter.game (name, max_players)
-                values (%(name)s, %(max_players)s)
+                insert into score_counter.game (name, max_players, end_time)
+                values (%(name)s, %(max_players)s, current_timestamp + interval '6 hours')
                 returning id, name, max_players, creation_time
-                """, {"name": name, 'max_players': max_players}).fetchone()
+                """, {"name": name, 'max_players': payload.max_players}).fetchone()
 
                 return details, None
 
     @staticmethod
-    def join_game(game_id: int, player: m.Player, score: float) -> str | None:
+    def join_game(game_id: PositiveInt, payload: req.JoinGameRequest) -> str | None:
         with connection_context() as conn:
-            players: set[str] = set(conn.execute("select uuid from score_counter.score where game_id = %s", (game_id,))
-                                    .fetchall())
+            players: set[str] = set(
+                conn.execute("select uuid from score_counter.score where game_id = %s",
+                             (game_id,))
+                .fetchall())
             max_players, *_ = conn.execute("select count(*) from score_counter.score where game_id = %s",
                                            (game_id,)).fetchone()
 
-            if len(players) == max_players and player.uuid not in players:
+            if len(players) == max_players and payload.uuid not in players:
                 return "Max player reached, cannot join game"
 
             conn.execute("""
@@ -59,8 +60,7 @@ class ScoreCounterRepo:
                 -- update happens on player re-joining game
                 do update 
                     set name = %(name)s;
-            
-            """, {'game_id': game_id, 'name': player.name, 'uuid': player.uuid, 'score': score})
+            """, {'game_id': game_id} | payload.model_dump())
 
     @staticmethod
     def end_game(game_id: int):
@@ -72,19 +72,38 @@ class ScoreCounterRepo:
             """, {'game_id': game_id})
 
     @staticmethod
-    def get_scores(room_id: int) -> list[m.PlayerScore]:
-        with cursor_context(row_factory=class_row(m.PlayerScore)) as cur:
+    def get_scores(game_id: int) -> list[rsp.PlayerScore]:
+        with cursor_context(row_factory=class_row(rsp.PlayerScore)) as cur:
             return cur.execute("""
             select id, name, uuid, score 
             from score_counter.score
             where game_id = %s
-            """, (room_id,)).fetchall()
+            """, (game_id,)).fetchall()
 
-    @staticmethod
-    def update_scores(scores: list[m.Score]):
+    @classmethod
+    def update_scores(cls, game_id: int, scores: list[dat.Score]):
         with cursor_context() as cur:
+            game_exists = cur.execute("""select 1
+            from score_counter.game
+            where id = %(game_id)s
+              and game.end_time > current_timestamp
+            """, {'game_id': game_id})
+
+            if not game_exists:
+                return None, f"Game (id={game_id}) does not exist"
+
+            # update score
             cur.executemany("""
             update score_counter.score
             set score = %(score)s
             where id = %(id)s
             """, [s.model_dump() for s in scores])
+
+            # update end time
+            cur.execute("""
+            update score_counter.game
+            set end_time = current_timestamp + interval '6 hours'
+            where id = %(game_id)s
+            """, {"game_id": game_id})
+
+        return cls.get_scores(game_id), None
