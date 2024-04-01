@@ -3,7 +3,7 @@ from typing import Optional
 from psycopg.rows import class_row
 
 import src.repository.golf.course.models as m
-from src.database.connector import connection_context
+from src.database.connector import connection_context, cursor_context
 
 __all__ = ['CourseRepository']
 
@@ -14,17 +14,16 @@ class CourseRepository:
     @staticmethod
     def create_course(course: m.CreateCourse):
         """Creates a course given the CreateCourse command object"""
-        with connection_context() as conn:
-            with conn.cursor() as cur, conn.transaction():
-                course_id, *_ = cur.execute("""
+        with cursor_context(transaction=True) as cur:
+            course_id, *_ = cur.execute("""
                 insert into golf.course (location, course, country, google_map_url, website, active, par, index)
                 values (%(location)s, %(course)s, %(country)s, %(google_map_url)s, %(website)s, %(active)s, %(par)s, %(index)s)
                 returning id
                 """, course.model_dump(include={
-                    'location', 'course', 'country', 'google_map_url', 'website', 'active', 'par', 'index'
-                })).fetchone()
+                'location', 'course', 'country', 'google_map_url', 'website', 'active', 'par', 'index'
+            })).fetchone()
 
-                cur.executemany("""
+            cur.executemany("""
                 insert into golf.course_tee_info (course_id, tee, distance, distance_metric) 
                 values (%(course_id)s, %(tee)s, %(distance)s, %(distance_metric)s)
                 """, [{'course_id': course_id} | x.model_dump() for x in course.tee_info])

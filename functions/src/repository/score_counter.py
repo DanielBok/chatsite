@@ -43,24 +43,26 @@ class ScoreCounterRepo:
     @staticmethod
     def join_game(game_id: PositiveInt, payload: req.JoinGameRequest) -> str | None:
         with connection_context() as conn:
-            players: set[str] = set(
-                conn.execute("select uuid from score_counter.score where game_id = %s",
-                             (game_id,))
-                .fetchall())
+            players: set[str] = {
+                x.upper()
+                for x in conn.execute("select name from score_counter.score where game_id = %s", (game_id,))
+            }
             max_players, *_ = conn.execute("select count(*) from score_counter.score where game_id = %s",
                                            (game_id,)).fetchone()
 
-            if len(players) == max_players and payload.uuid not in players:
+            if payload.name.upper in players:
+                return None  # player exists
+            elif len(players) == max_players:
                 return "Max player reached, cannot join game"
-
-            conn.execute("""
-            insert into score_counter.score (game_id, name, uuid, score)
-            values (%(game_id)s, %(name)s, %(uuid)s, %(score)s)
-            on conflict (game_id, uuid)
-                -- update happens on player re-joining game
-                do update 
-                    set name = %(name)s;
-            """, {'game_id': game_id} | payload.model_dump())
+            else:
+                # add player
+                conn.execute("""
+                insert into score_counter.score (game_id, name, score)
+                values (%(game_id)s, %(name)s, %(score)s)
+                on conflict (game_id, name)
+                    -- do nothing when player is already in
+                    do nothing 
+                """, {'game_id': game_id} | payload.model_dump())
 
     @staticmethod
     def end_game(game_id: int):
@@ -75,7 +77,7 @@ class ScoreCounterRepo:
     def get_scores(game_id: int) -> list[rsp.PlayerScore]:
         with cursor_context(row_factory=class_row(rsp.PlayerScore)) as cur:
             return cur.execute("""
-            select id, name, uuid, score 
+            select id, name, score 
             from score_counter.score
             where game_id = %s
             """, (game_id,)).fetchall()

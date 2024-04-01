@@ -21,5 +21,4 @@ class ScoresGameTask(BaseModel):
 
 class JoinGameRequest(BaseModel):
     name: str
-    uuid: str
     score: float

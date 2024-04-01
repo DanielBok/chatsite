@@ -53,6 +53,7 @@ class MigrationManager:
                 if self.migration_table_exists(connection=conn):
                     conn.execute("update main.migration set level = %s where id = %s",
                                  (new_migration_level, self._get_migration_id(connection=conn)))
+                    conn.commit()
 
             return new_migration_level
 

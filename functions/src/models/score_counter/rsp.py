@@ -12,4 +12,3 @@ class CreateGameResponse(BaseModel):
 
 class PlayerScore(dat.Score):
     name: str
-    uuid: str
