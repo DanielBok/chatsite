@@ -1,12 +1,10 @@
 import os
-from contextlib import contextmanager
-from typing import ContextManager, Optional, TypeVar
+from contextlib import contextmanager, nullcontext
+from typing import ContextManager, Optional
 
 from psycopg import Connection, Cursor
 from psycopg.rows import RowFactory
 from psycopg_pool import ConnectionPool
-
-T = TypeVar('T')
 
 _pool: Optional[ConnectionPool] = None
 
@@ -41,27 +39,25 @@ def close_pool():
         _pool = None
 
 
-def get_connection():
-    """
-    Gets a raw connection object. Used for debugging purposes. For all other usages,
-    please use the connection/cursor context to properly close the connection after
-    code is complete.
-    """
-    return pool().getconn()
-
-
 @contextmanager
-def connection_context(timeout: float = None, connection: Connection = None) -> ContextManager[Connection]:
+def connection_context(
+        timeout: float = None,
+        connection: Connection = None,
+        transaction=False,
+) -> ContextManager[Connection]:
     if isinstance(connection, Connection):
         yield connection
     else:
         with pool().connection(timeout=timeout) as conn:  # type: Connection
-            yield conn
+            with conn.transaction() if transaction else nullcontext():
+                yield conn
 
 
 @contextmanager
-def cursor_context(timeout: float = None,
-                   row_factory: Optional[RowFactory[T]] = None,
-                   connection: Connection = None) -> ContextManager[Cursor[T]]:
-    with connection_context(timeout, connection=connection) as conn, conn.cursor(row_factory=row_factory) as cur:
+def cursor_context[T](timeout: float = None,
+                      row_factory: Optional[RowFactory[T]] = None,
+                      connection: Connection = None,
+                      transaction=False) -> ContextManager[Cursor[T]]:
+    with (connection_context(timeout, connection=connection, transaction=transaction) as conn,
+          conn.cursor(row_factory=row_factory) as cur):
         yield cur
