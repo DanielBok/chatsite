@@ -28,18 +28,16 @@ export default function CreateGameModal() {
         title={<div className="text-lg font-bold">Create Game</div>}
         centered
         open={open}
-        onOk={() => {
-          (dispatch(createGame({name: roomName, maxPlayers})))
-            .then(({type, payload}) => {
-              if (type.endsWith("fulfilled")) {
-                const {id} = payload as CreateRoomResponse;
-                navigate(`/game/${id}`);
-                setError("");
-                setOpen(false);
-              } else if (type.endsWith("rejected")) {
-                setError(payload as string);
-              }
-            });
+        onOk={async () => {
+          const {type, payload} = await dispatch(createGame({name: roomName, maxPlayers}));
+          if (type.endsWith("fulfilled")) {
+            const {id} = payload as CreateRoomResponse;
+            setError("");
+            setOpen(false);
+            navigate(`/game/${id}`);
+          } else if (type.endsWith("rejected")) {
+            setError(payload as string);
+          }
         }}
         okText="Create"
         onCancel={() => setOpen(false)}

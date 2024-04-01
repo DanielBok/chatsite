@@ -3,12 +3,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import * as T from "./types";
 
-export const joinGame = createAsyncThunk(
-  "game/join",
-  async () => {
-
-  }
-);
 
 export const createGame = createAsyncThunk<
   T.CreateRoomResponse,

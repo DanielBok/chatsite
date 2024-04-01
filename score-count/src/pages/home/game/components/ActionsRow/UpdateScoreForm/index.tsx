@@ -42,11 +42,10 @@ export default function UpdateScoreForm() {
 
   function sendScoreData() {
     const payload = Object.values(scores)
-      .reduce((acc, {score, id, name, scorePrefix, uuid}) => {
+      .reduce((acc, {score, id, name, scorePrefix}) => {
         acc.push({
           id,
           name,
-          uuid,
           score: scorePrefix === "sub" ? -score : score,
         });
         return acc;

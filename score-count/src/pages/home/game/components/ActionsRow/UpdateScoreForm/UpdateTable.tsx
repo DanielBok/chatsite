@@ -15,13 +15,12 @@ export default function UpdateTable() {
           else if (s1.id > s2.id) return 1;
           else return 0;
         })
-        .map(({score, name, id, uuid}) =>
+        .map(({score, name, id}) =>
           <ScoresRow
             key={id}
             score={score}
             name={name}
             id={id}
-            uuid={uuid}
           />
         )
       }
